@@ -1,0 +1,41 @@
+
+## Export regular function names
+export(autolayout, HOF, Para, betaresp)
+
+## export regular functions with dot names
+export(pick.model, Para.niche, Para.opt, Para.deriv)
+
+## Export .Deprecated functions (to be removed later)
+
+## export the following internal functions
+export(HOF.model, HOF.fun, scale01, svHOF, eHOF.modelnames)
+
+## Registration of S3 methods
+# importFrom(foreign, read.dbf)
+# importFrom(utils, head, tail)
+# import(lattice)
+
+# HOF
+S3method(HOF, default)
+S3method(HOF, data.frame)
+S3method(pick.model, HOF)
+S3method(pick.model, HOF.list)
+S3method(Para, HOF)
+S3method(Para, HOF.list)
+S3method(predict, HOF)
+S3method(fitted, HOF)
+S3method(coef, HOF)
+S3method(deviance, HOF)
+S3method(logLik, HOF)
+
+# graphics
+S3method(plot, HOF)
+S3method(plot, HOF.list)
+S3method(plot, betaresp)
+S3method(lines, betaresp)
+
+# print
+S3method(print, HOF)
+S3method(print, HOF.list)
+
+# others

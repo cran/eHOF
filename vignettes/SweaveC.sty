@@ -1,0 +1,42 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{SweaveC}{}
+
+\RequirePackage{ifthen}
+\newboolean{Sweave@gin}
+\setboolean{Sweave@gin}{true}
+\newboolean{Sweave@ae}
+\setboolean{Sweave@ae}{true}
+
+\DeclareOption{nogin}{\setboolean{Sweave@gin}{false}}
+\DeclareOption{noae}{\setboolean{Sweave@ae}{false}}
+\ProcessOptions
+
+\RequirePackage{graphicx,fancyvrb}
+\IfFileExists{upquote.sty}{\RequirePackage{upquote}}{}
+
+\ifthenelse{\boolean{Sweave@gin}}{\setkeys{Gin}{width=0.8\textwidth}}{}%
+\ifthenelse{\boolean{Sweave@ae}}{%
+  \RequirePackage[T1]{fontenc}  
+  \RequirePackage{ae}
+}{}%
+
+%\newenvironment{Schunk}{\par\small \vspace{\topsep}}{\vspace{\topsep}}
+\newenvironment{Schunk}{\vspace{\topsep}}{\vspace{\topsep}}
+
+\RequirePackage{color}
+\definecolor{Sinput}{rgb}{0,0,0.56}
+\definecolor{Scode}{rgb}{0,0,0.56}
+\definecolor{Soutput}{rgb}{0.56,0,0}
+
+\DefineVerbatimEnvironment{Sinput}{Verbatim}
+  {formatcom={\color{Sinput}},fontsize=\small,xleftmargin=0em}
+\DefineVerbatimEnvironment{Soutput}{Verbatim}
+  {formatcom={\color{Soutput}},fontsize=\small,xleftmargin=0em}
+\DefineVerbatimEnvironment{Scode}{Verbatim}
+  {formatcom={\color{Scode}},fontsize=\small,xleftmargin=0em}
+
+\fvset{listparameters={\setlength{\topsep}{0pt}}}
+
+%%\renewcommand{\code}[1]{{\small{\color{Sinput}{\texttt{#1}}}}}
+\newcommand{\code}[1]{{\color{Sinput}{\texttt{#1}}}}
+
