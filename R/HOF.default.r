@@ -8,7 +8,7 @@ HOF.default <- function(
 		bootstrap=100, 
 		test = c('AICc', 'BIC', 'AIC','Dev'), 
 		...)  {
-  if(any(c('data.frame', 'matrix','list') %in% class(occ))) stop('Occurrence data for HOF.default must be a vector.')
+  if(any(c('data.frame', 'matrix','list') %in% class(occ))) stop('Performance data for HOF.default must be a vector.')
   x.name <- deparse(substitute(grad))
   if (missing(y.name)) y.name <- deparse(substitute(occ))
   if(any(is.na(occ))) stop('NA in occurrence vector is not allowed!')

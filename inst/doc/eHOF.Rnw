@@ -48,7 +48,7 @@ Taxon names can be evaluated \cite{Jansen2010} if they are referenced with an ap
 Within this sample session we will use the build-in vegetation dataset of package \texttt{vegdata} 
 from the floodplain of river Elbe \citep{Leyer2007} and a dataset delivered with \texttt{eHOF} from arable land of North-Eastern Germany with measured pH.
 
-<<4site.echo, results='hide'>>=
+<<4site.echo, results='hide', message=FALSE>>=
 library(vegdata)
 db <- 'elbaue'
 site <- tv.site(db)
@@ -198,11 +198,11 @@ Many applications in applied and theoretical ecology are possible with such mode
 
 Slopes of species response curves provide for instance an easy and direct way to model species turnover along an environmental gradient \citep{Peper2011}.
 
-To think about the consequences of using only canonical response shapes (IV and maybe V) instead of a more complete set of model types you might want to analyse the optima of unimodal models (II,IV,V) compared to HOF modelling results.
+To think about the consequences of using only canonical response shapes (IV and maybe V) instead of a more complete set of model types you might want to analyse the optima of unimodal models (II,IV,V) compared to HOF modelling results (see Fig. \ref{fig:compOPT}).
 
 \begin{figure}[H]
 \begin{center}
-<<11, results='hide', warning=FALSE>>=
+<<11, results='hide', warning=FALSE, fig.height=4, fig.width=4>>=
 mods.pa <- HOF(veg.pa, site$MGL, M=1, freq.limit=7, family=poisson, bootstrap=NULL)
 p <- Para(mods.pa)
 p4 <- vector('list', length(mods.pa))
@@ -211,14 +211,15 @@ for(i in 1:length(mods.pa)) p4[[i]] <- Para(mods.pa[[i]], modeltypes='IV')
 ind <- !sapply(p, function(x) x$model) %in% c('III','VI', 'VII')
 p.opt <- sapply(p, function(x) x$opt)
 p4.opt <- sapply(p4, function(x) x$opt)
-plot(p.opt[ind], p4.opt[ind], xlab='mean groundwater level', ylab='only model IV')
+plot(p.opt[ind], p4.opt[ind], xlab='mean groundwater level (MGL)', ylab='MGL only with model IV')
 for(i in 1:length(p.opt[!ind]))
     lines(unlist(p.opt[!ind][i]), rep(p4.opt[!ind][i], 2), col='darkgreen')
-points(c(-270,-270), p4.opt[is.na(p.opt)], pch='+')
+points(c(-270), p4.opt[is.na(p.opt)], pch='+')
+lines(c(-600,0),c(-600,0), lty=2)
 @
 \end{center}
 \caption{
-Scatter Plot of optima (mean groundwater level below surface in centimetre in the Elbaue dataset) with best HOF model versus response models restricted to be unimodal symmetric ('IV'). The two crosses are plotted at x=-270 but in fact they have no x values since they are recognized to be model I (no response) species by AICc selection. The green lines are representations of species without punctual optimum.
+Scatter Plot of optima (mean groundwater level below surface in centimetre in the Elbaue dataset) with best HOF model versus response models restricted to be unimodal symmetric ('IV'). The cross is plotted at x=-270 but in fact there is no x values since it is recognized to be a model I (no response) species by AICc selection. The green lines are representations of species without punctual optimum.
  }
 \label{fig:compOPT}
 \end{figure}

@@ -11,7 +11,7 @@ options(warn=1)
 library(eHOF)
 
 
-## ----4site.echo, results='hide'------------------------------------------
+## ----4site.echo, results='hide', message=FALSE---------------------------
 library(vegdata)
 db <- 'elbaue'
 site <- tv.site(db)
@@ -73,7 +73,7 @@ mod.ELYM.sqrt <- HOF(veg.sqrt$ELYMREP, site$MGL, M=10, family=poisson, bootstrap
 plot(mod.ELYM.sqrt, marginal='point', para=TRUE, onlybest=FALSE, newdata=seq(min(mod.ELYM.sqrt$range), max(mod.ELYM.sqrt$range),length.out=10000) )
 
 
-## ----11, results='hide', warning=FALSE-----------------------------------
+## ----11, results='hide', warning=FALSE, fig.height=4, fig.width=4--------
 mods.pa <- HOF(veg.pa, site$MGL, M=1, freq.limit=7, family=poisson, bootstrap=NULL)
 p <- Para(mods.pa)
 p4 <- vector('list', length(mods.pa))
@@ -82,9 +82,10 @@ for(i in 1:length(mods.pa)) p4[[i]] <- Para(mods.pa[[i]], modeltypes='IV')
 ind <- !sapply(p, function(x) x$model) %in% c('III','VI', 'VII')
 p.opt <- sapply(p, function(x) x$opt)
 p4.opt <- sapply(p4, function(x) x$opt)
-plot(p.opt[ind], p4.opt[ind], xlab='mean groundwater level', ylab='only model IV')
+plot(p.opt[ind], p4.opt[ind], xlab='mean groundwater level (MGL)', ylab='MGL only with model IV')
 for(i in 1:length(p.opt[!ind]))
     lines(unlist(p.opt[!ind][i]), rep(p4.opt[!ind][i], 2), col='darkgreen')
-points(c(-270,-270), p4.opt[is.na(p.opt)], pch='+')
+points(c(-270), p4.opt[is.na(p.opt)], pch='+')
+lines(c(-600,0),c(-600,0), lty=2)
 
 

@@ -22,7 +22,6 @@ HOF.model <- function (
   if(!exists('wt')) wt  <- if(famname == "binomial") M else 1
   if (length(wt) == 1) wt <- rep(wt, length(grad))
   x.orig <- grad
-  x.range <- range(grad)
   x <- scale01(grad)
   nobs <- length(occ)
 
@@ -38,14 +37,14 @@ HOF.model <- function (
   }
 
   trial.1 <- function(p, x, ...) { # PORT routine
-    p <- svHOF(grad, occ, M, model = m, mod = mod)
-    temp <- nlminb(start=p, objective=mlHOF, lower = -lim, upper = lim, x=x, y = occ, M = M, model = m)
+    p <- svHOF(x, occ, M, model = m, mod = mod)
+    temp <- nlminb(start=p, objective = mlHOF, lower = -lim, upper = lim, x = x, y = occ, M = M, model = m)
     temp$method <- 'nlminb'
     temp
     }
   trial.2 <- function(p, x, ...) { # Byrd et. al. (1995)
-    p <- svHOF(grad, occ, M, model = m, mod = mod)                                
-    temp <- optim(par = p, mlHOF, x = grad, method = "L-BFGS-B", lower = -lim, upper = lim, y = occ, M = M, model = m)
+    p <- svHOF(x, occ, M, model = m, mod = mod)                                
+    temp <- optim(par = p, mlHOF, x = x, method = "L-BFGS-B", lower = -lim, upper = lim, y = occ, M = M, model = m)
     temp$method <- 'Nelder-Mead'
     return(temp)
     }
@@ -69,15 +68,15 @@ for(m in eHOF.modelnames) {
 
 # fitted values and deviance
   if(is.na(res)) {
-  	assign(res, list(par=c(a=NA,b=NA,c=NA,d=NA), value=NA, counts=c(0,0),convergence=NULL, method='None', trial='No success', message=paste('No solution for model',m), fitted=rep(NA,length(grad)),deviance=NA))
+  	assign(res, list(par=c(a=NA,b=NA,c=NA,d=NA), value=NA, counts=c(0,0),convergence=NULL, method='None', trial='No success', message=paste('No solution for model',m), fitted=rep(NA,length(x)),deviance=NA))
   	warning(paste('No solution for model', m)) } else {
 
   if(all(get(res)$par <= lim) & !any(is.na(get(res)$par))) {
       fv <- HOF.fun(x, m, get(res)$par, M)
       assign(res, c(get(res), deviance = sum(dev.resids(occ/div, fv/div, wt))))
-      assign(res, c(get(res), fitted = if(is.nan(get(res)[['deviance']])) list(rep(NA,length(grad))) else list(fv) ))
+      assign(res, c(get(res), fitted = if(is.nan(get(res)[['deviance']])) list(rep(NA, length(x))) else list(fv) ))
       } else {
-  	assign(res, list(par=c(a=NA,b=NA,c=NA,d=NA), value=NA, counts=c(0,0),convergence=NULL, method='None', trial='No success', message=paste('No solution for model',m), fitted=rep(NA,length(grad)),deviance=NA))
+  	assign(res, list(par=c(a=NA,b=NA,c=NA,d=NA), value=NA, counts=c(0,0),convergence=NULL, method='None', trial='No success', message=paste('No solution for model',m), fitted=rep(NA,length(x)), deviance=NA))
   	warning(paste('No solution for model',m)) }
    }
   }
@@ -94,7 +93,7 @@ if(!all(is.na(V.res$par)))
   }
 
   models <- list(I = I.res, II = II.res, III = III.res , IV = IV.res, V = V.res, VI = VI.res, VII = VII.res)
-  out <- list(call = match.call(), x = x.orig, y = occ,  range = x.range, M = M, family = famname, nobs = nobs, models = models)
+  out <- list(call = match.call(), x = x.orig, y = occ,  range = range(grad), M = M, family = famname, nobs = nobs, models = models)
   class(out) <- "HOF"
   options(warn=0)
   out
