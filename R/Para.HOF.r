@@ -1,5 +1,8 @@
-"Para.HOF" <-
-function (resp, model, newdata = NULL, ...)
+"Para.HOF" <- function (
+		resp, 
+		model, 
+		newdata = NULL, 
+		...)
 {
     if (missing(model)) model <- pick.model(resp, gam=FALSE, ...)
     if (is.null(newdata)) x <- scale01(seq(resp$range[1], resp$range[2], length.out=1000)) else x <- scale01(newdata, ...)

@@ -1,4 +1,9 @@
-"HOF.data.frame" <- function (veg, grad, M = max(veg), freq.limit = 10, ...)
+"HOF.data.frame" <- function (
+		veg, 
+		grad, 
+		M = max(veg), 
+		freq.limit = 10, 
+		...)
 {
     if(names(veg)[1] == 'RELEVE_NR' & names(veg)[2] == 'SPECIES_NR') print('tvabund format detected, execute tv.veg first')   else {
     if(!is.vector(grad)) print('Gradient must be a vector')

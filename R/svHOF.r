@@ -1,5 +1,5 @@
-"svHOF" <- function (x, y, M, model, mod, famname = binomial, ...)
-{
+"svHOF" <- function (
+		x, y, M, model, mod, famname = binomial, ...) {
 #x <- scale01(x)
 if(model == 'I') a = log((1 - mean(y/M))/mean(y/M))
 if(model == 'II') {

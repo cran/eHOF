@@ -1,5 +1,13 @@
-"Para.niche" <- function (resp, model, top, opt, pess, central = exp(-0.5), outer = exp(-2), newdata = NULL, ...) 
-{
+"Para.niche" <- function (
+		resp, 
+		model, 
+		top, 
+		opt, 
+		pess, 
+		central = exp(-0.5), 
+		outer = exp(-2), 
+		newdata = NULL, 
+		...) {
  if (is.null(newdata)) x <- resp$x else x <- newdata
  M <- resp$M
  if (missing(model)) 

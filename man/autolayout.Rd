@@ -2,11 +2,11 @@
 \name{autolayout}
 \alias{autolayout}
 
-\title{Automatic variant of \code{\link{layout}}
-}
+\title{Automatically Specifying Complex Plot Arrangements}
 
 \description{
-Defines appropriate matrix schemes for \code{\link{layout}} for up to 32 subfigures.
+ Automatic version of function \code{\link{layout}} for given number of subplots. 
+ Defined matrix schemes for \code{\link{layout}} for up to 32 subfigures.
 }
 
 \usage{
@@ -19,14 +19,14 @@ autolayout(N, byrow = TRUE, ...)
   \item{...}{additional arguments for \code{\link{layout}} or \code{\link{matrix}}.}
 }
 
-
-\value{Returns the number of figures, N, see \code{\link{layout}}}
+\value{Returns the number of figures, N, see \code{\link{layout}}.}
 
 \author{
-Florian Jansen}
+ Florian Jansen
+}
 
 \seealso{
-\code{\link{layout}}; \code{\link{matrix}}
+ \code{\link{layout}}; \code{\link{matrix}}
 }
 
 \examples{
@@ -36,4 +36,4 @@ for(i in sample(1:32, 1)) {
 }
 }
 
-\keyword{ misc}
+\keyword{misc}

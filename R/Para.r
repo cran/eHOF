@@ -1,5 +1,3 @@
-"Para" <-
-    function(resp, ...)
-{
+"Para" <-  function(resp, ...) {
     UseMethod("Para")
 }

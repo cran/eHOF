@@ -1,4 +1,12 @@
-HOF.model <- function (occ, grad, M = max(occ), y.name, family=binomial, lim = 100, x.name, ...)  {
+HOF.model <- function (
+		occ, 
+		grad, 
+		M = max(occ), 
+		y.name, 
+		family = binomial, 
+		lim = 100, 
+		x.name, 
+		...)  {
   if(max(occ) > M) stop('Maximum response value specified too low!')
   if(any(is.na(grad))) stop('No NA values in gradient allowed.')
   aic <- family()$aic

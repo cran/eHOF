@@ -1,5 +1,9 @@
-Para.opt <- function (resp, model=NULL, punctual = FALSE, newdata = NULL, ...) 
-{
+Para.opt <- function (
+		resp, 
+		model=NULL, 
+		punctual = FALSE, 
+		newdata = NULL, 
+		...) {
   if(is.null(model)) model <- pick.model(resp, gam=FALSE, ...)
   M <- resp$M
 #  if (missing(newdata)) x <- seq(resp$range[1], resp$range[2], length.out=10000) else x <- newdata

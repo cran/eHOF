@@ -1,4 +1,13 @@
-HOF.default <- function(occ, grad, M = max(occ), y.name, family=binomial, lim=100, bootstrap=100, test = c('AICc', 'BIC', 'AIC','Dev'), ...)  {
+HOF.default <- function(
+		occ, 
+		grad, 
+		M = max(occ), 
+		y.name, 
+		family=binomial, 
+		lim=100, 
+		bootstrap=100, 
+		test = c('AICc', 'BIC', 'AIC','Dev'), 
+		...)  {
   if(any(c('data.frame', 'matrix','list') %in% class(occ))) stop('Occurrence data for HOF.default must be a vector.')
   x.name <- deparse(substitute(grad))
   if (missing(y.name)) y.name <- deparse(substitute(occ))
@@ -23,14 +32,10 @@ HOF.default <- function(occ, grad, M = max(occ), y.name, family=binomial, lim=10
     modeltypes <- character(length=bootstrap)
     mods <- vector('list', length=bootstrap)
 	weights <-  matrix(nrow=bootstrap, ncol=7); colnames(weights) <- eHOF.modelnames
-#    o <- order(grad)
-#    d <- density(grad, n=length(grad))$y[o[o]]
     pb <- txtProgressBar (min = 0, max = bootstrap, char = '.',  width = 45, style = 3)
     for(i in 1:bootstrap) {
       take <- sample(length(grad), replace=TRUE)
-      #take <- sample(length(grad), length(grad)*.8, prob=1/(d+1))
       mods[[i]] <- HOF.model(occ[take], grad[take], M=M, y.name, x.name, family=family, lim=lim,...)
-#      print(mo)
       modeltypes[i] <- pick.model(mods[[i]], quiet=TRUE, ...)
 	  weights[i,] <- IC.weights(mods[[i]])
       setTxtProgressBar(pb, bootstrap - (bootstrap - i))

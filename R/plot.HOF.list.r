@@ -1,18 +1,16 @@
 plot.HOF.list <- function (
-x, 
-plottype = c('layout', "lattice", "all"), 
-xlabel = NULL, 
-test = "AICc",
-modeltypes,
-border.top = 0.1,
-color,
-yl,
-leg = FALSE, 
-...)
-{
+	x, 
+	plottype = c('layout', "lattice", "all"), 
+	xlabel = NULL, 
+	test = "AICc",
+	modeltypes,
+	border.top = 0.1,
+	color,
+	yl,
+	leg = FALSE, 
+	...) {
 ncol = 4
 plottype <- match.arg(plottype) 
-# types <- c("I", "II", "III", "IV", "V", "VI", 'VII')
 cols <- if(missing(color)) c("black", "red", "green", "blue", "sienna", "violet", "pink") else color
 
 if(missing('modeltypes')) modeltypes <- eHOF.modelnames
@@ -44,7 +42,6 @@ fitfun <- function(x, test, modeltypes,...) fitted(x, model = pick.model(x, test
       Fit <- unlist(lapply(mods, fitfun, test, modeltypes))
       mod <- sapply(mods, pick.model, test = test, modeltypes, gam=FALSE, quiet = TRUE, ...)
       mod <- rep(mod, each = nobs)
-      require(lattice)
       fit.panel <- function(x, y, subscripts, Fit, ...) {
 	  panel.xyplot(x, y, ...)
 	  i <- order(x)

@@ -1,49 +1,23 @@
-%\VignetteIndexEntry{Hierarchical logistic regression with package HOF}
 \documentclass[a4paper,10pt]{article}
-\usepackage{fullpage}
-%\usepackage{ucs}
+%\VignetteIndexEntry{Hierarchical logistic regression with package HOF}
+%\VignetteDepends{vegan}
+%\VignetteKeyword{Vegetation}
+%\VignetteEngine{knitr::knitr}
+
 \usepackage[utf8x]{inputenc}
 \usepackage[T1]{fontenc}
-\usepackage{graphicx}
-%\usepackage{sidecap}
-%\usepackage{caption2}
-%\setlength{\captionindent}{0pt}
-\usepackage{hyperref}
 \usepackage[sort&compress]{natbib}
-% \renewcommand{\cite}{\citep}
-
-%\renewcommand{\floatpagefraction}{0.8}
-
-% \usepackage[german, english]{babel}
-% \usepackage{hyperref}
-% \usepackage[english=american]{csquotes}
-% \usepackage[left=30mm,right=20mm,top=30mm,bottom=30mm]{geometry}
-% \usepackage{datetime}
-
-% \newcommand{\Rcmd}[1]{\textsl{\texttt{#1}}}
-% \usepackage{/usr/share/R/share/texmf/tex/latex/Rd}
+\usepackage{fullpage}
 
 \title{Hierarchical species response curves in package eHOF}
 \author{Florian Jansen}
-% \date{\today \\ \xxivtime}
-%\setkeys{Gin}{width=\textwidth}
 
-\usepackage{SweaveC}
-\setkeys{Gin}{width=0.75\linewidth}
 
 \begin{document}
-\SweaveOpts{strip.white=true}
-%\SweaveOpts{prefix.string=fig/, width=6, height=4, eps =FALSE}
-
-<<prep, echo=FALSE, >>=
-options(width=70, digits=2, SweaveHooks=list(fig=function() par(mar=c(4,4,1,1)+.1), cache=TRUE)
-)
-@
 
 \maketitle
 
 \begin{abstract}
-
 \noindent
 This is an example session to show how to use enhanced hierarchical logistic regression modeling in R with package \textit{eHOF}. 
 Only a few possibilities and applications can be covered. Use the usual help functions for further information or contact the author if in doubt. The package is still in it's early stage.
@@ -55,29 +29,17 @@ with
 vignette("eHOF")
 @
 
-You can download the package from
-\url{http://geobot.botanik.uni-greifswald.de/download}.
-Use the functions with care and please provide me any information about encountered problems.
 \end{abstract}
 
 
 \section{Preparations}
-
-\subsection{Installation}
-You have to install the package by source. For a default (Windows)
-installation you can use something like:
-
-<<load package, eval=FALSE>>=
-tmp <- tempdir()
-URL <- 'http://geobot.botanik.uni-greifswald.de/download/r_package'
-download.file(paste(URL,'eHOF.tar.gz', sep='/'), destfile=file.path(tmp,'eHOF.tar.gz'))
-install.packages(file.path(tmp, 'eHOF.tar.gz'), type='source')
+<<prep, echo=FALSE>>=
+options(warn=1)
 @
-
-Now we can load the library as usual.
-<<load, results=hide>>=
+<<load, results='hide'>>=
 library(eHOF)
 @
+
 
 \subsection{Load vegetation data}
 
@@ -86,34 +48,44 @@ Taxon names can be evaluated \cite{Jansen2010} if they are referenced with an ap
 Within this sample session we will use the build-in vegetation dataset of package \texttt{vegdata} 
 from the floodplain of river Elbe \citep{Leyer2007} and a dataset delivered with \texttt{eHOF} from arable land of North-Eastern Germany with measured pH.
 
-<<4site.echo, eval=TRUE, results=hide>>=
+<<4site.echo, results='hide'>>=
 library(vegdata)
 db <- 'elbaue'
 site <- tv.site(db)
-veg <- tv.veg(db)
+veg <- tv.veg(db, tax=FALSE, spcnames='numbers')
+# taxa <- tax(unique(obs$TaxonUsageID), verbose=TRUE)
+# write.csv2(taxa, file='taxa.csv')
+taxa <- read.csv2('taxa.csv')
+names(veg) <- sub('.0', '', names(veg), fixed=TRUE)
+names(veg) <- taxa$LETTERCODE[match(names(veg), taxa$TaxonUsageID)]
 @
+
+Normally you will use the capabilities of package vegdata and the taxonomic reference list of your Turboveg installation to replace species numbers with Shortletters or real names. For the sake of CRAN policies we will set tax=FALSE and replace taxnumbers manually.
 
 \subsection{Cover transformation}
 
 If you want to use cover values as performance, it might be better to use cover
 transformed abundance values instead of the original percentage cover.
 
-<<5veg.2, results=hide>>=
-veg.sqrt <- tv.veg(db, cover.transform='sqrt')
+<<5veg.2, results='hide'>>=
+veg.sqrt <- tv.veg(db, cover.transform='sqrt', tax=FALSE, spcnames='numbers')
+names(veg.sqrt) <- sub('.0', '', names(veg.sqrt), fixed=TRUE)
+names(veg.sqrt) <- taxa$LETTERCODE[match(names(veg.sqrt), taxa$TaxonUsageID)]
 @
 
 or even presence-absence information only.
 
-<<5veg.3, results=hide>>=
-veg.pa <- tv.veg(db, cover.transform='pa')
+<<5veg.3, results='hide'>>=
+veg.pa <- tv.veg(db, cover.transform='pa', tax=FALSE, spcnames='numbers')
+names(veg.pa) <- sub('.0', '', names(veg.pa), fixed=TRUE)
+names(veg.pa) <- taxa$LETTERCODE[match(names(veg.pa), taxa$TaxonUsageID)]
 @
 
 
 
 \section{Modeling hierarchical logistic regressions}
 
-Introduced by Ramenskij in the early 20th century and named direct gradient analysis by
-\citet{Whittaker1967} is modeling species responses along environmental gradients still a frequent task in vegetation ecology.
+Introduced by Ramenskij in the early 20th century and named direct gradient analysis by \citet{Whittaker1967} is modeling species responses along environmental gradients still a frequent task in vegetation ecology.
 Several algorithms are available to map the performance of a species along changing ecological conditions. Often it is difficult to decide which level of complexity is needed to get an adequate simplification of the data. In 1993 Huisman, Olff and Fresco introduced a set of hierarchical models to combine the wish for simple and easy to interpret response models with the need to catch different kinds of niche types and species response data \citep{Huisman1993}.
 
 Species responses along measured environmental gradients are cross-sections of the species hyperniche. Even if we assume, that the physiological niche of a species should be simple (e.g. unimodal or with a specific threshold) we can not expect, that realized niches should be that simple too. Nevertheless, due to the generally high number of hidden gradients in field data and the resulting unbalanced datasets, it seems to be advisable not to use an untrammelled modelling technique like Generalised Additive Models (GAM) but to restrict ourselves to a more conservative set of model types which can be interpreted afterwards.
@@ -123,14 +95,15 @@ Species responses along measured environmental gradients are cross-sections of t
 
 Huisman, Olff and Fresco suggested five response shapes \cite{Huisman1993}. Additional to these we added two bimodal model types so that we get 7 hierarchical model types in total (see Fig. \ref{fig:HOFModels}).
 
-
 \begin{figure}
 \begin{center}
-<<modeltypes, fig=TRUE, results=hide>>=
+<<modeltypes, warning=FALSE, results='hide'>>=
 data(acre)
 sel <- c('ELYMREP', 'VEROPES', 'CONSREG', 'DESUSOP', 'VEROARV', 'ARTE#VU', 'ACHIMIL')
 mo <- HOF(acre[match(sel, names(acre))], acre.env$PH_KCL, M=1, bootstrap=NULL)
+par(mar=c(4,4,1,1)+.1)
 autolayout(7)
+par(mar=c(4,4,1,1)+.1)
 for(i in 1:7) plot(mo[[i]], model = eHOF.modelnames[i], marginal ='n')
 @
 \end{center}
@@ -140,7 +113,6 @@ The layout plot shows the seven model types of enhanced Hierarchical logistic re
 \label{fig:HOFModels}
 \end{figure}
 
-
 The seven models are of increasing complexity. Maybe the most important model type is number I: a flat response, that means there is no significant trend along the gradient for that species. It is our null hypothesis and ensures that only species with a clear response will be modelled with one of the further model types. Shape II is monotone sigmoid with a top at one end of the gradient, III is monotone sigmoid with a plateau below the maximal upper abundance value. Model type IV is the canonical form of species response, a unimodal symmetric model, V is a unimodal skewed model and model types VI and VII have two optima, VI with tops being equal.
 
 
@@ -148,7 +120,7 @@ The seven models are of increasing complexity. Maybe the most important model ty
 
 For all species in a vegetation data frame above a specific frequency threshold (10 by default) all six model shapes are modelled and stored in a HOF object. The most appropriate model type is evaluated only at the moment this object is printed, summarised or plotted.
 
-<<10percentageVEG, results=hide>>=
+<<percentageVEG, results='hide', warning=FALSE>>=
 mods <- HOF(veg, site$MGL, M=100, family= poisson, bootstrap=NULL)
 @
 <<printPerc>>=
@@ -159,9 +131,9 @@ Printing the output of a HOF objects with more than one species will give a matr
 
 \begin{figure}
 \begin{center}
-<<7sqrt, fig=TRUE,results=hide>>=
+<<7sqrt, results='hide', warning=FALSE>>=
 mods.sq <- HOF(veg.sqrt, site$MGL, M=10, family= poisson, freq.limit=10, bootstrap=NULL)
-print(plot(mods.sq))
+plot(mods.sq)
 @
 \end{center}
 \caption{
@@ -173,9 +145,9 @@ Most adequate model types for all species of the Elbaue dataset with at least 10
 
 \begin{figure}
 \begin{center}
-<<7pres-abs, fig=TRUE, results=hide>>=
+<<7pres-abs, results='hide', warning=FALSE>>=
 mods.pa <- HOF(veg.pa, site$MGL, M=1, bootstrap=NULL)
-print(plot(mods.pa))
+plot(mods.pa)
 @
 \end{center}
 \caption{
@@ -194,7 +166,7 @@ Package HOF contains functions to compute parameters for the different model typ
 
 \begin{figure}
 \begin{center}
-<<paraplot,fig=TRUE, results=hide>>=
+<<paraplot, warning=FALSE, out.width='.5\\textwidth'>>=
 plot(mods.pa[['RANCREP']], para=TRUE, onlybest=FALSE)
 @
 \end{center}
@@ -207,9 +179,9 @@ Hierarchical logistic regression models for \textit{Ranunculus repens} presence/
 
 \begin{figure}
 \begin{center}
-<<sqrt-ELYMREP, fig=TRUE, results=hide>>=
-mod.ELYM.sqrt <- HOF(veg.sqrt$ELYMREP, site$MGL, M=10, family=poisson)
-print(plot(mod.ELYM.sqrt, marginal='point', para=TRUE, onlybest=FALSE))
+<<sqrt-ELYMREP, results='hide', warning=FALSE, out.width='.5\\textwidth'>>=
+mod.ELYM.sqrt <- HOF(veg.sqrt$ELYMREP, site$MGL, M=10, family=poisson, bootstrap = 10)
+plot(mod.ELYM.sqrt, marginal='point', para=TRUE, onlybest=FALSE)
 @
 \end{center}
 \caption{
@@ -229,7 +201,7 @@ To think about the consequences of using only canonical response shapes (IV and 
 
 \begin{figure}[H]
 \begin{center}
-<<11, fig=TRUE, results=hide>>=
+<<11, results='hide', warning=FALSE>>=
 mods.pa <- HOF(veg.pa, site$MGL, M=1, freq.limit=7, family=poisson, bootstrap=NULL)
 p <- Para(mods.pa)
 p4 <- vector('list', length(mods.pa))
@@ -251,7 +223,6 @@ Scatter Plot of optima (mean groundwater level below surface in centimetre in th
 \end{figure}
 
 
-
 % \subsection{Turnover}
 %
 % <<turnover, fig=TRUE, results=hide>>=
@@ -260,8 +231,8 @@ Scatter Plot of optima (mean groundwater level below surface in centimetre in th
 % plot(turnover(mods))
 % @
 
+
 \bibliographystyle{plainnat}
 \bibliography{bibdata}
 
 \end{document}
-
