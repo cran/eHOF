@@ -1,0 +1,7 @@
+
+eHOF RELEASE VERSIONS at http://cran.r-project.org/
+	
+Version 1.2 (Nov 30 2013)
+
+	* Para.HOF: Problems with calculation of optima and subsequent attributes in models VI and VII fixed
+

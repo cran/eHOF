@@ -1,6 +1,6 @@
 Para.deriv <- function (
-		resp, 
-		newdata=NULL, 
+		resp, # response data object of HOF function
+		newdata=NULL, # specify new x value vector
 		p, 
 		model=NULL, 
 		type=c('slope','inflection'), 
@@ -12,7 +12,8 @@ Para.deriv <- function (
   M <- resp$M
   a = p[1]; b = p[2]; c = p[3]; d = p[4]; f = p[5]
   if(is.null(model)) model <- pick.model(resp, gam=FALSE, ...)
-  
+  if(is.null(newdata)) x <- scale01(seq(resp$range[1], resp$range[2], length.out=10000)) else x <- scale01(newdata, ...)  
+
   fv <- switch(model,
      'I'  = expression(M/(1 + exp(a))),
      'II' = expression(M/(1 + exp(a + b * x))),
@@ -24,9 +25,10 @@ Para.deriv <- function (
     )
 
   if(type == 'slope') {
-    x <- if(is.null(newdata)) scale01(seq(resp$range[1], resp$range[2], length.out=1000)) else scale01(newdata, ...)
-    out <- eval(D(fv, 'x'))
-  }
+    if(model=='I') out <- 0 else {
+    	fv1 <- D(fv, 'x')
+    	out <- eval(fv1)
+  }}
 
   if(type == 'inflection') {
     optima <- scale01(optima, resp$range)

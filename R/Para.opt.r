@@ -7,7 +7,7 @@ Para.opt <- function (
   if(is.null(model)) model <- pick.model(resp, gam=FALSE, ...)
   M <- resp$M
 #  if (missing(newdata)) x <- seq(resp$range[1], resp$range[2], length.out=10000) else x <- newdata
-  if (missing(newdata)) x <- resp$x else x <- newdata
+  x <-  if (missing(newdata)) seq(min(resp$range),max(resp$range),length.out=10000)	else newdata
 
   HOFfun <- function(x, y, resp) abs(y - predict(resp, newdata = x, M = M, model = model))
 
@@ -75,19 +75,37 @@ Para.opt <- function (
       mini <- as.numeric(optimize(HOFfun, resp$range, y=0, resp = resp, maximum = FALSE)[["objective"]])
       pess <- as.numeric(tmp$minimum)
   }
-  if (model %in% c("VI",'VII')) {
+  
+  if (model == "VI") {
       max1 <- optimize(HOFfun, resp$range, resp = resp, y=0, maximum = TRUE)
-      max2 <- if(model == 'VI') optimize(HOFfun, c(max1$maximum, resp$range[2]), resp = resp, y=0, maximum = TRUE) else optimize(HOFfun, c(resp$range[1], max1$maximum), resp = resp, y=0, maximum = TRUE)
-      tmp <- optimize(HOFfun, c(max1$maximum, max2$maximum), resp = resp, y=0, maximum = FALSE)
+  	  min2 <- optimize(HOFfun, lower=max1$maximum, upper=resp$range[2], resp = resp, y=0, maximum = FALSE)
+#  if(round(max1$objective,2) < round(max(predict(resp)),2))  
+#  	  min <- optimize(HOFfun, lower=max1$maximum, upper=resp$range[2], resp = resp, y=max1$objective, maximum = FALSE)
+#      max2 <- optimize(HOFfun, c(min1$maximum, resp$range[[2]]), resp = resp, y=min1$objective, maximum = FALSE)
+#       mini <- min(predict(resp, newdata=x))
+      mini <- min2$objective
+      max2 <- optimize(HOFfun, c(min2[[1]], resp$range[[2]]), resp = resp, y=mini, maximum = TRUE)
+      top <- c(top1=max1$objective, top2 =max2$objective)
+      pess <- min2$minimum
+      opt <- c(opt1 = max1$maximum, opt2 = max2$maximum)
+      new <- seq(resp$range[1], pess, length.out = 5000)
+      pm <- predict.HOF(resp, newdata = new, model = model)
+      expect1 <- sum(pm * new)/sum(pm)
+      new <- seq(pess, resp$range[2], length.out = 5000)
+      pm <- predict.HOF(resp, newdata = new, model = model)
+      expect2 <- sum(pm * new)/sum(pm) 
+      expect <- c(expect1, expect2)
+   }
+
+  
+  if (model == 'VII') {
+      max1 <- optimize(HOFfun, resp$range, resp = resp, y=0, maximum = TRUE)
+  	  max2 <- optimize(HOFfun, lower=max1$maximum, upper=resp$range[2], resp = resp, y=max1$objective, maximum = FALSE)
+      tmp <- optimize(HOFfun, c(max1$maximum, max2[[1]]), resp = resp, y=0, maximum = FALSE)
       mini <- as.numeric(tmp$objective)
-#      range1 <- c(resp$range[1], tmp$minimum)
-#      range2 <- c(tmp$minimum, resp$range[2])
-#       max1 <- optimize(HOFfun, range1, resp = resp, y=0, maximum = TRUE)
-#       max2 <- optimize(HOFfun, range2, resp = resp, y=0, maximum = TRUE)
       top <- c(top1=min(max1$objective, max2$objective), top2 =max(max1$objective, max2$objective))
-#      names(top) <- c("top1", "top2")
       pess <- as.numeric(tmp$minimum)
-      opt <- c(opt1 = min(max1$maximum, max2$maximum), opt2 = max(max1$maximum, max2$maximum))
+      opt <- c(opt1 = min(max1$maximum, max2$minimum), opt2 = max(max1$maximum, max2$minimum))
       pess <- as.numeric(tmp$minimum)
       new <- seq(resp$range[1], pess, length.out = 5000)
       pm <- predict.HOF(resp, newdata = new, model = model)
@@ -96,15 +114,12 @@ Para.opt <- function (
       pm <- predict.HOF(resp, newdata = new, model = model)
       expect2 <- sum(pm * new)/sum(pm) 
       expect <- c(expect1, expect2)
-      } else {
-#   `expectancy` <- function(object, ...) {
-#       fv <- as.matrix(fitted(object, ...))
-#       apply(fv, 2, function(x) weighted.mean(object$x, w = x)) 
-#     }
-	new <- seq(resp$range[1], resp$range[2], length.out = 10000)
-	pm <- predict.HOF(resp, newdata = new, model = model)
-	expect <- sum(pm * new)/sum(pm)
+  }
+  if(model %in% c('I', 'II', 'III', 'IV', 'V')) {      
+# 		new <- seq(resp$range[1], resp$range[2], length.out = 10000)
+		pm <- predict.HOF(resp, newdata = x, model = model)
+		expect <- sum(pm * x)/sum(pm)
 	}
-  
+
   list(opt = opt, top = top, pess = pess, mini = mini, expect = expect)
 }

@@ -2,7 +2,7 @@ autolayout <- function (
 		N, 
 		byrow = TRUE, 
 		...) {
-  if (N < 1 | N > 33) stop("not able to determine layout for more than 33 plots automatically")
+  if (N < 1 | N > 33) stop("I am not able to determine layout for more than 33 plots automatically.")
 lay <- switch(N,
   matrix(1, ncol = 1),
   matrix(1:2, ncol = 2, byrow = byrow),

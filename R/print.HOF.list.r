@@ -4,11 +4,11 @@
 		selectMethod = 'bootselect', 
 		...) {
 	if(is.null(x[[1]]$bootstrapmodels)) {
-		cat('Warning: No bootstrap results in object. Using selectMethod "raw" instead.\n')
+		message('Warning: No bootstrap results in object. Using selectMethod "raw" instead.\n')
 		selectMethod <- 'raw'
 	}
     cat("Deviances:\n")
-    printCoefmat(sapply(x, deviance), na.print="", ...)
+    printCoefmat(sapply(x, deviance), na.print="", has.Pvalue=FALSE, ...)
     cat(paste("\nSuggested best models (",test, ", ", selectMethod, "):", sep=''))
     tmp <- sapply(x, pick.model, test=test, quiet = TRUE, selectMethod = selectMethod, ...)
     names(tmp) <- names(x)
