@@ -1,11 +1,13 @@
 ### Simulate beta response with Bernoulli error
 
-### x: gradient
-### p1, p2: response endpoints
-### alpha, gamma: shape parameters of the response
-### hi: maximum height of the response
-
-`betaresp` <- function(x, p1, p2, alpha, gamma, hi) {
+`betaresp` <- function(
+		x, ### x: gradient
+		p1, ### p1, p2: response endpoints
+		p2, 
+		alpha, ### alpha, gamma: shape parameters of the response		
+		gamma, 
+		hi  ### hi: maximum height of the response
+) {
     ## take care that p1 < p2
     if (p1 > p2) {
         tmp <- p1

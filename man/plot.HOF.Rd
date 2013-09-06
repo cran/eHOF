@@ -3,13 +3,16 @@
 \alias{plot.HOF}
 \alias{plot.HOF.list}
 
-\title{Plot Hierachical Logistic regression models}
+\title{Plot Hierarchical Logistic Regression Models}
 
 \description{Plot single or multiple HOF models with or without model parameters.}
 
 \usage{
-  \method{plot}{HOF}(x, marginal = c('bar', 'rug', 'hist', 'points', 'n'), boxp = TRUE, las.h = 1, yl, main, model, test = 'AICc', modeltypes, onlybest = TRUE, penal, para = FALSE, gam.se = FALSE, color, newdata = NULL, lwd=1, leg = TRUE, add=FALSE, xlabel, ...)
-  \method{plot}{HOF.list}(x, plottype = c("layout", "lattice", "all") , xlabel = NULL, test = 'AICc', modeltypes, border.top = 0.1, color, yl, leg = FALSE, ...)
+  \method{plot}{HOF}(x, marginal = c('bar', 'rug', 'hist', 'points', 'n'), boxp = TRUE, 
+  las.h = 1, yl, main, model, test = 'AICc', modeltypes, onlybest = TRUE, penal, para = 
+  FALSE, gam.se = FALSE, color, newdata = NULL, lwd=1, leg = TRUE, add=FALSE, xlabel, ...)
+  \method{plot}{HOF.list}(x, plottype = c("layout", "lattice", "all") , xlabel = NULL, 
+  test = 'AICc', modeltypes, border.top = 0.1, color, yl, leg = FALSE, ...)
   }
 
 \arguments{
@@ -26,24 +29,28 @@
   \item{onlybest}{plot only the best model according to chosen Information criterion. If set to FALSE all calculated models will be plotted, but the best model with a thicker line.}
   \item{penal}{penalty term for model types, default is the number of model parameter}
   \item{para}{should model parameters (optima, raw.mean, niche,..) be plotted.}
-  \item{gam.se}{Plotting of two times standard error of predict.gam as confidence interval}
+  \item{gam.se}{plotting of two times standard error of predict.gam as confidence interval}
   \item{color}{model line color, vector of length eight}
-  \item{newdata}{Curves are plotted for original x-values. Otherwise you have to provide a vector with new gradient values.}
+  \item{newdata}{curves are plotted for original x-values. Otherwise you have to provide a vector with new gradient values.}
   \item{leg}{legend for model type (and parameters)}
   \item{lwd}{line width of model curve(s)}
-  \item{plottype}{Plottype, see Details}
+  \item{plottype}{plottype, see details}
   \item{add}{add to existing plot}
   \item{xlabel}{x axis label}
   \item{border.top}{height of top border for legend}
-  \item{...}{further arguments passed to or from other methods.}
+  \item{\dots}{further arguments passed to or from other methods.}
 }
 
 \details{
-Plottype layout will give a normal plot for a single species, or if the HOF object contains several species, the graphics display will be divided by \code{\link{autolayout}}. Multiple species can also be plottet by a \code{'lattice'} xyplot and plotted with plot.HOF for every species. The third option (plottype='all') plots all selected species on the same graph which might be useful to evaluate e.g. the species within one vegetation plot, see examples.
+Plottype \code{layout} will give a normal plot for a single species, or if the HOF object contains several species, 
+the graphics display will be divided by \code{\link{autolayout}}. Multiple species can also be plottet by a \code{'lattice'} 
+xyplot and plotted with plot.HOF for every species. The third option (plottype='all') plots all selected species 
+on the same graph which might be useful to evaluate e.g. the species within one vegetation plot, see examples.
 
-A \code{rug} adds a rug representation (1-d plot) of the data to the plot. A rug plot is a compact way of illustrating the marginal distributions of x. Positions of the data points along x and y are denoted by tick marks, reminiscent of the tassels on a rug. Rug marks are overlaid onto the axis. 
-A \code{dit='bar'} plot will display the original response values. For binary data this will be identical to rug. 
-
+A \code{rug} adds a rug representation (1-d plot) of the data to the plot. A rug plot is a compact way of 
+illustrating the marginal distributions of x. Positions of the data points along x and y are denoted by tick marks, 
+reminiscent of the tassels on a rug. Rug marks are overlaid onto the axis. 
+A \code{dit='bar'} plot will display the original response values. For binary data this will be identical to rug.
 }
 
 \seealso{\code{\link{HOF}} }
@@ -54,31 +61,36 @@ A \code{dit='bar'} plot will display the original response values. For binary da
  }
 
 \examples{
-data(acre)
-sel <- c('MATRREC', 'RUMEACT', 'SILENOC', 'APHAARV', 'MYOSARV', 'DESUSOP', 'ARTE#VU')
-mo <- HOF(acre[match(sel, names(acre))], acre.env$PH_KCL, M=1, bootstrap=NULL)
-par(mar=c(2,2,1,.1))
-plot(mo, para=TRUE)
+	data(acre)
+	sel <- c('MATRREC', 'RUMEACT', 'SILENOC', 'APHAARV', 'MYOSARV', 'DESUSOP', 'ARTE#VU')
+	mo <- HOF(acre[match(sel, names(acre))], acre.env$PH_KCL, M=1, bootstrap=NULL)
+	par(mar=c(2,2,1,.1))
+	plot(mo, para=TRUE)
 
-
-# An example for plottype='all' to show species responses for the species within the most acidic and the most calcareous vegetation plot
-\dontrun{
-# acid <- sample(rownames(acre)[acre.env$PH_KCL < 4.8], 1)
-SpeciesFromAnAcidicPlot <- acre['57',] >0
-mods.acidic <- HOF(acre[, SpeciesFromAnAcidicPlot], acre.env$PH_KCL, M=1, bootstrap=NULL)
-SpeciesFromAnCalcareousPlot <- acre[calc <- sample(rownames(acre)[acre.env$PH_KCL > 6], 1),] >0
-mods.calc <- HOF(acre[, SpeciesFromAnCalcareousPlot], acre.env$PH_KCL, M=1, bootstrap=NULL)
-
-autolayout(2)
-plot(mods.acidic, plottype='all', main='Plot with low pH')
-abline(v=acre.env$PH_KCL[acre.env$RELEVE_NR == acid])
-legend('topright',cex=.75, bty='n', lty=1:length(mods.acidic), col= c("black", "red", "green", "blue", "sienna", "violet")[as.integer(factor(pick.model(mods.acidic)))], names(mods.acidic))
-abline(v=acre.env$PH_KCL[acre.env$RELEVE_NR == acid])
-
-plot(mods.calc, plottype='all', main='Plot with high pH')
-legend('topleft',cex=.75, bty='n', lty=1:length(mods.acidic), col= c("black", "red", "green", "blue", "sienna", "violet")[as.integer(factor(pick.model(mods.calc)))], names(mods.calc))
-abline(v=acre.env$PH_KCL[acre.env$RELEVE_NR == calc])
-}
+# An example for plottype='all' to show species responses for the species within 
+# the most acidic and the most calcareous vegetation plot.
+	\dontrun{
+	# acid <- sample(rownames(acre)[acre.env$PH_KCL < 4.8], 1)
+	SpeciesFromAnAcidicPlot <- acre['57',] >0
+	mods.acidic <- HOF(acre[,SpeciesFromAnAcidicPlot],acre.env$PH_KCL,M=1,bootstrap=NULL)
+	SpeciesFromAnCalcareousPlot <- acre[calc <- 
+  sample(rownames(acre)[acre.env$PH_KCL > 6], 1),] >0
+	mods.calc <- HOF(acre[,SpeciesFromAnCalcareousPlot],acre.env$PH_KCL,M=1,bootstrap=NULL)
+	
+	autolayout(2)
+	plot(mods.acidic, plottype='all', main='Plot with low pH')
+	abline(v=acre.env$PH_KCL[acre.env$RELEVE_NR == acid])
+	legend('topright',cex=.75, bty='n', lty=1:length(mods.acidic), col= c("black","red",
+  "green", "blue", "sienna", "violet")[as.integer(factor(pick.model(mods.acidic)))], 
+  names(mods.acidic))
+	abline(v=acre.env$PH_KCL[acre.env$RELEVE_NR == acid])
+	
+	plot(mods.calc, plottype='all', main='Plot with high pH')
+	legend('topleft',cex=.75, bty='n', lty=1:length(mods.acidic), col= c("black","red", 
+  "green","blue","sienna","violet")[as.integer(factor(pick.model(mods.calc)))], 
+  names(mods.calc))
+	abline(v=acre.env$PH_KCL[acre.env$RELEVE_NR == calc])
+	}
 } 
 
 \author{ Florian Jansen }

@@ -1,4 +1,24 @@
-plot.HOF <- function (x, marginal =  c('bar', 'rug', 'hist', 'points', 'n'), boxp = TRUE, las.h = 1, yl, main, model, test = "AICc", modeltypes, onlybest = TRUE, penal, para = FALSE, gam.se = FALSE, color, newdata = NULL, lwd=1, leg = TRUE, add=FALSE, xlabel, ...)    {
+plot.HOF <- function (
+		x, 
+		marginal =  c('bar', 'rug', 'hist', 'points', 'n'), 
+		boxp = TRUE, 
+		las.h = 1, 
+		yl, 
+		main, 
+		model, 
+		test = "AICc", 
+		modeltypes, 
+		onlybest = TRUE, 
+		penal, 
+		para = FALSE, 
+		gam.se = FALSE, 
+		color, 
+		newdata = NULL, 
+		lwd=1, 
+		leg = TRUE, 
+		add=FALSE, 
+		xlabel, 
+		...)    {
   resp <- x
   ow <- options("warn")
   options(warn = -1)
@@ -204,9 +224,8 @@ para.fun <- function(resp, cex.pl = .8, ...) {
 }
   
  gam.conf <- function(independ, depend, bs = 'cr', k = 4, ...) {
-    require(mgcv)
     if (!is.null(newdata)) warning('GAM confidence intervalls only calculated for original predictor values!')
-    fit <- gam(depend ~ s(independ, bs=bs, k=k),family=get(resp$family), scale=0, ...)
+    fit <- mgcv::gam(depend ~ s(independ, bs=bs, k=k),family=get(resp$family), scale=0, ...)
     pred.fit <- predict.gam(fit, type='response', se.fit=TRUE)
     o <- order(independ)
     ll <- pred.fit$fit - 2*pred.fit$se.fit; ll[ll<0] <- 0

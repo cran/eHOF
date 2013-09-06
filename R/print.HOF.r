@@ -1,6 +1,11 @@
-"print.HOF" <-   
-		function (x, test = 'AICc', penal = 'df', selectMethod = c('bootselect', 'IC.weight', 'raw'), gam = FALSE, k=4,...) 
-{
+"print.HOF" <- function (
+		x, 
+		test = 'AICc', 
+		penal = 'df', 
+		selectMethod = c('bootselect', 'IC.weight', 'raw'), 
+		gam = FALSE, 
+		k=4,
+		...) {
 	selectMethod <- match.arg(selectMethod)
     if(length(penal)==1) {
       if(penal == 'df') penal <- sapply(x$models, function(x) length(x$par))

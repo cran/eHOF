@@ -6,7 +6,6 @@ pick.model.HOF.list <- function(object, ...) {
 }
 
 pick.model.HOF <- function (object, level = 0.95, test = c('AICc', 'BIC', 'AIC','Dev'), modeltypes, penal = 'df', gam = FALSE, selectMethod = c('bootselect', 'IC.weight', 'raw'), quiet=FALSE, ...) {
-#  quiet <- match.arg(quiet)
   selectMethod <- match.arg(selectMethod)
   if(is.null(object$bootstrapmodels) & selectMethod != 'raw') {
     if(!quiet) cat('Bootselect or IC.weight method only possible after bootstrapping. Choosing raw model choice instead.\n')

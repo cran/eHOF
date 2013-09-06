@@ -1,4 +1,12 @@
-Para.deriv <- function (resp, newdata=NULL, p, model=NULL, type=c('slope','inflection'), optima, pessima, ...)
+Para.deriv <- function (
+		resp, 
+		newdata=NULL, 
+		p, 
+		model=NULL, 
+		type=c('slope','inflection'), 
+		optima, 
+		pessima, 
+		...)
 {
   type <- match.arg(type, c('slope','inflection'))
   M <- resp$M

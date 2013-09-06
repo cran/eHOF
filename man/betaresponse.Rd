@@ -5,27 +5,30 @@
 \alias{plot.betaresp}
 \alias{betaresponse}
 
-\title{Generation of beta response models}
+\title{Beta response models}
 
 \description{
-To compare the hierarchical logistic regression models with beta response models.}
+ Generating beta response models. Implemented to compare the hierarchical logistic regression models 
+ with beta response models.
+}
 
 \usage{
-betaresp(x, p1, p2, alpha, gamma, hi)
+ betaresp(x, p1, p2, alpha, gamma, hi)
 }
 
 \arguments{
-  \item{x}{Gradient values}
-  \item{p1, p2}{response endpoints}
-  \item{alpha, gamma}{shape parameters of the response}
-  \item{hi}{maximum height of the response}
+ \item{x}{Gradient values}
+ \item{p1, p2}{response endpoints}
+ \item{alpha, gamma}{shape parameters of the response}
+ \item{hi}{maximum height of response}
 }
 
 
 \references{
-Jansen, F. & Oksanen, J. (in prep) How to model species responses along ecological gradients? - Huisman-Olf-Fresco models revisited
+Jansen, F. & Oksanen, J. (2013) How to model species responses along ecological gradients? - 
+ Huisman-Olf-Fresco models revisited, Journal of Vegetation Science DOI: 10.1111/jvs.12050
 
-Oksanen, J. & Minchin, P.R. (2002). Continum theory revisited: what shape are species responses along ecological gradients? \emph{Ecological
+Oksanen, J. & Minchin, P.R. (2002). Continuum theory revisited: what shape are species responses along ecological gradients? \emph{Ecological
   Modelling} 157, 119-129.
  }
  

@@ -4,10 +4,11 @@
 \alias{Para.HOF}
 \alias{Para.HOF.list}
 
-\title{Curve parameters of HOF models}
+\title{Curve parameters of eHOF models}
 
 \description{
-  One of the advantages using a restricted set of models, is the possibility to derive common shape parameters from the different model types. Function \code{Para} calculates a set of parameters (see below) from HOF models.
+  Derive common shape parameters from the different model types. 
+  Calculate a set of parameters (see values below) from eHOF models.
 }
 
 \usage{
@@ -16,10 +17,10 @@
 }
 
 \arguments{
- \item{resp}{Response model results, see \code{\link{HOF}}}
- \item{model}{Response model type. If not specified, the output of \code{\link{pick.model}} will be used.}
- \item{newdata}{New gradient vector.}
- \item{\dots}{Further arguments passed to or from other methods, e.g. for \code{\link{pick.model}}.}
+ \item{resp}{response model results, see \code{\link{HOF}}.}
+ \item{model}{response model type. If not specified, the output of \code{\link{pick.model}} will be used.}
+ \item{newdata}{new gradient vector.}
+ \item{\dots}{further arguments passed to or from other methods, e.g. for \code{\link{pick.model}}.}
 }
 
 \value{

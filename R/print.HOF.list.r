@@ -1,6 +1,8 @@
-"print.HOF.list" <-
-    function (x, test = 'AICc',  selectMethod = 'bootselect', ...)
-{
+"print.HOF.list" <-  function (
+		x, 
+		test = 'AICc',  
+		selectMethod = 'bootselect', 
+		...) {
 	if(is.null(x[[1]]$bootstrapmodels)) {
 		cat('Warning: No bootstrap results in object. Using selectMethod "raw" instead.\n')
 		selectMethod <- 'raw'

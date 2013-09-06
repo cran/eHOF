@@ -1,6 +1,9 @@
 "coef.HOF" <-
-    function (object, model, ...) 
-{
+    function (
+			object, 
+			model, 
+			...
+) {
     maxNrofParameters <- 5  
     out <- sapply(object$models, function(x) c(x$par, rep(NA, maxNrofParameters - length(x$par))))
     rownames(out) <- letters[1:maxNrofParameters]

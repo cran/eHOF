@@ -12,13 +12,11 @@
 \alias{[.HOF.list}
 \alias{eHOF.modelnames}
 
-\title{Internal HOF functions}
-
+\title{Internal eHOF functions}
 
 \description{
-  Internal HOF functions that are not intended to be called directly,
+  Internal eHOF functions that are not intended to be called directly,
   but only within other functions.
 }
-
 
 \keyword{internal}

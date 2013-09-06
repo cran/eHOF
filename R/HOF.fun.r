@@ -14,9 +14,7 @@ HOF.fun <- function (x, model, p, M = 1, ...) {
            V = M/(1 + exp(a + b * x)) * 1/(1 + exp(c - d * x)),
           VI = M/(1 + exp(a + b * x)) * 1/(1 + exp(c - b * x)) + M/(1 + exp(a + b * (x - d))) * 1/(1 + exp(c - b * (x - d))),
          VII = M/(1 + exp(a + b * x)) * 1/(1 + exp(c - b * x)) + M/(1 + exp(a + b * (x - d))) * 1/(1 + exp(c - f * (x - d)))
-#         VII = M/(1 + exp(a + b * x)) * 1/(1 + exp(c - b * x)) + M/(1 + exp(a + f * (x - d))) * 1/(1 + exp(c - f * (x - d))) # second mode mostly to flat to be plausible
      )
-    #    fv <- HOF.modelformulas(model, ...)
     return(fv)
 }
 
