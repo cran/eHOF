@@ -144,7 +144,7 @@ plot.HOF <- function (
         o <- order(resp$x)
         fv <- fitted(resp)[o,]
         fv <- sweep(fv, 1, resp$M, "/")
-	fv <- fv[,match(modeltypes, eHOF.modelnames)]
+				fv <- fv[,match(modeltypes, eHOF.modelnames)]
         x <- resp$x[o]
 	}
 	if (onlybest) {
@@ -168,7 +168,7 @@ plot.HOF <- function (
 
 para.fun <- function(resp, cex.pl = .8, ...) {
     if(dit=='hist') warning("It is not recommended to use dit='hist' together with para='TRUE'.")
-    if (is.null(newdata)) x <- resp$x else x <- newdata
+    x  <- if (is.null(newdata)) seq(min(resp$range), max(resp$range),length.out=10000) else newdata
     p <- Para(resp, model, newdata = x, ...)
     tl <- yl[2] - yl[2]/15
 
@@ -219,7 +219,7 @@ para.fun <- function(resp, cex.pl = .8, ...) {
   if(length(x) > 0)
      for(n in 1:length(x)) {
        y <- predict(resp, model, x[n], ...)
-       lines(rep(x[n],2), c(y - 0.05, y + 0.05), lty=1, col='orange')
+       lines(rep(x[n],2), c(y - (yl[2]/25), y + (yl[2]/25)), lty=1, col='orange')
       }
 }
   
@@ -243,7 +243,7 @@ para.fun <- function(resp, cex.pl = .8, ...) {
     }
   if(!add) {
     if (boxp == TRUE) logi.box(independ, depend, xaxt='n', ...) else  logi.scatter(independ, depend, ...)
-    if (para)  para.fun(resp, xaxt='n',...)
+    if (para)  para.fun(resp, xaxt='n', ...)
     switch(dit,
        	hist =logi.hist(independ, depend, ...),
        	bar = logi.bar(independ, depend, ...),

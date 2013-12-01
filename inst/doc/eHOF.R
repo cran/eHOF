@@ -7,7 +7,7 @@
 options(warn=1)
 
 
-## ----load, results='hide'------------------------------------------------
+## ----load, messages=FALSE------------------------------------------------
 library(eHOF)
 
 
@@ -16,11 +16,12 @@ library(vegdata)
 db <- 'elbaue'
 site <- tv.site(db)
 veg <- tv.veg(db, tax=FALSE, spcnames='numbers')
-# taxa <- tax(unique(obs$TaxonUsageID), verbose=TRUE)
-# write.csv2(taxa, file='taxa.csv')
-taxa <- read.csv2('taxa.csv')
+obs <- tv.obs(db)
+#taxa <- tax(unique(obs$TaxonUsageID), verbose=TRUE)
+#write.csv2(taxa, file='taxa.csv')
+taxa <- read.delim('taxonnames.csv')
 names(veg) <- sub('.0', '', names(veg), fixed=TRUE)
-names(veg) <- taxa$LETTERCODE[match(names(veg), taxa$TaxonUsageID)]
+for(i in 1:ncol(veg)) names(veg)[i] <- as.character(taxa$LETTERCODE[match(as.numeric(names(veg)[i]), taxa$TaxonUsageID)])
 
 
 ## ----5veg.2, results='hide'----------------------------------------------
@@ -46,7 +47,7 @@ for(i in 1:7) plot(mo[[i]], model = eHOF.modelnames[i], marginal ='n')
 
 
 ## ----percentageVEG, results='hide', warning=FALSE------------------------
-mods <- HOF(veg, site$MGL, M=100, family= poisson, bootstrap=NULL)
+mods <- HOF(veg, site$MGL, M=100, family = poisson, bootstrap = NULL)
 
 
 ## ----printPerc-----------------------------------------------------------
@@ -69,7 +70,7 @@ plot(mods.pa[['RANCREP']], para=TRUE, onlybest=FALSE)
 
 ## ----sqrt-ELYMREP, results='hide', warning=FALSE, out.width='.5\\textwidth'----
 mod.ELYM.sqrt <- HOF(veg.sqrt$ELYMREP, site$MGL, M=10, family=poisson, bootstrap = 10)
-plot(mod.ELYM.sqrt, marginal='point', para=TRUE, onlybest=FALSE)
+plot(mod.ELYM.sqrt, marginal='point', para=TRUE, onlybest=FALSE, newdata=seq(min(mod.ELYM.sqrt$range), max(mod.ELYM.sqrt$range),length.out=10000) )
 
 
 ## ----11, results='hide', warning=FALSE-----------------------------------
@@ -81,7 +82,7 @@ for(i in 1:length(mods.pa)) p4[[i]] <- Para(mods.pa[[i]], modeltypes='IV')
 ind <- !sapply(p, function(x) x$model) %in% c('III','VI', 'VII')
 p.opt <- sapply(p, function(x) x$opt)
 p4.opt <- sapply(p4, function(x) x$opt)
-plot(p.opt[ind], p4.opt[ind], xlab='best HOF model', ylab='only model IV')
+plot(p.opt[ind], p4.opt[ind], xlab='mean groundwater level', ylab='only model IV')
 for(i in 1:length(p.opt[!ind]))
     lines(unlist(p.opt[!ind][i]), rep(p4.opt[!ind][i], 2), col='darkgreen')
 points(c(-270,-270), p4.opt[is.na(p.opt)], pch='+')

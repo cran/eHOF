@@ -11,7 +11,8 @@ citEntry(
 	journal="Journal of Vegetation Science",
 	author="Jansen, Florian and Oksanen, Jari",
 	year="2013",
-	pages="1-11",
+	volume = {24},
+	pages="1108--1117",
 
 	textVersion =
 	paste("Jansen F, Oksanen J (2013) How to model species responses along ecological gradients - Huisman-Olff-Fresco models revisited.
@@ -19,3 +20,6 @@ citEntry(
 )
  
 citFooter("Thank you for using 'eHOF'")
+
+
+
