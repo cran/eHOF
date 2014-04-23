@@ -25,8 +25,8 @@
   bootstrap = 100,   test = c('AICc', 'BIC', 'AIC','Dev'), ...)
 	\method{HOF}{data.frame}(veg, grad, M, freq.limit = 10, ...)
 	\method{pick.model}{HOF}(object, level = 0.95, test = c("AICc", "BIC", "AIC", "Dev"), 
-  modeltypes, penal = 'df', gam = FALSE, selectMethod = c('bootselect','IC.weight','raw'),
-  quiet = FALSE, ...)
+  modeltypes, penal = 'df', gam = FALSE, selectMethod = c('bootselect','IC.weight',
+  'pick.model'), quiet = FALSE, ...)
 	\method{fitted}{HOF}(object, model, ...)
 	\method{predict}{HOF}(object, model, newdata, ...)
 }

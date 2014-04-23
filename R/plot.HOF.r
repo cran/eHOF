@@ -48,9 +48,9 @@ plot.HOF <- function (
  	if(yaxt!='n') axis(2, at=ax, labels= eval(ax*resp$M), ...)
       indep.1 <- independ[depend > 0]
       indep.0 <- independ[depend == 0]
-      boxplot(indep.1, horizontal = TRUE, add = TRUE, at = (yrange[2] + diff(yrange)/20), boxwex = diff(yrange)/10, col = col.box, notch = TRUE, axes = FALSE)
+      boxplot(indep.1, horizontal = TRUE, add = TRUE, at = (yrange[2] + diff(yrange)/20), boxwex = diff(yrange)/10, col = col.box, notch = TRUE, axes = FALSE, ...)
       axis(1, mgp=c(2,.5,0))
-        boxplot(indep.0, horizontal = TRUE, add = TRUE, at = 0 - diff(yrange)/20, boxwex = diff(yrange)/10, col = col.box, notch = TRUE, axes = FALSE)
+        boxplot(indep.0, horizontal = TRUE, add = TRUE, at = 0 - diff(yrange)/20, boxwex = diff(yrange)/10, col = col.box, notch = TRUE, axes = FALSE, ...)
        if(para & leg) title(main, adj = 0, ...) else title(main, ...)
     }
 

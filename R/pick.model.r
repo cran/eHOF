@@ -5,11 +5,11 @@ pick.model.HOF.list <- function(object, ...) {
   return(out)
 }
 
-pick.model.HOF <- function (object, level = 0.95, test = c('AICc', 'BIC', 'AIC','Dev'), modeltypes, penal = 'df', gam = FALSE, selectMethod = c('bootselect', 'IC.weight', 'raw'), quiet=FALSE, ...) {
+pick.model.HOF <- function (object, level = 0.95, test = c('AICc', 'BIC', 'AIC','Dev'), modeltypes, penal = 'df', gam = FALSE, selectMethod = c('bootselect', 'IC.weight', 'pick.model'), quiet=FALSE, ...) {
   selectMethod <- match.arg(selectMethod)
-  if(is.null(object$bootstrapmodels) & selectMethod != 'raw') {
-    if(!quiet) cat('Bootselect or IC.weight method only possible after bootstrapping. Choosing raw model choice instead.\n')
-    selectMethod <- 'original'
+  if(is.null(object$bootstrapmodels) & selectMethod != 'pick.model') {
+    if(!quiet) cat('Bootselect or IC.weight method only possible after bootstrapping.')
+    selectMethod <- 'pick.model'
   }
   test <- match.arg(test)
   if(missing(modeltypes)) modeltypes <- eHOF.modelnames

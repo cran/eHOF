@@ -4,8 +4,8 @@
 		selectMethod = 'bootselect', 
 		...) {
 	if(is.null(x[[1]]$bootstrapmodels)) {
-		message('Warning: No bootstrap results in object. Using selectMethod "raw" instead.\n')
-		selectMethod <- 'raw'
+		message('Warning: No bootstrap results in object. Using selectMethod "pick.model" instead.\n')
+		selectMethod <- 'pick.model'
 	}
     cat("Deviances:\n")
     printCoefmat(sapply(x, deviance), na.print="", has.Pvalue=FALSE, ...)

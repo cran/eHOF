@@ -18,33 +18,34 @@ HOF.default <- function(
   out <- HOF.model(occ, grad, M, y.name, x.name, family=family, lim=lim,...)
   
   IC.weights <- function(x, test = 'AICc') {
-	  penal <- sapply(x$models, function(x) length(x$par))
-	  dev <- deviance(x)
-	  ll <- logLik(x)
-	  AICc <- -2 * ll + 2 * penal + 2 * penal *(penal + 1)/(x$nobs - penal - 1) 
-	  d.AICc <- AICc - min(AICc, na.rm=TRUE)
-	  AICc.W <- round(exp(-0.5*AICc)/ sum(exp(-0.5*AICc), na.rm=TRUE),4)
-	  return(AICc.W)
+    p <- sapply(x$models, function(x) length(x$par))
+    k <- if(test == 'BIC') log(x$nobs) else 2
+    if(test == 'AICc') ic <- -2 * logLik(x) + k * p + (2*k*(k + 1))/(x$nobs - k - 1)
+    if(test %in% c('AIC', 'BIC'))   ic <- -2 * logLik(x) + k * p
+    if (test == "Dev")   ic <- deviance(x)
+    ic.W <- round(exp(-0.5 * ic)/ sum(exp(-0.5 * ic), na.rm=TRUE), 4)
+	  return(ic.W)
   }
+
   
   if(!is.null(bootstrap)) {
     test <- match.arg(test)
     modeltypes <- character(length=bootstrap)
     mods <- vector('list', length=bootstrap)
-	weights <-  matrix(nrow=bootstrap, ncol=7); colnames(weights) <- eHOF.modelnames
+	  weights <-  matrix(nrow=bootstrap, ncol=7); colnames(weights) <- eHOF.modelnames
     pb <- txtProgressBar (min = 0, max = bootstrap, char = '.',  width = 45, style = 3)
     for(i in 1:bootstrap) {
       take <- sample(length(grad), replace=TRUE)
       mods[[i]] <- HOF.model(occ[take], grad[take], M=M, y.name, x.name, family=family, lim=lim,...)
-      modeltypes[i] <- pick.model(mods[[i]], quiet=TRUE, ...)
-	  weights[i,] <- IC.weights(mods[[i]])
+      modeltypes[i] <- pick.model(mods[[i]], quiet=TRUE, test=test, ...)
+	    weights[i,] <- IC.weights(mods[[i]], test=test)
       setTxtProgressBar(pb, bootstrap - (bootstrap - i))
     }
     close (pb) ## Close progress bar
     out$call <- match.call()
     out$bootstraptest <- test
     out$bootstrapmodels <- modeltypes
-	out$ICweights <- weights
+	  out$ICweights <- weights
   }
   out
 }

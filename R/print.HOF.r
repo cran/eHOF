@@ -2,7 +2,7 @@
 		x, 
 		test = 'AICc', 
 		penal = 'df', 
-		selectMethod = c('bootselect', 'IC.weight', 'raw'), 
+		selectMethod = c('bootselect', 'IC.weight', 'pick.model'), 
 		gam = FALSE, 
 		k=4,
 		...) {
@@ -26,7 +26,7 @@
     d.AICc <- AICc - min(AICc, na.rm=TRUE)
     AICc.W <- round(exp(-0.5*AICc)/ sum(exp(-0.5*AICc), na.rm=TRUE),4)
 	
-	BIC  <- -2 * ll + log(x$nobs) * penal
+	  BIC  <- -2 * ll + log(x$nobs) * penal
     d.BIC <- BIC - min(BIC, na.rm=TRUE)
 
     out <- cbind(Deviance = dev, logLik=ll, AICc=AICc, df=penal, AICc.Diff = d.AICc, AICc.W = AICc.W, BIC.Diff = d.BIC)
@@ -37,16 +37,22 @@
 	  cat('Sum of bootstrapped model weights:\n')
 	  print(round(colSums(x$ICweights, na.rm=TRUE),2))
 
-	  if(selectMethod == 'bootselect') 
-		  best <- pick.model(x, test=test, k=k, gam=gam, selectMethod = selectMethod, quiet=TRUE, ...)
+	  if(selectMethod == 'bootselect') {
+		  best <- pick.model(x, k=k, gam=gam, selectMethod = selectMethod, quiet=TRUE, ...)
+		  cat("\nTest used during bootstrapping: ", x$bootstraptest, sep='')
+	  }
 	  if(selectMethod == 'IC.weight') 
 		  best <- names(which.max(colSums(x$ICweights)))
-#	  bestweight <- which.max(colSums(x$ICweights))
+#	  bestweight <- which.max(colSums(x$AICweights))
 #	  print(bestweight)
-	  cat("\nSuggested best bootstrap model (", test, ", " ,selectMethod, "): ", best, '\n', sep='')
-	} else {
+    if(selectMethod == 'pick.model') {
+      best <- pick.model(x, test=test, k=k, gam=gam, quiet=TRUE, ...)
+	  cat("\nSuggested best ", test, ", " , selectMethod, "model: ", best, '\n', sep='')
+    } else 
+    cat("\nSuggested best model (",selectMethod, '): ', best, '\n', sep='')
+    } else {
 	  best <- pick.model(x, test=test, k=k, gam=gam, quiet=TRUE, ...)
-	  cat("\nSuggested best model (",test, "information criterion ):", best, '\n\n')
+	  cat("\nSuggested best model (",test, "information criterion ): ", best, '\n\n')
   }
 	#    invisible(x)
 }
