@@ -38,7 +38,7 @@
 	  print(round(colSums(x$ICweights, na.rm=TRUE),2))
 
 	  if(selectMethod == 'bootselect') {
-		  best <- pick.model(x, k=k, gam=gam, selectMethod = selectMethod, quiet=TRUE, ...)
+		  best <- pick.model(x, k=k, gam=gam, selectMethod = selectMethod, ...)
 		  cat("\nTest used during bootstrapping: ", x$bootstraptest, sep='')
 	  }
 	  if(selectMethod == 'IC.weight') 
@@ -46,12 +46,12 @@
 #	  bestweight <- which.max(colSums(x$AICweights))
 #	  print(bestweight)
     if(selectMethod == 'pick.model') {
-      best <- pick.model(x, test=test, k=k, gam=gam, quiet=TRUE, ...)
+      best <- pick.model(x, test=test, k=k, gam=gam, ...)
 	  cat("\nSuggested best ", test, ", " , selectMethod, "model: ", best, '\n', sep='')
     } else 
     cat("\nSuggested best model (",selectMethod, '): ', best, '\n', sep='')
     } else {
-	  best <- pick.model(x, test=test, k=k, gam=gam, quiet=TRUE, ...)
+	  best <- pick.model(x, test=test, k=k, gam=gam, ...)
 	  cat("\nSuggested best model (",test, "information criterion ): ", best, '\n\n')
   }
 	#    invisible(x)

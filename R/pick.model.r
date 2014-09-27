@@ -1,14 +1,16 @@
 pick.model <-  function(...) UseMethod("pick.model")
 
 pick.model.HOF.list <- function(object, ...) {
-   out <- sapply(object, function(x) pick.model.HOF(object=x, quiet=TRUE, ...))
+   out <- sapply(object, function(x) pick.model.HOF(object=x,  ...))
   return(out)
 }
 
-pick.model.HOF <- function (object, level = 0.95, test = c('AICc', 'BIC', 'AIC','Dev'), modeltypes, penal = 'df', gam = FALSE, selectMethod = c('bootselect', 'IC.weight', 'pick.model'), quiet=FALSE, ...) {
+pick.model.HOF <- function (object, level = 0.95, test = c('AICc', 'BIC', 'AIC','Dev'), modeltypes, penal = 'df', gam = FALSE, selectMethod = c('bootselect', 'IC.weight', 'pick.model'),  ...) {
   selectMethod <- match.arg(selectMethod)
   if(is.null(object$bootstrapmodels) & selectMethod != 'pick.model') {
-    if(!quiet) cat('Bootselect or IC.weight method only possible after bootstrapping.')
+    if(getOption("bootselectmessage")) {
+       message('Bootselect or IC.weight method only possible after bootstrapping.')
+       options(bootselectmessage = FALSE)}
     selectMethod <- 'pick.model'
   }
   test <- match.arg(test)
@@ -59,7 +61,7 @@ pick.model.HOF <- function (object, level = 0.95, test = c('AICc', 'BIC', 'AIC',
   if(selectMethod == 'bootselect') {
     modboot <- names(which.max(table(object$bootstrapmodels)))
   if(modboot != model) 
-      if(!quiet) cat('Selection method: Most frequent bootstrap model.\n', object$y.name, ': Most frequent bootstrap model (',modboot, ') not equal to original choice (', model, ') by ', test, ' test.\n', sep='')
+      message('Selection method: Most frequent bootstrap model.\n', object$y.name, ': Most frequent bootstrap model (',modboot, ') not equal to original choice (', model, ') by ', test, ' test.\n', sep='')
     model <- modboot
   }
   if(selectMethod == 'IC.weights') {
@@ -73,10 +75,9 @@ pick.model.HOF <- function (object, level = 0.95, test = c('AICc', 'BIC', 'AIC',
       AICc.W <- round(exp(-0.5*AICc)/ sum(exp(-0.5*AICc), na.rm=TRUE),4)
       model.weight <- names(which.max(AICc.W))
       if(model.weight != model) { 
-		if(!quiet) cat('Selection method: Highest ', test, ' weights.\n', object$y.name, ': Original model choice (', model, ') not equal to the model with highest AICc weight (', model.weight, ') is chosen instead.\n', sep='')
+		message('Selection method: Highest ', test, ' weights.\n', object$y.name, ': Original model choice (', model, ') not equal to the model with highest AICc weight (', model.weight, ') is chosen instead.\n', sep='')
       	model <- model.weight
 	  }
   }
-
   return(model)
 }

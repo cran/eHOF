@@ -37,7 +37,7 @@ HOF.default <- function(
     for(i in 1:bootstrap) {
       take <- sample(length(grad), replace=TRUE)
       mods[[i]] <- HOF.model(occ[take], grad[take], M=M, y.name, x.name, family=family, lim=lim,...)
-      modeltypes[i] <- pick.model(mods[[i]], quiet=TRUE, test=test, ...)
+      modeltypes[i] <- pick.model(mods[[i]], test=test, ...)
 	    weights[i,] <- IC.weights(mods[[i]], test=test)
       setTxtProgressBar(pb, bootstrap - (bootstrap - i))
     }
@@ -46,7 +46,7 @@ HOF.default <- function(
     out$bootstraptest <- test
     out$bootstrapmodels <- modeltypes
 	  out$ICweights <- weights
-  }
+  } else options(bootselectmessage = TRUE)
   out
 }
 

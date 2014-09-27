@@ -54,9 +54,9 @@ db <- 'elbaue'
 site <- tv.site(db)
 veg <- tv.veg(db, tax=FALSE, spcnames='numbers')
 obs <- tv.obs(db)
-#taxa <- tax(unique(obs$TaxonUsageID), verbose=TRUE)
-#write.csv2(taxa, file='taxa.csv')
-taxa <- read.delim('taxonnames.csv')
+# taxa <- tax(unique(obs$TaxonUsageID), verbose=TRUE)
+# write.csv2(taxa, file='taxonnames.csv')
+taxa <- read.csv('taxonnames.csv')
 names(veg) <- sub('.0', '', names(veg), fixed=TRUE)
 for(i in 1:ncol(veg)) names(veg)[i] <- as.character(taxa$LETTERCODE[match(as.numeric(names(veg)[i]), taxa$TaxonUsageID)])
 @

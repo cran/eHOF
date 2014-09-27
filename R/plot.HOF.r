@@ -226,7 +226,7 @@ para.fun <- function(resp, cex.pl = .8, ...) {
  gam.conf <- function(independ, depend, bs = 'cr', k = 4, ...) {
     if (!is.null(newdata)) warning('GAM confidence intervalls only calculated for original predictor values!')
     fit <- mgcv::gam(depend ~ s(independ, bs=bs, k=k),family=get(resp$family), scale=0, ...)
-    pred.fit <- predict.gam(fit, type='response', se.fit=TRUE)
+    pred.fit <- mgcv::predict.gam(fit, type='response', se.fit=TRUE)
     o <- order(independ)
     ll <- pred.fit$fit - 2*pred.fit$se.fit; ll[ll<0] <- 0
     ul <- pred.fit$fit + 2*pred.fit$se.fit; ul[ul>resp$M] <- resp$M

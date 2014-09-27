@@ -1,6 +1,10 @@
 
 eHOF RELEASE VERSIONS at http://cran.r-project.org/
 
+Version 1.5 (Sept 27 2014)
+	* Para.HOF: Calculation of optima fixed
+	* pick.model: Bootselect messages mechanism changed
+
 Version 1.4 (April 22 2014)
 	* HOF.default: missing test=test in pick.model subfunction prohibited other selection criteria than AICc during bootstrap
 
