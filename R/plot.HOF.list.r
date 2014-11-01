@@ -23,18 +23,18 @@ nobs <- length(mods[[1]]$x)
 
 fitfun <- function(x, test, modeltypes,...) fitted(x, model = pick.model(x, test = test, modeltypes=modeltypes, gam=FALSE, ...))/x$M
 
- if (plottype == "layout") {
-	M <- mods[[1]]$M
-	minresp <- if(missing(yl)) 0 else yl[1]
-        maxresp <- 
-	if(missing(yl)) max(sapply(mods, function(x) max(x$models[[pick.model(x, test = test, modeltypes, gam=FALSE)]]$fitted )/M))  else yl[2]
-        layoutfun <- function(mods, N, mar=NULL, ...) {
-      	  if(is.null(mar)) mar <- if(N < 30) c(2,2,2,0) else c(1,0,0,0)
-      	  autolayout(N)
-      	  par(mar=mar)
-      	  for(i in 1:N) plot(mods[[i]], test=test, leg=leg, yl=c(minresp,maxresp), color=cols,  ...)
-      	}
-      layoutfun(mods, N=N, ...)
+   if (plottype == "layout") {
+  	M <- mods[[1]]$M
+  	minresp <- if(missing(yl)) 0 else yl[1]
+    maxresp <- 
+  	if(missing(yl)) max(sapply(mods, function(x) max(x$models[[pick.model(x, test = test, modeltypes, gam=FALSE)]]$fitted )/M))  else yl[2]
+    layoutfun <- function(mods, N, mar=NULL, ...) {
+  	  if(is.null(mar)) mar <- if(N < 30) c(2,2,2,0) else c(1,0,0,0)
+  	  autolayout(N)
+  	  par(mar=mar)
+  	  for(i in 1:N) plot(mods[[i]], test=test, leg=leg, yl=c(minresp,maxresp), color=cols,  ...)
+  	}
+    layoutfun(mods, N=N, ...)
   }
 
   if (plottype == "lattice") {

@@ -1,5 +1,11 @@
 
 eHOF RELEASE VERSIONS at http://cran.r-project.org/
+Version 1.5.4 (Oct 11 2014)
+	* pick.model: it was possible to select refused model V by bootstrapping
+	* Para.HOF: improvements
+
+Version 1.5.3 (Oct 11 2014)
+	* HOF.default: bootselect mechanism secured against primarily rejected modeltypes
 
 Version 1.5 (Sept 27 2014)
 	* Para.HOF: Calculation of optima fixed

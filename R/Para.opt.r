@@ -6,8 +6,10 @@ Para.opt <- function (
 		...) {
   if(is.null(model)) model <- pick.model(resp, gam=FALSE, ...)
   M <- resp$M
-  x <-  if (missing(newdata)) seq(min(resp$range),max(resp$range),length.out=10000)	else newdata
-
+#  x <-  if (missing(newdata)) seq(min(resp$range),max(resp$range),length.out=10000)	else newdata
+  x <- seq(resp$range[1] - diff(resp$range), resp$range[2] + diff(resp$range),length.out=10000)
+  
+  pred <- predict.HOF(resp, newdata = x, model = model)
   HOFfun <- function(resp, x, model) predict(resp, newdata = x, M = M, model = model)
   HOFfun3 <- function(x, y, resp) abs(y - predict(resp, newdata = x, M = M, model = model))
   
@@ -16,7 +18,7 @@ Para.opt <- function (
       if (missing(newdata)) top <- fitted(resp, 'I')[1] else  top <- predict(resp, 'I', newdata)[1]
       mini <- top
       pess <- NA
-  } 
+  }
 
   if (model == "II") {
       tmp <- optimize(HOFfun, resp$range, resp = resp, model = model, maximum = TRUE)
@@ -53,6 +55,7 @@ Para.opt <- function (
       mini <- as.numeric(tmp$objective)
       pess <- as.numeric(tmp$minimum)
   }
+
   if (model == "V") {
       p <- coef(resp, model)
       if (p[2] * p[4] >= 0) {
@@ -76,13 +79,26 @@ Para.opt <- function (
   }
   
   if (model == "VI") {
-      max1 <- optimize(HOFfun, resp$range, resp = resp, model=model, maximum = TRUE)
-  	  min2 <- optimize(HOFfun, lower=max1$maximum, upper=resp$range[2], resp = resp, model=model, maximum = FALSE)
-      mini <- min2$objective
-      max2 <- optimize(HOFfun3, c(min2[[1]], resp$range[[2]]), resp = resp, y=mini, maximum = TRUE)
-      top <- c(top1=max1$objective, top2 =max2$objective)
-      pess <- min2$minimum
-      opt <- c(opt1 = max1$maximum, opt2 = max2$maximum)
+      infl <- c(FALSE, diff(diff(pred)>0)!=0)
+      if(sum(infl) == 2) {# one optimum outside range
+        whichopt <- which.max(pred[which(infl)])
+        if(whichopt == 1) {# second optimum on the right side of the gradient
+          opt <- c(opt1 = x[which(infl)[1]], opt2 = resp$range[2]+-diff(resp$range)/1000)
+          top <- c(top1 = pred[which(infl)[1]], top2 = pred[length(pred)])
+          pess <- x[which(infl)[2]]
+          mini <- pred[which(infl)[2]]
+        } else {
+          opt <- c(opt1 = resp$range[1]--diff(resp$range)/1000, opt2 = x[which(infl)[2]])
+          top <- c(top1 = pred[which(infl)[2]], top2 = pred[1])
+          pess <- x[which(infl)[1]]
+          mini <- pred[which(infl)[1]]
+        }
+      } else {# both optima inside gradient
+      top <- c(top1 = pred[which(infl)[1]], top2 = pred[which(infl)[3]])
+      pess <- x[which(infl)[2]]
+      opt <- c(opt1 = x[which(infl)[1]], opt2 = x[which(infl)[3]])
+      mini <- pred[which(infl)[2]]
+      }
       new <- seq(resp$range[1], pess, length.out = 5000)
       pm <- predict.HOF(resp, newdata = new, model = model)
       expect1 <- sum(pm * new)/sum(pm)
@@ -120,9 +136,7 @@ Para.opt <- function (
     expect <- c(expect1, expect2)
   }
   if(model %in% c('I', 'II', 'III', 'IV', 'V')) {      
-# 		new <- seq(resp$range[1], resp$range[2], length.out = 10000)
-		pm <- predict.HOF(resp, newdata = x, model = model)
-		expect <- sum(pm * x)/sum(pm)
+		expect <- sum(pred * x)/sum(pred)
 	}
 
   list(opt = opt, top = top, pess = pess, mini = mini, expect = expect)

@@ -167,35 +167,26 @@ plot.HOF <- function (
   }
 
 para.fun <- function(resp, cex.pl = .8, ...) {
-    if(dit=='hist') warning("It is not recommended to use dit='hist' together with para='TRUE'.")
-    x  <- if (is.null(newdata)) seq(min(resp$range), max(resp$range),length.out=10000) else newdata
-    p <- Para(resp, model, newdata = x, ...)
+    if(dit=='hist') warning("It is not recommended to use marginal='hist' together with para='TRUE'.")
+    p <- Para(resp, model, ...)
     tl <- yl[2] - yl[2]/15
 
 ## Niche
   x <- c(p$outerBorder[1],rep(p$outerBorder[2], 2),p$outerBorder[1])
   y <- rep(c(yl[2] - yl[2]/35, yl[2]),each=2)
   polygon(x,y, col=grey(.9), border = NA)
-#       lines(rep(p$outerBorder[1],2), c(y[1], yl[2]), lwd=1, col = 1)
-#       lines(rep(p$outerBorder[2],2), c(y[1], yl[2]), lwd=1, col = 1)
 
   x <- c(p$centralBorder[1],rep(p$centralBorder[2], 2),p$centralBorder[1])
   y <- rep(c(yl[2] - yl[2]/20, yl[2]),each=2)
   polygon(x,y, col=grey(.85), border = NA)
-#       lines(rep(p$centralBorder[1],2), c(y[1], yl[2]), lwd=1, col = 1)
-#       lines(rep(p$centralBorder[2],2), c(y[1], yl[2]), lwd=1, col = 1)
 
   if(model %in% c('VI','VII')) {
     x <- c(p$outerBorder[3],rep(p$outerBorder[4], 2),p$outerBorder[3])
     y <- rep(c(yl[2] - yl[2]/35, yl[2]),each=2)
     polygon(x,y, col=grey(.9), border = NA)
-#       lines(rep(p$outerBorder[3],2), c(y[1], yl[2]), lwd=1, col = 1)
-#       lines(rep(p$outerBorder[4],2), c(y[1], yl[2]), lwd=1, col = 1)
     x <- c(p$centralBorder[3],rep(p$centralBorder[4], 2),p$centralBorder[3])
     y <- rep(c(yl[2] - yl[2]/20, yl[2]),each=2)
     polygon(x,y, col=grey(.85), border = NA)
-#       lines(rep(p$centralBorder[3],2), c(y[1], yl[2]), lwd=1, col = 1)
-#       lines(rep(p$centralBorder[4],2), c(y[1], yl[2]), lwd=1, col = 1)
   }
 ## Top
     lines(c(par('usr')[1], p$range[1]+diff(p$range)/100), rep(p$top[1], length.out=2))
@@ -210,17 +201,21 @@ para.fun <- function(resp, cex.pl = .8, ...) {
    if(model %in% c('VI','VII'))  {
     	lines(rep(p$opt['opt1'],2), c(tl, yl[2]), col = 4, lwd = 2)
     	lines(rep(p$opt['opt2'],2), c(tl, yl[2]), col = 4, lwd = 2)
-      } else { 
+    	points(p$opt, predict(resp, model, newdata=p$opt), col='blue')
+    } else { 
       if(length(p$opt)==1) lines(c(p$opt, p$opt), c(tl, yl[2]), col = 4, lwd = 2) else
     	lines(p$opt, c(yl[2], yl[2]), col=4, lwd = 2)
-   }
+      points(p$opt, predict(resp, model, newdata=p$opt), col='blue')
+    }
+## Pessimum
+  points(p$pess, predict(resp, model, newdata=p$pess), col='blue')
+
 ## Inflection
-  x <- p$inflection
-  if(length(x) > 0)
-     for(n in 1:length(x)) {
-       y <- predict(resp, model, x[n], ...)
-       lines(rep(x[n],2), c(y - (yl[2]/25), y + (yl[2]/25)), lty=1, col='orange')
-      }
+  if(length(p$inflection) > 0)
+     for(n in 1:length(p$inflection)) {
+       y <- predict(resp, model, p$inflection[n], ...)
+       points(p$inflection, predict(resp, model, newdata=p$inflection), col='orange')
+     }
 }
   
  gam.conf <- function(independ, depend, bs = 'cr', k = 4, ...) {

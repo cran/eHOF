@@ -3,14 +3,14 @@
 		test = 'AICc',  
 		selectMethod = 'bootselect', 
 		...) {
-	if(is.null(x[[1]]$bootstrapmodels)) {
-		message('Warning: No bootstrap results in object. Using selectMethod "pick.model" instead.\n')
+	if(selectMethod == 'bootselect' & is.null(x[[1]]$bootstrapmodels)) {
+		message('Bootstrap results missing. Using selectMethod "pick.model" instead.\n')
 		selectMethod <- 'pick.model'
 	}
     cat("Deviances:\n")
     printCoefmat(sapply(x, deviance), na.print="", has.Pvalue=FALSE, ...)
     cat(paste("\nSuggested best models (",test, ", ", selectMethod, "):", sep=''))
-    tmp <- sapply(x, pick.model, test=test, selectMethod = selectMethod, ...)
+    tmp <- sapply(x, pick.model, test=test, selectMethod = selectMethod, silent = TRUE, ...)
     names(tmp) <- names(x)
     cat('\n')
     print(noquote(tmp))

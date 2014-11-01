@@ -21,12 +21,13 @@
 }
 
 \usage{
-	\method{HOF}{default}(occ, grad, M = max(occ), y.name, family = binomial, lim = 100, 
-  bootstrap = 100,   test = c('AICc', 'BIC', 'AIC','Dev'), ...)
+	\method{HOF}{default}(occ, grad, M = max(occ), y.name, family=binomial, lim=100, 
+  bootstrap=100, test=c('AICc', 'BIC', 'AIC','Dev'), 
+  modeltypes=eHOF.modelnames, ...)
 	\method{HOF}{data.frame}(veg, grad, M, freq.limit = 10, ...)
 	\method{pick.model}{HOF}(object, level = 0.95, test = c("AICc", "BIC", "AIC", "Dev"), 
   modeltypes, penal = 'df', gam = FALSE, selectMethod = c('bootselect','IC.weight',
-  'pick.model'), ...)
+  'pick.model'), silent = FALSE, ...)
 	\method{fitted}{HOF}(object, model, ...)
 	\method{predict}{HOF}(object, model, newdata, ...)
 }
@@ -48,9 +49,10 @@
   \item{penal}{penalty term for model types, default is the number of model parameter.}
   \item{gam}{calculate AIC of GAM model and compare it with HOF models.}
   \item{selectMethod}{choose the model type selection method in case of divergence of the most frequent bootstrapped model 
-  		or the one with highest information criterion weight from the primary chosen type.}
+  or the one with highest information criterion weight from the primary chosen type.}
+  \item{silent}{messages about selectMethod}
   \item{newdata}{vector of gradient values for prediction.}
-  \item{model}{manually specify the HOF model type to be used, otherwise it is selected through function \code{\link{pick.model}}.}
+  \item{model}{You can specify the HOF model type to be used, otherwise it is selected through function \code{\link{pick.model}}.}
   \item{\dots}{further arguments passed to or from other methods}
 }
 

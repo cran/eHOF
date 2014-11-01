@@ -5,12 +5,12 @@ pick.model.HOF.list <- function(object, ...) {
   return(out)
 }
 
-pick.model.HOF <- function (object, level = 0.95, test = c('AICc', 'BIC', 'AIC','Dev'), modeltypes, penal = 'df', gam = FALSE, selectMethod = c('bootselect', 'IC.weight', 'pick.model'),  ...) {
+pick.model.HOF <- function (object, level = 0.95, test = c('AICc', 'BIC', 'AIC','Dev'), modeltypes, penal = 'df', gam = FALSE, selectMethod = c('bootselect', 'IC.weight', 'pick.model'), silent = FALSE, ...) {
   selectMethod <- match.arg(selectMethod)
   if(is.null(object$bootstrapmodels) & selectMethod != 'pick.model') {
-    if(getOption("bootselectmessage")) {
+    if(getOption("eHOF.bootselectmessage")) {
        message('Bootselect or IC.weight method only possible after bootstrapping.')
-       options(bootselectmessage = FALSE)}
+       options(eHOF.bootselectmessage = FALSE)}
     selectMethod <- 'pick.model'
   }
   test <- match.arg(test)
@@ -22,46 +22,56 @@ pick.model.HOF <- function (object, level = 0.95, test = c('AICc', 'BIC', 'AIC',
     m = c(I=1, II=2, III=2, IV=3, V=4, VI=4, VII=5)
     )
   }
+  rejectedmodels <- sapply(object$models, function(x) is.na(x$deviance))
   if(gam) {
-  	gamfun <- function(x, bs = 'cr', k = -1, ...) gam(x$y ~ s(x$x, bs=bs, k=k),family = get(x$family), scale = 0, ...)
+    gamfun <- function(x, bs = 'cr', k = -1, ...) gam(x$y ~ s(x$x, bs=bs, k=k),family = get(x$family), scale = 0, ...)
     pg <- gamfun(object, ...)
-  	object$models$GAM <- pg
-  	modeltypes <- c(modeltypes, 'GAM')
-  	if('GAM' %in% names(penal)) penal['GAM'] <- sum(pg$edf) else 
-  	penal <- c(penal, GAM=sum(pg$edf))
+    object$models$GAM <- pg
+    modeltypes <- c(modeltypes, 'GAM')
+    if('GAM' %in% names(penal)) penal['GAM'] <- sum(pg$edf) else 
+      penal <- c(penal, GAM=sum(pg$edf))
   }
-   
+  
+#   if(gam) {
+#     x <- object$x; y <- object$y; fam <- get(object$family)
+#   	gamfun <- function(..., y ~ s(x, bs=bs, k=k), family = fam, scale = 0, bs = 'cr', k = -1, ...) gam(...)
+#     pg <- gamfun(object = object, bs = bs, k = k, ...)
+#   	object$models$GAM <- pg
+#   	modeltypes <- c(modeltypes, 'GAM')
+#   	if('GAM' %in% names(penal)) penal['GAM'] <- sum(pg$edf) else 
+#   	penal <- c(penal, GAM=sum(pg$edf))
+#   }
+#    
   if (test == "AIC") {
       k <-  2
       p <- penal[match(names(penal), names(object$models))]
       ic <- -2 * logLik(object) + k * p
       ic <- ic[names(ic) %in% modeltypes]
-      model <- (names(ic))[which.min(ic)]
+      model <- (names(ic[!rejectedmodels]))[which.min(ic[!rejectedmodels])]
   }
   if (test == "AICc") {
       k <-  2
       p <- penal[match(names(penal), names(object$models))]
       ic <- -2 * logLik(object) + k * p + (2*k*(k + 1))/(object$nobs - k - 1)
       ic <- ic[names(ic) %in% modeltypes]
-      model <- (names(ic))[which.min(ic)]
+      model <- (names(ic[!rejectedmodels]))[which.min(ic[!rejectedmodels])]
   }
   if( test == 'BIC') {
       k <- log(object$nobs)
       p <- penal[match(names(penal), names(object$models))]
       ic <- -2 * logLik(object) + k * p
       ic <- ic[names(ic) %in% modeltypes]
-      model <- (names(ic))[which.min(ic)]
+      model <- (names(ic[!rejectedmodels]))[which.min(ic[!rejectedmodels])]
   }
   if (test == "Dev") {
       ic <- deviance(object)
       ic <- ic[names(ic) %in% modeltypes]
-      model <- (names(ic))[which.min(ic)]
+      model <- (names(ic[!rejectedmodels]))[which.min(ic[!rejectedmodels])]
   }
-  
   if(selectMethod == 'bootselect') {
     modboot <- names(which.max(table(object$bootstrapmodels)))
-  if(modboot != model) 
-      message('Selection method: Most frequent bootstrap model.\n', object$y.name, ': Most frequent bootstrap model (',modboot, ') not equal to original choice (', model, ') by ', test, ' test.\n', sep='')
+    if(modboot != model) 
+      if(!silent) message(object$y.name, ': Most frequent bootstrap model (',modboot, ') not equal to original choice (', model, ',',  object$bootstraptest,') by ', test, ' test.', sep='')
     model <- modboot
   }
   if(selectMethod == 'IC.weights') {
@@ -73,9 +83,9 @@ pick.model.HOF <- function (object, level = 0.95, test = c('AICc', 'BIC', 'AIC',
       AICc <- -2 * ll + 2 * penal + 2 * penal *(penal + 1)/(object$nobs - penal - 1) 
       d.AICc <- AICc - min(AICc, na.rm=TRUE)
       AICc.W <- round(exp(-0.5*AICc)/ sum(exp(-0.5*AICc), na.rm=TRUE),4)
-      model.weight <- names(which.max(AICc.W))
+      model.weight <- names(which.max(AICc.W[!rejectedmodels]))
       if(model.weight != model) { 
-		message('Selection method: Highest ', test, ' weights.\n', object$y.name, ': Original model choice (', model, ') not equal to the model with highest AICc weight (', model.weight, ') is chosen instead.\n', sep='')
+        if(!silent) message('Selection method: Highest ', test, ' weights.\n', object$y.name, ': Original model choice (', model, ') not equal to the model with highest IC weight (', model.weight, ') is chosen instead.', sep='')
       	model <- model.weight
 	  }
   }
