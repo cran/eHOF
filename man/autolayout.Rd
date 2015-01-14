@@ -10,13 +10,15 @@
 }
 
 \usage{
-autolayout(N, byrow = TRUE, ...)
+autolayout(N, byrow = TRUE, widths, heights, respect)
 }
 
 \arguments{
   \item{N}{number of subfigures}
   \item{byrow}{see \code{\link{matrix}}}
-  \item{...}{additional arguments for \code{\link{layout}} or \code{\link{matrix}}.}
+  \item{widths}{a vector of values for the widths of columns on the device. Relative widths are specified with numeric values. Absolute widths (in centimetres) are specified with the lcm() function (see examples).}
+  \item{heights}{a vector of values for the heights of rows on the device. Relative and absolute heights can be specified, see widths above.}
+  \item{respect}{either a logical value or a matrix object. If the latter, then it must have the same dimensions as mat and each value in the matrix must be either 0 or 1.}
 }
 
 \value{Returns the number of figures, N, see \code{\link{layout}}.}

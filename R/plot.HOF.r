@@ -139,12 +139,12 @@ plot.HOF <- function (
         fv <- matrix(ncol=length(modeltypes),nrow=length(newdata))
         dimnames(fv)[[2]] <- modeltypes
         for(i in 1:length(modeltypes)) 
-            fv[,i] <- predict(resp, modeltypes[i], newdata=x)
+            fv[,i] <- predict(resp, model=modeltypes[i], newdata=x)
      } else {
         o <- order(resp$x)
         fv <- fitted(resp)[o,]
         fv <- sweep(fv, 1, resp$M, "/")
-				fv <- fv[,match(modeltypes, eHOF.modelnames)]
+				fv <- fv[, match(modeltypes, eHOF.modelnames)]
         x <- resp$x[o]
 	}
 	if (onlybest) {
@@ -204,11 +204,11 @@ para.fun <- function(resp, cex.pl = .8, ...) {
     	points(p$opt, predict(resp, model, newdata=p$opt), col='blue')
     } else { 
       if(length(p$opt)==1) lines(c(p$opt, p$opt), c(tl, yl[2]), col = 4, lwd = 2) else
-    	lines(p$opt, c(yl[2], yl[2]), col=4, lwd = 2)
+    	lines(p$opt, c(yl[2], yl[2]), col='blue', lwd = 2)
       points(p$opt, predict(resp, model, newdata=p$opt), col='blue')
     }
 ## Pessimum
-  points(p$pess, predict(resp, model, newdata=p$pess), col='blue')
+#  points(p$pess, predict(resp, model, newdata=p$pess), col='blue')
 
 ## Inflection
   if(length(p$inflection) > 0)

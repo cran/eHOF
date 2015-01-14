@@ -15,7 +15,7 @@ Para.deriv <- function (
   a = p[1]; b = p[2]; c = p[3]; d = p[4]; f = p[5]
   M <- resp$M
   
-  fv <- switch(model,
+  fv <- switch(as.character(model),
      'I'  = expression(M/(1 + exp(a))),
      'II' = expression(M/(1 + exp(a + b * x))),
      'III'= expression(M/(1 + exp(a + b * x))/(1 + exp(c))),
@@ -26,10 +26,11 @@ Para.deriv <- function (
     )
 
   if(type == 'slope') {
-    if(model=='I') out <- 0 else {
+    if(model=='I') out <- rep(0, length(x)) else {
     	fv1 <- D(fv, 'x')
     	out <- eval(fv1)
-  }}
+    }
+  }
 
   if(type == 'inflection') {
     optima <- scale01(optima, resp$range)
@@ -38,13 +39,13 @@ Para.deriv <- function (
     fv2 <- deriv(fv1, 'x')
     fv3 <- as.function(list(fv2[[1]]))
     formals(fv3) <- alist(x=,a=a,b=b,c=c,d=d,f=f)
-    out <- switch(model,
+    out <- switch(as.character(model),
       I  = NA,
       II = if(a>0) optimize(fv3, c(0,1), a,b,c,d, maximum=TRUE)$maximum else optimize(fv3, c(0,1), a,b,c,d, maximum=FALSE)$minimum,
       III= {# range <- if(a<0) c(max(optima[2]), min(pessima)) else c(max(pessima),min(optima))
             if(a<0) optimize(fv3, c(0,1), a,b,c,d, maximum=FALSE)$minimum else optimize(fv3, c(0,1), a,b,c,d, maximum=TRUE)$maximum
             },
-      IV = c(optimize(fv3, c(0, optima), a,b,c,d, maximum=TRUE)$maximum, optimize(fv3, c(optima, 1), a,b,c,d, maximum=FALSE)$minimum),
+      IV = if(optima != 0 & optima != 1) c(optimize(fv3, c(0, optima), a,b,c,d, maximum=TRUE)$maximum, optimize(fv3, c(optima, 1), a,b,c,d, maximum=FALSE)$minimum) else NA,
       V  = c(optimize(fv3, c(0, optima), a,b,c,d, maximum=TRUE)$maximum, optimize(fv3, c(optima, 1), a,b,c,d, maximum=FALSE)$minimum),
       VI = c(optimize(fv3, c(0, optima[1]), a,b,c,d, maximum=TRUE)$maximum, 
              optimize(fv3, c(optima[1], pessima), a,b,c,d,maximum=FALSE)$minimum, 
@@ -56,6 +57,7 @@ Para.deriv <- function (
               optimize(fv3, c(pessima, optima[2]), a,b,c,d,f, maximum=TRUE)$maximum, 
               optimize(fv3, c(optima[2], max(x)), a,b,c,d,f, maximum=FALSE)$minimum)
    )
+   if(!all(is.na(out))) {
    out <- rescale01(out, resp$range)
 ## Filter true inflection points
    if(model == 'II') {
@@ -71,6 +73,7 @@ Para.deriv <- function (
       if(length(out)>1) if(out[2] > (resp$range[2] - diff(resp$range)/100)) out[2] <- NA
    }
 }
+  }
 
 return(out) 
 

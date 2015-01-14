@@ -45,15 +45,16 @@ mods <- HOF(veg, site$MGL, M=100, family = poisson, bootstrap = NULL)
 mods
 
 ## ----7sqrt, results='hide', warning=FALSE--------------------------------
+x <- seq(from=min(site$MGL), to=max(site$MGL), length.out=1000)
 mods.sq <- HOF(veg.sqrt, site$MGL, M=10, family= poisson, freq.limit=10, bootstrap=NULL)
-plot(mods.sq)
+plot(mods.sq, newdata = x)
 
 ## ----7pres-abs, results='hide', warning=FALSE----------------------------
 mods.pa <- HOF(veg.pa, site$MGL, M=1, bootstrap=NULL)
-plot(mods.pa)
+plot(mods.pa, newdata = x)
 
 ## ----paraplot, warning=FALSE, out.width='.5\\textwidth'------------------
-plot(mods.pa[['RANCREP']], para=TRUE, onlybest=FALSE)
+plot(mods.pa[['RANCREP']], para=TRUE, onlybest=FALSE, newdata=x)
 
 ## ----sqrt-ELYMREP, results='hide', warning=FALSE, out.width='.5\\textwidth'----
 mod.ELYM.sqrt <- HOF(veg.sqrt$ELYMREP, site$MGL, M=10, family=poisson, bootstrap = 10)

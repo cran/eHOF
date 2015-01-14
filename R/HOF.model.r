@@ -36,13 +36,13 @@ HOF.model <- function (
      aic(y, n, mu, wt, dev)/2
   }
 
-  trial.1 <- function(p, x, ...) { # PORT routine
+  trial.1 <- function(p, x, m, ...) { # PORT routine
     p <- svHOF(x, occ, M, model = m, mod = mod)
     temp <- nlminb(start=p, objective = mlHOF, lower = -lim, upper = lim, x = x, y = occ, M = M, model = m)
     temp$method <- 'nlminb'
     temp
     }
-  trial.2 <- function(p, x, ...) { # Byrd et. al. (1995)
+  trial.2 <- function(p, x, m, ...) { # Byrd et. al. (1995)
     p <- svHOF(x, occ, M, model = m, mod = mod)                                
     temp <- optim(par = p, mlHOF, x = x, method = "L-BFGS-B", lower = -lim, upper = lim, y = occ, M = M, model = m)
     temp$method <- 'Nelder-Mead'
@@ -60,10 +60,10 @@ for(m in eHOF.modelnames) {
     VII  = IV.res,            
     NA
     )
-  try(assign(res, trial.1(p, x)), silent=TRUE)
+  try(assign(res, trial.1(p, x, m)), silent=TRUE)
 
   if(is.na(res)) try(
-    { tmp <- trial.2(p, x)
+    { tmp <- trial.2(p, x, m)
     if(all(abs(tmp$par) <= lim)) assign(res, tmp) }, silent =TRUE)
 
 # fitted values and deviance

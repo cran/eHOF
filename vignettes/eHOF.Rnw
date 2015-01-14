@@ -133,8 +133,9 @@ Printing the output of a HOF objects with more than one species will give a matr
 \begin{figure}
 \begin{center}
 <<7sqrt, results='hide', warning=FALSE>>=
+x <- seq(from=min(site$MGL), to=max(site$MGL), length.out=1000)
 mods.sq <- HOF(veg.sqrt, site$MGL, M=10, family= poisson, freq.limit=10, bootstrap=NULL)
-plot(mods.sq)
+plot(mods.sq, newdata = x)
 @
 \end{center}
 \caption{
@@ -148,7 +149,7 @@ Most adequate model types for all species of the Elbaue dataset with at least 10
 \begin{center}
 <<7pres-abs, results='hide', warning=FALSE>>=
 mods.pa <- HOF(veg.pa, site$MGL, M=1, bootstrap=NULL)
-plot(mods.pa)
+plot(mods.pa, newdata = x)
 @
 \end{center}
 \caption{
@@ -168,7 +169,7 @@ Package HOF contains functions to compute parameters for the different model typ
 \begin{figure}
 \begin{center}
 <<paraplot, warning=FALSE, out.width='.5\\textwidth'>>=
-plot(mods.pa[['RANCREP']], para=TRUE, onlybest=FALSE)
+plot(mods.pa[['RANCREP']], para=TRUE, onlybest=FALSE, newdata=x)
 @
 \end{center}
 \caption{
@@ -186,7 +187,7 @@ plot(mod.ELYM.sqrt, marginal='point', para=TRUE, onlybest=FALSE, newdata=seq(min
 @
 \end{center}
 \caption{
-Hierarchical logistic regression models for \textit{Elymus repens} square root cover within the Elbaue dataset with plotted parameters of the most adequate model.
+Hierarchical logistic regression models for \textit{Elymus repens} square root cover within the Elbaue dataset with plotted parameters of the most adequate model. Original gradient.
 }
  \label{fig:paraModels}
 \end{figure}
@@ -219,7 +220,7 @@ lines(c(-600,0),c(-600,0), lty=2)
 @
 \end{center}
 \caption{
-Scatter Plot of optima (mean groundwater level below surface in centimetre in the Elbaue dataset) with best HOF model versus response models restricted to be unimodal symmetric ('IV'). The cross is plotted at x=-270 but in fact there is no x values since it is recognized to be a model I (no response) species by AICc selection. The green lines are representations of species without punctual optimum.
+Scatter Plot of optima (mean groundwater level below surface in centimetre in the Elbaue dataset) with best HOF model versus response models restricted to be unimodal symmetric ('IV'). The cross is plotted at x=-270 but in fact there are no x values since it is recognized to be a model I (no response) species by AICc selection. The green lines are representations of species without punctual optimum.
  }
 \label{fig:compOPT}
 \end{figure}

@@ -3,7 +3,7 @@
 		...,
 		test = 'AICc', 
 		penal = 'df', 
-		selectMethod = c('bootselect', 'IC.weight', 'pick.model'), 
+		selectMethod = c('bootselect.lower', 'IC.weight', 'pick.model'), 
 		gam = FALSE, 
 		k=4) {
 	  selectMethod <- match.arg(selectMethod)
@@ -15,11 +15,11 @@
     }
     cat('Response of: ', x$y.name, "\n")
     cat('Deviances and information criteria:\n')
-    if(gam) { 
+    if(gam) {
       gamfun <- function(x, bs = 'cr', ...) gam(x$y ~ s(x$x, bs=bs, k=k, ...),family=get(x$family), scale=0, ...)
       pg <- gamfun(x, ...)
       x$models$GAM <- pg
-      penal <- c(penal, GAM=sum(pg$edf) )
+      penal <- c(penal, GAM = sum(pg$edf) )
     }
     dev <- deviance(x)
     ll <- logLik(x)
@@ -39,21 +39,16 @@
   	  print(round(colSums(x$ICweights, na.rm=TRUE),2))
 
 	  if(selectMethod == 'bootselect') {
-		  best <- pick.model(x, k=k, gam=gam, selectMethod = selectMethod, silent = TRUE, ...)
+		  best <- pick.model(x, k=k, selectMethod = selectMethod, silent = TRUE, ...)
 		  cat("\nTest used during bootstrapping: ", x$bootstraptest, sep='')
 	  }
-	  if(selectMethod == 'IC.weight') 
-		  best <- names(which.max(colSums(x$ICweights)))
-#	  bestweight <- which.max(colSums(x$AICweights))
-#	  print(bestweight)
-    if(selectMethod == 'pick.model') {
-      best <- pick.model(x, test=test, k=k, gam=gam, silent = TRUE, ...)
-	  cat("\nSuggested best ", test, ", " , selectMethod, "model: ", best, '\n', sep='')
-    } else 
-    cat("\nSuggested best model (",selectMethod, '): ', best, '\n', sep='')
+	  if(selectMethod == 'IC.weight') best <- names(which.max(colSums(x$ICweights))) else
+                            best <- pick.model(x, test=test, k=k, silent = TRUE, ...)
+    
+     cat("\nSuggested best model (", test, ", " , selectMethod, "): ", best, '\n', sep='')
     } else {
-	  best <- pick.model(x, test=test, k=k, gam=gam, silent = TRUE, ...)
-	  cat("\nSuggested best model (",test, "information criterion ): ", best, '\n\n')
+  	  best <- pick.model(x, test=test, k=k, silent = TRUE, ...)
+  	  cat("\nSuggested best model (",test, "information criterion ): ", best, '\n\n')
   }
 	#    invisible(x)
 }

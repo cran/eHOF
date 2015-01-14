@@ -50,12 +50,10 @@ fitfun <- function(x, test, modeltypes,...) fitted(x, model = pick.model(x, test
 	  fv <- Fit[subscripts]
 	  sp <- unique(cbind(x[i], fv[i]))
 	  panel.xyplot(sp[, 1], sp[, 2], type = "l", lwd = 4, col = cols[match(mod[min(subscripts)], modeltypes)], ...)
-      }
-      mykey <- list(text = list(text = modeltypes), lines = list(lty = 1, 
-	  col = cols[match(modeltypes, eHOF.modelnames)]), columns = length(modeltypes))
-      out <- xyplot(Response ~ Gradient | Species, xlab = mods[[1]]$x.name, 
-	  Fit = Fit, key = mykey, panel = fit.panel)
-      return(out)
+    }
+    mykey <- list(text = list(text = modeltypes), lines = list(lty = 1, col = cols[match(modeltypes, eHOF.modelnames)]), columns = length(modeltypes))
+    out <- xyplot(Response ~ Gradient | Species, xlab = mods[[1]]$x.name, Fit = Fit, key = mykey, panel = fit.panel)
+    return(out)
   }
  if (plottype == "all") {
       lplot <- function( ..., xlim = c(min(grad), max(grad)), ylim=c(0,m), ylab = "Predicted probability", xlab = xlabel, type = "n", para) {
