@@ -10,7 +10,7 @@
     cat("Deviances:\n")
     printCoefmat(sapply(x, deviance), na.print="", has.Pvalue=FALSE, ...)
     cat(paste("\nSuggested best models (",test, ", ", selectMethod, "):", sep=''))
-    tmp <- sapply(x, pick.model, test=test, selectMethod = selectMethod, silent = TRUE)
+    tmp <- sapply(x, pick.model, test=test, selectMethod = selectMethod, silent = TRUE, ...)
     names(tmp) <- names(x)
     cat('\n')
     print(noquote(tmp))

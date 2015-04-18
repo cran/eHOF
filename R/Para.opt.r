@@ -1,21 +1,18 @@
 Para.opt <- function (
 		resp, 
 		model=NULL, 
-		punctual = FALSE, 
-		newdata = NULL, 
+		punctual = FALSE,
 		...) {
   if(is.null(model)) model <- pick.model(resp, gam=FALSE, ...)
   M <- resp$M
-#  x <-  if (missing(newdata)) seq(min(resp$range),max(resp$range),length.out=10000)	else newdata
   x <- seq(resp$range[1] - diff(resp$range), resp$range[2] + diff(resp$range),length.out=10000)
-  
   pred <- predict.HOF(resp, newdata = x, model = model)
   HOFfun <- function(resp, x, model) predict(resp, newdata = x, M = M, model = model)
   HOFfun3 <- function(x, y, resp) abs(y - predict(resp, newdata = x, M = M, model = model))
   
   if (model == "I") {
-      opt <- NA  # resp$range
-      if (missing(newdata)) top <- fitted(resp, 'I')[1] else  top <- predict(resp, 'I', newdata)[1]
+      opt <- NA  # alternative: resp$range
+      top <- fitted(resp, 'I')[1]
       mini <- top
       pess <- NA
   }
@@ -128,10 +125,10 @@ Para.opt <- function (
     min <- optimize(HOFfun, lower=opt['opt1'], upper=opt['opt2'], resp = resp, model=model, maximum = FALSE)
     mini <- min$objective
     pess <- min$minimum
-    new <- seq(resp$range[1], pess, length.out = 5000)
+    new <- seq(resp$range[1], pess, length.out = 10000)
     pm <- predict.HOF(resp, newdata = new, model = model)
     expect1 <- sum(pm * new)/sum(pm)
-    new <- seq(pess, resp$range[2], length.out = 5000)
+    new <- seq(pess, resp$range[2], length.out = 10000)
     pm <- predict.HOF(resp, newdata = new, model = model)
     expect2 <- sum(pm * new)/sum(pm) 
     expect <- c(expect1, expect2)
@@ -140,5 +137,5 @@ Para.opt <- function (
 		expect <- sum(pred * x)/sum(pred)
 	}
 
-  list(opt = opt, top = top, pess = pess, mini = mini, expect = expect)
+  list(opt = opt, top = top*M, pess = pess, mini = mini*M, expect = expect)
 }

@@ -1,4 +1,4 @@
-pick.model <-  function(object, ...) UseMethod("pick.model", object)
+pick.model <-  function(...) UseMethod("pick.model")
 
 pick.model.HOF.list <- function(object, ...) {
    out <- sapply(object, function(x) pick.model.HOF(object=x,  ...))

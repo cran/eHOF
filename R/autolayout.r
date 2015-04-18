@@ -1,12 +1,9 @@
 autolayout <- function (
 		N, 
 		byrow = TRUE, 
-		widths = rep.int(1, ncol(mat)),
-		heights = rep.int(1, nrow(mat)), 
-    respect = FALSE
-  ) {
+		...) {
   if (N < 1 | N > 33) stop("I am not able to determine layout for more than 33 plots automatically.")
-mat <- switch(N,
+lay <- switch(N,
   matrix(1, ncol = 1),
   matrix(1:2, ncol = 2, byrow = byrow),
   matrix(c(0, 1, 1, 0, 2, 2, 3, 3), nrow = 2, byrow = byrow), 
@@ -41,7 +38,6 @@ mat <- switch(N,
   matrix(1:32, nrow = 4, byrow = byrow),
   matrix(1:33,ncol=11, byrow = byrow)
   )
-  invisible(layout(mat, widths = rep.int(1, ncol(mat)),
-                   heights = rep.int(1, nrow(mat)), respect = FALSE))
+  invisible(layout(lay, ...))
 }
 

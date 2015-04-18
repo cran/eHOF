@@ -29,17 +29,19 @@ plot.HOF <- function (
     dit <- ifelse(para, 'n', if(length(independ) > 200) 'hist' else  'bar') 
     if(resp$family != 'binomial') dit <- 'points'
     } else dit <-  match.arg(marginal)
-  if(missing(modeltypes)) modeltypes <- eHOF.modelnames
+  if(missing(modeltypes)) modeltypes <- eHOF.modelnames else onlybest = FALSE
   if(missing(penal)) penal <- 'df'
   if(missing(model)) {
 	    model <- pick.model(resp, modeltypes = modeltypes, penal = penal, test = test, gam=FALSE, ...)
   }
   cols <- if(missing(color)) c("black", "red", "green", "blue", "sienna", "violet", "pink") else color
-  if(length(cols) != length(modeltypes)) cols <- rep(cols, length.out=length(modeltypes))
+#  cols <- c("black", "red", "green", "blue", "sienna", "violet", "pink")
+  #if(length(cols) != length(modeltypes)) cols <- rep(cols, length.out=length(modeltypes))
   if(missing(xlabel)) xlabel <- resp$x.name
   if (missing(main)) main <- resp$y.name
   if (missing(yl)) yl <- c(0, 1)
   if(missing(yaxt)) yaxt <- 's'
+  if (is.null(newdata)) newdata <- seq(min(resp$x), max(resp$x), length.out=10000)
     
   logi.box <- function(independ, depend, col.box = "grey", x.lab = xlabel, yrange = yl, ylab= NULL, las = las.h, multi=FALSE, ...) {
         if(is.null(ylab)) ylab <- if(resp$M == 1) 'Predicted probability' else 'Response'
@@ -134,30 +136,22 @@ plot.HOF <- function (
   }
 
  logi.curve <- function(resp, cex.l = .8, ...) {
-   if (!is.null(newdata)) {
-        x <- sort(newdata)
-        fv <- matrix(ncol=length(modeltypes),nrow=length(newdata))
-        dimnames(fv)[[2]] <- modeltypes
-        for(i in 1:length(modeltypes)) 
-            fv[,i] <- predict(resp, model=modeltypes[i], newdata=x)
-     } else {
-        o <- order(resp$x)
-        fv <- fitted(resp)[o,]
-        fv <- sweep(fv, 1, resp$M, "/")
-				fv <- fv[, match(modeltypes, eHOF.modelnames)]
-        x <- resp$x[o]
-	}
-	if (onlybest) {
-	  cols <- cols[match(model, eHOF.modelnames)]
-	  fv <- fv[, match(model, modeltypes)]
-	  linewd <- lwd
-	  lines(x, fv, col =  cols[1], lwd = linewd, ...)
-	  } else {
-	  cols <- cols[match(modeltypes, eHOF.modelnames)]
+   x <- sort(newdata) 
+   if (onlybest) {
+     cols <- cols[match(model, eHOF.modelnames)]
+     fv <- predict(resp, model, newdata=x)
+     linewd <- lwd
+     lines(x, fv, col =  cols[1], lwd = linewd, ...)
+   } else {
+     fv <- matrix(ncol=length(modeltypes), nrow=length(newdata))
+     for(i in 1:length(modeltypes)) 
+         fv[,i] <- predict(resp, model=modeltypes[i], newdata=x)
+     # fv <- sweep(fv, 1, resp$M, "/")
+
+	  if(length(cols) == length(eHOF.modelnames)) cols <- cols[match(modeltypes, eHOF.modelnames)]
 	  if(length(lwd)==1) linewd <- rep(lwd, length(modeltypes))
-	  linewd[match(model, modeltypes)] <- lwd*4
 	  matlines(x, fv, lty = 1, col = cols, lwd = linewd, ...)
-	  }
+	}
   par(xpd = TRUE)
   if(leg) {
        legend(par("usr")[2] + 0.05, par("usr")[4], if(onlybest) model else rev(modeltypes), ncol = 1, bty = "n", col = if(onlybest) cols else rev(cols[match(modeltypes, eHOF.modelnames)]), lty = 1, lwd = rev(linewd), title="Model", cex = cex.l)

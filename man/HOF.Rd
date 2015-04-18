@@ -26,9 +26,8 @@
   modeltypes=eHOF.modelnames, ...)
 	\method{HOF}{data.frame}(veg, grad, M, freq.limit = 10, ...)
 	\method{pick.model}{HOF}(object, level = 0.95, test = c("AICc", "BIC", "AIC", "Dev"), 
-  modeltypes, penal = 'df', gam = FALSE, 
-  selectMethod = c('bootselect.lower', 'bootselect.always', 'IC.weight', 'pick.model'),
-  silent = FALSE, ...)
+  modeltypes, penal = 'df', gam = FALSE,   selectMethod =   c('bootselect.lower', 
+  'bootselect.always', 'IC.weight', 'pick.model'),  silent = FALSE, ...)
 	\method{fitted}{HOF}(object, model, ...)
 	\method{predict}{HOF}(object, model, newdata, ...)
 }
@@ -54,7 +53,7 @@
   \item{silent}{messages about selectMethod}
   \item{newdata}{vector of gradient values for prediction.}
   \item{model}{You can specify the HOF model type to be used, otherwise it is selected through function \code{\link{pick.model}}.}
-  \item{\dots}{further arguments passed to other methods}
+  \item{\dots}{further arguments passed to or from other methods}
 }
 
 \details{

@@ -45,33 +45,18 @@ mods <- HOF(veg, site$MGL, M=100, family = poisson, bootstrap = NULL)
 mods
 
 ## ----7sqrt, results='hide', warning=FALSE--------------------------------
-x <- seq(from=min(site$MGL), to=max(site$MGL), length.out=1000)
 mods.sq <- HOF(veg.sqrt, site$MGL, M=10, family= poisson, freq.limit=10, bootstrap=NULL)
-plot(mods.sq, newdata = x)
+plot(mods.sq)
 
 ## ----7pres-abs, results='hide', warning=FALSE----------------------------
 mods.pa <- HOF(veg.pa, site$MGL, M=1, bootstrap=NULL)
-plot(mods.pa, newdata = x)
+plot(mods.pa)
 
 ## ----paraplot, warning=FALSE, out.width='.5\\textwidth'------------------
-plot(mods.pa[['RANCREP']], para=TRUE, onlybest=FALSE, newdata=x)
+plot(mods.pa[['RANCREP']], para=TRUE, onlybest=FALSE)
 
 ## ----sqrt-ELYMREP, results='hide', warning=FALSE, out.width='.5\\textwidth'----
 mod.ELYM.sqrt <- HOF(veg.sqrt$ELYMREP, site$MGL, M=10, family=poisson, bootstrap = 10)
 plot(mod.ELYM.sqrt, marginal='point', para=TRUE, onlybest=FALSE, newdata=seq(min(mod.ELYM.sqrt$range), max(mod.ELYM.sqrt$range),length.out=10000) )
-
-## ----11, results='hide', warning=FALSE, fig.height=4, fig.width=4--------
-mods.pa <- HOF(veg.pa, site$MGL, M=1, freq.limit=7, family=poisson, bootstrap=NULL)
-p <- Para(mods.pa)
-p4 <- vector('list', length(mods.pa))
-for(i in 1:length(mods.pa)) p4[[i]] <- Para(mods.pa[[i]], modeltypes='IV')
-#p4
-ind <- !sapply(p, function(x) x$model) %in% c('III','VI', 'VII')
-p.opt <- sapply(p, function(x) x$opt)
-p4.opt <- sapply(p4, function(x) x$opt)
-plot(p.opt[ind], p4.opt[ind], xlab='mean groundwater level (MGL)', ylab='MGL only with model IV')
-for(i in 1:length(p.opt[!ind]))
-    lines(unlist(p.opt[!ind][i]), rep(p4.opt[!ind][i], 2), col='darkgreen')
-points(c(-270), p4.opt[is.na(p.opt)], pch='+')
-lines(c(-600,0),c(-600,0), lty=2)
+Para(mod.ELYM.sqrt)
 

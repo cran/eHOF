@@ -1,10 +1,9 @@
 
 eHOF RELEASE VERSIONS at http://cran.r-project.org/
 
-Version 1.5.7 (Jan 13 2015)
-	* pick.model: the default is now to select most frequent bootstrap result only if it is a simpler model than the original choice (selectMethod = bootselectlower) 
-	* Para.opt: restriction of optima to the gradient range in concordance to the other models
-	* Para.deriv: slope for model has now the same length as the gradient and not only a single 0; model IV: missing inflection points if optimum is equal to a gradient border gave an error message
+Version 1.5.8 (2015-04)
+	* Para.opt and plot.HOF: corrected for M != 0
+	* CRAN policy maintenance
 
 Version 1.5.4 (Oct 11 2014)
 	* pick.model: it was possible to select refused model V by bootstrapping

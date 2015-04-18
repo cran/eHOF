@@ -45,7 +45,7 @@ Para.deriv <- function (
       III= {# range <- if(a<0) c(max(optima[2]), min(pessima)) else c(max(pessima),min(optima))
             if(a<0) optimize(fv3, c(0,1), a,b,c,d, maximum=FALSE)$minimum else optimize(fv3, c(0,1), a,b,c,d, maximum=TRUE)$maximum
             },
-      IV = if(optima != 0 & optima != 1) c(optimize(fv3, c(0, optima), a,b,c,d, maximum=TRUE)$maximum, optimize(fv3, c(optima, 1), a,b,c,d, maximum=FALSE)$minimum) else NA,
+      IV = c(optimize(fv3, c(0, optima), a,b,c,d, maximum=TRUE)$maximum, optimize(fv3, c(optima, 1), a,b,c,d, maximum=FALSE)$minimum),
       V  = c(optimize(fv3, c(0, optima), a,b,c,d, maximum=TRUE)$maximum, optimize(fv3, c(optima, 1), a,b,c,d, maximum=FALSE)$minimum),
       VI = c(optimize(fv3, c(0, optima[1]), a,b,c,d, maximum=TRUE)$maximum, 
              optimize(fv3, c(optima[1], pessima), a,b,c,d,maximum=FALSE)$minimum, 
@@ -57,7 +57,6 @@ Para.deriv <- function (
               optimize(fv3, c(pessima, optima[2]), a,b,c,d,f, maximum=TRUE)$maximum, 
               optimize(fv3, c(optima[2], max(x)), a,b,c,d,f, maximum=FALSE)$minimum)
    )
-   if(!all(is.na(out))) {
    out <- rescale01(out, resp$range)
 ## Filter true inflection points
    if(model == 'II') {
@@ -73,7 +72,6 @@ Para.deriv <- function (
       if(length(out)>1) if(out[2] > (resp$range[2] - diff(resp$range)/100)) out[2] <- NA
    }
 }
-  }
 
 return(out) 
 

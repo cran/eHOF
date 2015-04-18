@@ -11,7 +11,7 @@
   if (missing(model)) model <- pick.model(resp, gam=FALSE, ...)
   if (is.null(newdata)) x <- seq(-1, 2, length.out=10000) else x <- scale01(newdata, ...)
   M <- resp$M
-  opt <- Para.opt(resp, model=model, ...)
+  opt <- Para.opt(resp, model=model, newdata=x, ...)
   border <- Para.niche(resp, newdata=x, model=model, top=opt$top, optima=opt$opt, mini=opt$mini, pess=opt$pess, ...)
   slope <- Para.deriv(resp, newdata=x, p=resp$models[[model]]$par, model)
   infl <- Para.deriv(resp, newdata=x, p=resp$models[[model]]$par, model, optima=opt$opt, pessima=opt$pess, type='inflection')
