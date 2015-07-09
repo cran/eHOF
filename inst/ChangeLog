@@ -1,8 +1,10 @@
 
 eHOF RELEASE VERSIONS at http://cran.r-project.org/
+Version 1.5.9 (2015-05)
+	* outer and inner niche limits set to gradient range for all models
 
 Version 1.5.8 (2015-04)
-	* Para.opt and plot.HOF: corrected for M != 0
+	* Para.opt and plot.HOF: corrected for M != 1
 	* CRAN policy maintenance
 
 Version 1.5.4 (Oct 11 2014)

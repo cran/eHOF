@@ -6,7 +6,7 @@
 		pess, 
 		central = exp(-0.5), 
 		outer = exp(-2), 
-		newdata = NULL, 
+		newdata = NULL,
 		...) {
   x <- seq(resp$range[1] - diff(resp$range), resp$range[2] + diff(resp$range),length.out=10000)
 #  x <-  if(is.null(newdata)) seq(min(resp$range), max(resp$range), length.out=10000) else newdata
@@ -104,7 +104,11 @@
       outerBorder <- c(outer.low=outer.low, outer.high=outer.high)
       centralBorder <- c(central.low=central.low, central.high=central.high)
     }
+  centralBorder[which(centralBorder < min(resp$range))] <- min(resp$range)
+  centralBorder[which(centralBorder > max(resp$range))] <- max(resp$range)
+  outerBorder[which(outerBorder < min(resp$range))] <- min(resp$range)
+  outerBorder[which(outerBorder > max(resp$range))] <- max(resp$range)
   border <- list(centralBorder=centralBorder, outerBorder=outerBorder, orient=orient, relfreq.outer=relfreq.outer)
-  border
+  return(border)
 }
 

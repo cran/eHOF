@@ -15,17 +15,21 @@ export(HOF.model, HOF.fun, scale01, svHOF, eHOF.modelnames)
 # importFrom(utils, head, tail)
 importFrom(lattice, xyplot, panel.xyplot)
 importFrom(mgcv, gam)
+importFrom("graphics", "axTicks", "axis", "boxplot", "hist", "layout", "legend", "lines", "matlines", "mtext", "par", "plot", "points", "polygon", "text", "title")
+importFrom("grDevices", "gray", "grey", "rainbow")
+importFrom("stats", "D", "binomial", "coef", "deriv", "deviance", "fitted", "glm", "logLik", "nlminb", "optim", "optimize", "plogis", "predict", "printCoefmat", "rbinom")
+importFrom("utils", "setTxtProgressBar", "txtProgressBar")
 
 # HOF
 S3method(HOF, default)
 S3method(HOF, data.frame)
-S3method(HOF, fun) 
-S3method(HOF, model) 
+S3method(HOF, fun)
+S3method(HOF, model)
 S3method(pick.model, HOF)
 S3method(pick.model, HOF.list)
 S3method(Para, HOF)
 S3method(Para, HOF.list)
-S3method(Para, deriv) 
+S3method(Para, deriv)
 S3method(Para, niche)
 S3method(Para, opt)
 S3method(predict, HOF)
@@ -45,5 +49,3 @@ S3method(print, HOF)
 S3method(print, HOF.list)
 
 # others
-
-
