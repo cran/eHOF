@@ -155,7 +155,9 @@ plot.HOF <- function (
   par(xpd = TRUE)
   if(leg) {
        legend(par("usr")[2] + 0.05, par("usr")[4], if(onlybest) model else rev(modeltypes), ncol = 1, bty = "n", col = if(onlybest) cols else rev(cols[match(modeltypes, eHOF.modelnames)]), lty = 1, lwd = rev(linewd), title="Model", cex = cex.l)
-       if (para) legend((par("usr")[2]), par("usr")[4], legend=c("optimum", "expectancy value", "raw mean", "inflection point", "outer niche", "central niche"), title='Response parameters', ncol=2, pch=c(NA,NA,NA,NA,15,15,15), lty = c(1,2,1,1,0,0), col = c(4, 2, 1, 'orange', 'lightgrey', 'grey'), bg = "transparent", xjust = 1, yjust = 0, lwd = c(1,2,2,1,NA,NA), cex = cex.l)
+       if (para) legend((par("usr")[2]), par("usr")[4], legend=c("optimum", "expectancy value", "raw mean", "inflection points", "outer niche", "central niche"), title='Response parameters', ncol=2, 
+                        pch=c(1,NA,NA,1,15,15), 
+                        lty = c(0,2,1,0,0,0), col = c(4, 2, 1, 'orange', 'lightgrey', 'grey'), bg = "transparent", xjust = 1, yjust = 0, lwd = c(1,2,2,1,NA,NA), cex = cex.l)
       }
   invisible()
   }

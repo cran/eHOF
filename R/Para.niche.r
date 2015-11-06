@@ -1,4 +1,4 @@
-"Para.niche" <- function (
+"Para_niche" <- function (
 		resp, 
 		model, 
 		top, 

@@ -45,11 +45,10 @@
   \item{object}{HOF model object, results from function HOF. Either for a single species or a list for several species.}
   \item{level}{probability for model selection (1-P) for F or Chisq tests.}
   \item{test}{information criterion for model selection. Alternatives are \code{"AICc"}, \code{"BIC"}, \code{"AIC"} or just \code{"Dev"iance}. }
-  \item{modeltypes}{vector of model types, when only a subset of the six implemented modeltypes should be considered.}
+  \item{modeltypes}{vector of model types, when only a subset of the seven implemented modeltypes should be considered.}
   \item{penal}{penalty term for model types, default is the number of model parameter.}
   \item{gam}{calculate AIC of GAM model and compare it with HOF models.}
-  \item{selectMethod}{choose the model type selection method in case of divergence of the most frequent bootstrapped model 
-  or the one with highest information criterion weight from the primary chosen type.}
+  \item{selectMethod}{choose the model type selection method in case of divergence of the most frequent bootstrapped model or the one with highest information criterion weight from the primary chosen type.}
   \item{silent}{messages about selectMethod}
   \item{newdata}{vector of gradient values for prediction.}
   \item{model}{You can specify the HOF model type to be used, otherwise it is selected through function \code{\link{pick.model}}.}

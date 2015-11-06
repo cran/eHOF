@@ -1,11 +1,9 @@
-Para.deriv <- function (
+Para_deriv <- function (
 		resp, # response data object of HOF function
 		newdata=NULL, # specify new x value vector
-		p, 
 		model=NULL, 
+		p, 
 		type=c('slope','inflection'), 
-		optima, 
-		pessima, 
 		...)
 {
   type <- match.arg(type, c('slope','inflection'))
@@ -33,7 +31,9 @@ Para.deriv <- function (
   }
 
   if(type == 'inflection') {
+    optima <- Para_opt(resp)$opt
     optima <- scale01(optima, resp$range)
+    pessima <- Para_opt(resp)$pess
     pessima <- scale01(pessima, resp$range)
     fv1 <- D(fv,'x')
     fv2 <- deriv(fv1, 'x')

@@ -1,4 +1,4 @@
-Para.opt <- function (
+Para_opt <- function (
 		resp, 
 		model=NULL, 
 		punctual = FALSE,
@@ -30,12 +30,11 @@ Para.opt <- function (
     top <- optimize(HOFfun, interval=resp$range, model = model, resp = resp, maximum = TRUE)$objective
     # optimum as range between 9/10 of the highest response plateau and the gradient edge
     opt <- optimize(HOFfun3, resp$range, y = top * 9/10, resp = resp, maximum = FALSE)$minimum
-  if(resp$models$III$par['c'] < 0) 
-		opt <- if(punctual) opt - (opt - min(resp$range))/2	else
-	  c(opt.min = min(resp$range), opt.max = opt)
-	if(resp$models$III$par['c'] >= 0) 
-		opt <- if(punctual) opt + (max(resp$range) - opt)/2	else
-	  c(opt.min = opt, opt.max = max(resp$range))
+  if(resp$models$III$par['a'] < 0) 
+		opt <- if(punctual) opt - (opt - min(resp$range))/2	else c(opt.min = min(resp$range), opt.max = opt) else
+	if(resp$models$III$par['a'] >= 0) 
+		opt <- if(punctual) opt + (max(resp$range) - opt)/2	else c(opt.min = opt, opt.max = max(resp$range)) 
+#  else if(resp$models$III$par['a'] >= 0 & resp$models$III$par['c'] >= 0)  else warning('Check optimum estimation code.')
   pess <- optimize(HOFfun, model=model, resp$range, resp = resp, maximum = FALSE)
   mini <- pess$objective
   if (predict(resp, newdata = min(resp$range), M = M, model = model) > predict(resp, newdata = max(resp$range), M = M, model = model))  pess <- c(pess$minimum, max(resp$range)) else pess <- c(min(resp$range), pess$minimum)

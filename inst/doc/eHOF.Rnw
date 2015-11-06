@@ -98,7 +98,7 @@ Huisman, Olff and Fresco suggested five response shapes \cite{Huisman1993}. Addi
 
 \begin{figure}
 \begin{center}
-<<modeltypes, warning=FALSE, results='hide'>>=
+<<modeltypes, warning=FALSE, results='hide', dev='png'>>=
 data(acre)
 sel <- c('ELYMREP', 'VEROPES', 'CONSREG', 'DESUSOP', 'VEROARV', 'ARTE#VU', 'ACHIMIL')
 mo <- HOF(acre[match(sel, names(acre))], acre.env$PH_KCL, M=1, bootstrap=NULL)
@@ -132,7 +132,7 @@ Printing the output of a HOF object with more than one species will give a matri
 
 \begin{figure}
 \begin{center}
-<<7sqrt, results='hide', warning=FALSE>>=
+<<7sqrt, results='hide', warning=FALSE, dev='png'>>=
 mods.sq <- HOF(veg.sqrt, site$MGL, M=10, family= poisson, freq.limit=10, bootstrap=NULL)
 plot(mods.sq)
 @
@@ -146,7 +146,7 @@ Most adequate model types for all species of the Elbaue dataset with at least 10
 
 \begin{figure}
 \begin{center}
-<<7pres-abs, results='hide', warning=FALSE>>=
+<<7pres-abs, results='hide', warning=FALSE, dev='png'>>=
 mods.pa <- HOF(veg.pa, site$MGL, M=1, bootstrap=NULL)
 plot(mods.pa)
 @
@@ -167,7 +167,7 @@ Package eHOF contains functions to compute parameters for the different model ty
 
 \begin{figure}
 \begin{center}
-<<paraplot, warning=FALSE, out.width='.5\\textwidth'>>=
+<<paraplot, warning=FALSE, out.width='.5\\textwidth', dev='png'>>=
 plot(mods.pa[['RANCREP']], para=TRUE, onlybest=FALSE)
 @
 \end{center}
@@ -180,7 +180,7 @@ Hierarchical logistic regression models for \textit{Ranunculus repens} presence/
 
 \begin{figure}
 \begin{center}
-<<sqrt-ELYMREP, results='hide', warning=FALSE, out.width='.5\\textwidth'>>=
+<<sqrt-ELYMREP, results='hide', warning=FALSE, out.width='.5\\textwidth', dev='png'>>=
 mod.ELYM.sqrt <- HOF(veg.sqrt$ELYMREP, site$MGL, M=10, family=poisson, bootstrap = 10)
 plot(mod.ELYM.sqrt, marginal='point', para=TRUE, onlybest=FALSE, newdata=seq(min(mod.ELYM.sqrt$range), max(mod.ELYM.sqrt$range),length.out=10000) )
 Para(mod.ELYM.sqrt)

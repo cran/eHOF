@@ -3,7 +3,7 @@
 export(autolayout, HOF, Para, betaresp)
 
 ## export regular functions with dot names
-export(pick.model, Para.niche, Para.opt, Para.deriv)
+export(pick.model, Para_niche, Para_opt, Para_deriv)
 
 ## Export .Deprecated functions (to be removed later)
 
@@ -29,9 +29,6 @@ S3method(pick.model, HOF)
 S3method(pick.model, HOF.list)
 S3method(Para, HOF)
 S3method(Para, HOF.list)
-S3method(Para, deriv)
-S3method(Para, niche)
-S3method(Para, opt)
 S3method(predict, HOF)
 S3method(fitted, HOF)
 S3method(coef, HOF)

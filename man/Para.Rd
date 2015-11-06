@@ -42,11 +42,10 @@
 }
 
 \details{
-If you want to obtain the model slope, you can use the undocumented function Para.deriv(resp, p=modelparameter, newdata=x, type='slope').
-
-For models VI and VII Para will give you two expectancy values for the ranges left and right of the pessimum between the model optima. If you want to have the overall expectancy value, calculate something like: 
-\code{gradient <- seq(min(Para(resp)$range), max(Para(resp)$range), length.out=10000)
-weighted.mean(gradient, predict(resp, newdata=gradient))
+For models VI and VII \code{Para} will give you two expectancy values for the ranges left and right of the pessimum between the model optima. If you want to have the overall expectancy value, use: 
+\code{
+  gradient <- seq(min(Para(resp)$range), max(Para(resp)$range), length.out=10000)
+  weighted.mean(gradient, predict(resp, newdata=gradient))
 }
 }
 

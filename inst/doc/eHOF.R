@@ -29,7 +29,7 @@ veg.pa <- tv.veg(db, cover.transform='pa', tax=FALSE, spcnames='numbers')
 names(veg.pa) <- sub('.0', '', names(veg.pa), fixed=TRUE)
 names(veg.pa) <- taxa$LETTERCODE[match(names(veg.pa), taxa$TaxonUsageID)]
 
-## ----modeltypes, warning=FALSE, results='hide'---------------------------
+## ----modeltypes, warning=FALSE, results='hide', dev='png'----------------
 data(acre)
 sel <- c('ELYMREP', 'VEROPES', 'CONSREG', 'DESUSOP', 'VEROARV', 'ARTE#VU', 'ACHIMIL')
 mo <- HOF(acre[match(sel, names(acre))], acre.env$PH_KCL, M=1, bootstrap=NULL)
@@ -44,18 +44,18 @@ mods <- HOF(veg, site$MGL, M=100, family = poisson, bootstrap = NULL)
 ## ----printPerc-----------------------------------------------------------
 mods
 
-## ----7sqrt, results='hide', warning=FALSE--------------------------------
+## ----7sqrt, results='hide', warning=FALSE, dev='png'---------------------
 mods.sq <- HOF(veg.sqrt, site$MGL, M=10, family= poisson, freq.limit=10, bootstrap=NULL)
 plot(mods.sq)
 
-## ----7pres-abs, results='hide', warning=FALSE----------------------------
+## ----7pres-abs, results='hide', warning=FALSE, dev='png'-----------------
 mods.pa <- HOF(veg.pa, site$MGL, M=1, bootstrap=NULL)
 plot(mods.pa)
 
-## ----paraplot, warning=FALSE, out.width='.5\\textwidth'------------------
+## ----paraplot, warning=FALSE, out.width='.5\\textwidth', dev='png'-------
 plot(mods.pa[['RANCREP']], para=TRUE, onlybest=FALSE)
 
-## ----sqrt-ELYMREP, results='hide', warning=FALSE, out.width='.5\\textwidth'----
+## ----sqrt-ELYMREP, results='hide', warning=FALSE, out.width='.5\\textwidth', dev='png'----
 mod.ELYM.sqrt <- HOF(veg.sqrt$ELYMREP, site$MGL, M=10, family=poisson, bootstrap = 10)
 plot(mod.ELYM.sqrt, marginal='point', para=TRUE, onlybest=FALSE, newdata=seq(min(mod.ELYM.sqrt$range), max(mod.ELYM.sqrt$range),length.out=10000) )
 Para(mod.ELYM.sqrt)
