@@ -1,5 +1,5 @@
 Para_opt <- function (
-		resp, 
+ 		resp, 
 		model=NULL, 
 		punctual = FALSE,
 		...) {

@@ -62,7 +62,7 @@
   Function \code{\link{pick.model}} finds the most adequate modeltype according to the chosen Information Criterion (AICc is default).
   Function \code{fitted} returns the fitted values for the used \code{grad}ient, and \code{predict} for any values in \code{newdata}.
   
-  To improve and check model stability a bootstrapping mechanism is implemented in function HOF. If the initially chosen model type is different from the most frequent one, the latter will be chosen by default.
+  To improve and check model stability a bootstrapping mechanism is implemented in function HOF. If the initially chosen model type is different from the most frequent one, the latter will be chosen by default. Bootstrapping is done with sample(length(grad), replace = TRUE).
  }
 
 \value{

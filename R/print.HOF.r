@@ -50,5 +50,5 @@
   	  best <- pick.model(x, test=test, k=k, silent = TRUE, ...)
   	  cat("\nSuggested best model (",test, "information criterion ): ", best, '\n\n')
   }
-	#    invisible(x)
+	    invisible(out)
 }

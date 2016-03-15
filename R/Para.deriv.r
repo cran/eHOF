@@ -31,9 +31,9 @@ Para_deriv <- function (
   }
 
   if(type == 'inflection') {
-    optima <- Para_opt(resp)$opt
+    optima <- suppressMessages(Para_opt(resp, model)$opt)
     optima <- scale01(optima, resp$range)
-    pessima <- Para_opt(resp)$pess
+    pessima <- suppressMessages(Para_opt(resp, model)$pess)
     pessima <- scale01(pessima, resp$range)
     fv1 <- D(fv,'x')
     fv2 <- deriv(fv1, 'x')
@@ -53,7 +53,7 @@ Para_deriv <- function (
              optimize(fv3, c(optima[2], max(x)), a,b,c,d, maximum=FALSE)$minimum),
 
       VII = c(optimize(fv3, c(0, optima[1]), a,b,c,d,f, maximum=TRUE)$maximum, 
-              optimize(fv3, c(optima[1], pessima), a,b,c,d,f, maximum=FALSE)$minimum, 
+              optimize(fv3, c(optima[1], pessima), a,b,c,d,f, maximum=FALSE)$minimum,
               optimize(fv3, c(pessima, optima[2]), a,b,c,d,f, maximum=TRUE)$maximum, 
               optimize(fv3, c(optima[2], max(x)), a,b,c,d,f, maximum=FALSE)$minimum)
    )

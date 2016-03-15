@@ -70,26 +70,19 @@ A \code{dit='bar'} plot will display the original response values. For binary da
 # An example for plottype='all' to show species responses for the species within 
 # the most acidic and the most calcareous vegetation plot.
 	\dontrun{
-	# acid <- sample(rownames(acre)[acre.env$PH_KCL < 4.8], 1)
-	SpeciesFromAnAcidicPlot <- acre['57',] >0
-	mods.acidic <- HOF(acre[,SpeciesFromAnAcidicPlot],acre.env$PH_KCL,M=1,bootstrap=NULL)
-	SpeciesFromAnCalcareousPlot <- acre[calc <- 
-  sample(rownames(acre)[acre.env$PH_KCL > 6], 1),] >0
-	mods.calc <- HOF(acre[,SpeciesFromAnCalcareousPlot],acre.env$PH_KCL,M=1,bootstrap=NULL)
+	allSpeciesFromAnAcidicPlot <- acre['57',] > 0
+	mods.acidic <- HOF(acre[,allSpeciesFromAnAcidicPlot],acre.env$PH_KCL,M=1,bootstrap=NULL)
+	allSpeciesFromAnCalcareousPlot <- acre['87',] > 0
+	mods.calc <- HOF(acre[,allSpeciesFromAnCalcareousPlot],acre.env$PH_KCL,M=1,bootstrap=NULL)
 	
 	autolayout(2)
 	plot(mods.acidic, plottype='all', main='Plot with low pH')
-	abline(v=acre.env$PH_KCL[acre.env$RELEVE_NR == acid])
-	legend('topright',cex=.75, bty='n', lty=1:length(mods.acidic), col= c("black","red",
-  "green", "blue", "sienna", "violet")[as.integer(factor(pick.model(mods.acidic)))], 
-  names(mods.acidic))
-	abline(v=acre.env$PH_KCL[acre.env$RELEVE_NR == acid])
+	abline(v=acre.env$PH_KCL[acre.env$RELEVE_NR == '57])
+  names(mods.acidic)
 	
 	plot(mods.calc, plottype='all', main='Plot with high pH')
-	legend('topleft',cex=.75, bty='n', lty=1:length(mods.acidic), col= c("black","red", 
-  "green","blue","sienna","violet")[as.integer(factor(pick.model(mods.calc)))], 
-  names(mods.calc))
-	abline(v=acre.env$PH_KCL[acre.env$RELEVE_NR == calc])
+	abline(v=acre.env$PH_KCL[acre.env$RELEVE_NR == '87'])
+  names(mods.calc)
 	}
 } 
 
