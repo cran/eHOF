@@ -25,9 +25,8 @@ After the installation of package eHOF you can access this PDF
 \footnote{$ $Id: eHOF.Rnw $ $ processed with eHOF \Sexpr{packageDescription("eHOF", field="Version")} in \Sexpr{R.version.string} on \today} 
 with
 
-<<1,eval=FALSE>>=
 vignette("eHOF")
-@
+
 
 \end{abstract}
 

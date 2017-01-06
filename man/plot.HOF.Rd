@@ -30,7 +30,7 @@
   \item{penal}{penalty term for model types, default is the number of model parameter}
   \item{para}{should model parameters (optima, raw.mean, niche,..) be plotted.}
   \item{gam.se}{plotting of two times standard error of predict.gam as confidence interval}
-  \item{color}{model line color, vector of length eight}
+  \item{color}{model line color, vector of length seven}
   \item{newdata}{curves are plotted for original x-values. Otherwise you have to provide a vector with new gradient values.}
   \item{leg}{legend for model type (and parameters)}
   \item{lwd}{line width of model curve(s)}

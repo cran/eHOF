@@ -16,7 +16,6 @@
     }
 }
 
-
 # '[.HOF.list' <- function(x, ...) {
 #    x <- UseMethod('[')
 #    class(x) <- 'HOF.list'

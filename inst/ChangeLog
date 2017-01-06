@@ -1,4 +1,6 @@
 eHOF RELEASE VERSIONS at http://cran.r-project.org/
+Version 1.8 (2016-01)
+	* Para failed sometimes for models without inflection points
 
 Version 1.6 (2015-11)
 	* Para failed for some model III responses

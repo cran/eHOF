@@ -8,12 +8,11 @@
 		outer = exp(-2), 
 		newdata = NULL,
 		...) {
-  x <- seq(resp$range[1] - diff(resp$range), resp$range[2] + diff(resp$range),length.out=10000)
-#  x <-  if(is.null(newdata)) seq(min(resp$range), max(resp$range), length.out=10000) else newdata
+ x <-  if(is.null(newdata))  seq(resp$range[1] - diff(resp$range)/2, resp$range[2] + diff(resp$range)/2, length.out = 10000) else newdata
  M <- resp$M
  if (missing(model)) 
     model <- pick.model(resp, gam=FALSE, ...)
- ranx <- diff(resp$range)
+# ranx <- diff(resp$range)
  HOFfun <- function(resp, x, y, M) abs(y - predict(resp, new = x, M = M, model = model))
 
     if (model == "I") {
@@ -63,18 +62,22 @@
     }
 
     if (model == "V") {
-   	  x <- seq(min(resp$x)* (-sign(min(resp$x))*10),optima, length.out=10)
+#      print(range(x))
+#   	  x <- 
+#      print(range(seq(min(resp$x)* (-sign(min(resp$x))*2), optima, length.out=length(x)))) # ??
             tmp <- optimize(HOFfun, y = top*eval(outer), x, resp = resp, maximum = FALSE)
   	  outer.low <- tmp$minimum
+#  	  print('outer.low')            
+#  	  print(outer.low)
   	  x <- resp$x[resp$x > optima]
             tmp <- optimize(HOFfun, y = top*eval(outer), c(optima,resp$range[2]), resp = resp, maximum = FALSE)
   	  outer.high <- tmp$minimum
-            tmp <- optimize(HOFfun, y = top*eval(central), c(resp$range[1], optima), resp = resp, maximum = FALSE)
+  	  tmp <- optimize(HOFfun, y = top*eval(central), c(resp$range[1], optima), resp = resp, maximum = FALSE)
   	  central.low <- tmp$minimum
   	  x <- resp$x[resp$x > optima]
             tmp <- optimize(HOFfun, y = top*eval(central), c(optima,resp$range[2]), resp = resp, maximum = FALSE)
-  	  central.high <- tmp$minimum
-            orient <- if((optima - outer.low) < (outer.high - optima)) 'skewed.left' else 'skewed.right'
+      central.high <- tmp$minimum
+      orient <- if((optima - outer.low) < (outer.high - optima)) 'skewed.left' else 'skewed.right'
     }
 
     if(model %in% c('VI','VII')) {
