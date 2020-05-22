@@ -1,32 +1,27 @@
-\encoding{UTF-8}
 \name{HOF-package}
 \alias{HOF-package}
 \docType{package}
 
-\title{Hierarchical logistic regression analysis}
+\title{
+Hierarchical logistic regression analysis
+}
 
 \description{
  The HOF package provides functions for hierachical logistic regressions, extended to  bimodal models 
- and a bootstrap approach to guarantee model stability. Such hierarchical models are known as 
- HOF models (Huisman-Olff-Fresco 1993).
+ and a bootstrap approach to guarantee model stability. Such hierarchical models are also known as 
+ HOF models (Huisman-Olff-Fresco 1993) and can be used e.g. to model species distribution along ecological gradients.
 }
 
 \details{
-\tabular{ll}{Package: \tab HOF\cr
-Title: \tab Extended Huisman-Olff-Fresco-Models\cr
-Author: \tab Florian Jansen <jansen@uni-greifswald.de>\cr
-\tab Jari Oksanen\cr
-Maintainer: \tab Florian Jansen <jansen@uni-greifswald.de>\cr
-Depends: \tab R (>= 2.0.0), \code{\link[vegdata]{vegdata}}\cr
-Suggests: \tab \code{\link[vegan]{vegan}}\cr
-URL: \tab http://geobot.botanik.uni-greifswald.de/download\cr}
+The functions in the \pkg{eHOF} package contain tools to model Extended Huisman-Olff-Fresco-Models
+to bounded responses to any gradient. The gradients (x-values) are internally standardized to 0 to 1.
+
+Binary as well as continous response values can be modelled.
 }
 
-\author{Florian Jansen <jansen@uni-greifswald.de> and 
+\author{Florian Jansen <florian.jansen@uni-rostock.de> and 
     Jari Oksanen
   }
-
-\seealso{\code{\link{HOF}}}
 
 \references{
 Huisman, J., Olff, H. & Fresco, L.F.M. (1993). A hierarchical set of models for species response analysis. 

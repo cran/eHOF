@@ -12,7 +12,7 @@
   if (is.null(newdata)) x <- seq(-1, 2, length.out = 10000) else x <- scale01(newdata, ...)
   M <- resp$M
   opt <- Para_opt(resp, model=model, newdata=x, ...)
-  border <- Para_niche(resp, newdata=x, model=model, top=opt$top, optima=opt$opt, mini=opt$mini, pess=opt$pess, ...)
+  border <- Para_niche(resp, newdata=x, model=model, top=opt$top/M, optima=opt$opt, mini=opt$mini, pess=opt$pess, ...)
   slope <- Para_deriv(resp, newdata=x, p=resp$models[[model]]$par, model)
   infl <- try(Para_deriv(resp, newdata=x, p=resp$models[[model]]$par, model, optima=opt$opt, pessima=opt$pess, type='inflection'), silent = TRUE)
   if(!is.numeric(infl)) infl <- NULL

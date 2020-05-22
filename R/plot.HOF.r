@@ -20,8 +20,7 @@ plot.HOF <- function (
 		xlabel, 
 		...)    {
   resp <- x
-  ow <- options("warn")
-  options(warn = -1)
+  # ow <- options("warn")
   yaxt = TRUE
   independ <- resp$x 
   depend <- resp$y 
@@ -245,5 +244,5 @@ para.fun <- function(resp, cex.pl = .8, ...) {
   if(gam.se) gam.conf(independ, depend, ...)
   logi.curve(resp, xaxt='n', ...)
   par(mar = old.mar)
-  options(ow) # reset
+  # on.exit(par(ow))
 }

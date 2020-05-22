@@ -43,7 +43,7 @@
 
 \details{
 Plottype \code{layout} will give a normal plot for a single species, or if the HOF object contains several species, 
-the graphics display will be divided by \code{\link{autolayout}}. Multiple species can also be plottet by a \code{'lattice'} 
+the graphics display will be divided by \code{\link{autolayout}}. Multiple species can also be plottet by a \code{lattice} 
 xyplot and plotted with plot.HOF for every species. The third option (plottype='all') plots all selected species 
 on the same graph which might be useful to evaluate e.g. the species within one vegetation plot, see examples.
 
@@ -77,7 +77,7 @@ A \code{dit='bar'} plot will display the original response values. For binary da
 	
 	autolayout(2)
 	plot(mods.acidic, plottype='all', main='Plot with low pH')
-	abline(v=acre.env$PH_KCL[acre.env$RELEVE_NR == '57])
+	abline(v=acre.env$PH_KCL[acre.env$RELEVE_NR == '57'])
   names(mods.acidic)
 	
 	plot(mods.calc, plottype='all', main='Plot with high pH')

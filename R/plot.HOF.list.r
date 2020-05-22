@@ -9,8 +9,6 @@ plot.HOF.list <- function (
 	yl,
 	leg = FALSE,
 	...) {
-# ow <- options('warn')  
-# options(warn = 10)
 ncol = 4
 plottype <- match.arg(plottype) 
 cols <- if(missing(color)) c("black", "red", "green", "blue", "sienna", "violet", "pink") else color
@@ -75,5 +73,4 @@ fitfun <- function(x, test, modeltypes,...) fitted(x, model = pick.model(x, test
         legtext <- paste(names(mods), "(", sapply(mods, function(x, ...) pick.model(x,modeltypes, gam=FALSE, test = test, ...)), ")")
        if(leg) legend(par("usr")[1], par("usr")[4] + border.top, legtext, ncol = ncol, bty = "n", fill = rainbow(N))
     }
-# options(ow)
 }

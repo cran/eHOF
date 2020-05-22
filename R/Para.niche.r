@@ -57,6 +57,7 @@
               tmp <- optimize(HOFfun, y = top*eval(central), resp$range, resp = resp, maximum = FALSE)
     	  tmp2 <-  optima - diff(c(optima,tmp$minimum))
     	  central.high <- max(tmp$minimum, tmp2)
+    	  print(central.high)
     	  central.low <- min(tmp$minimum, tmp2)
         orient = NA
     }
@@ -107,10 +108,10 @@
       outerBorder <- c(outer.low=outer.low, outer.high=outer.high)
       centralBorder <- c(central.low=central.low, central.high=central.high)
     }
-  centralBorder[which(centralBorder < min(resp$range))] <- min(resp$range)
-  centralBorder[which(centralBorder > max(resp$range))] <- max(resp$range)
-  outerBorder[which(outerBorder < min(resp$range))] <- min(resp$range)
-  outerBorder[which(outerBorder > max(resp$range))] <- max(resp$range)
+  # centralBorder[which(centralBorder < min(resp$range))] <- min(resp$range)
+  # centralBorder[which(centralBorder > max(resp$range))] <- max(resp$range)
+  # outerBorder[which(outerBorder < min(resp$range))] <- min(resp$range)
+  # outerBorder[which(outerBorder > max(resp$range))] <- max(resp$range)
   border <- list(centralBorder=centralBorder, outerBorder=outerBorder, orient=orient, relfreq.outer=relfreq.outer)
   return(border)
 }

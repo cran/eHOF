@@ -15,9 +15,7 @@ HOF.model <- function (
   if (!(famname %in% c("binomial", "gaussian", "poisson"))) stop("Allowed families: binomial, gaussian, poisson")
   if(famname == "poisson" & sum(grep('.',as.character(occ), fixed=TRUE)) > 0)  stop('Occurrency data must be integer values for family poisson!')
   if(famname == "binomial" && !all(occ %in% c(0,1))) warning('Occurrency data should be 0 or 1 for family binomial!') 
-  options(warn=-1)
-#  if (getRversion() >= '2.15.1') globalVariables(c('II.res', 'IV.res', 'p', 'I.res','III.res', 'VII.res'), package='eHOF')
-  
+
   div <- if(famname == "binomial") M else 1
   if(!exists('wt')) wt  <- if(famname == "binomial") M else 1
   if (length(wt) == 1) wt <- rep(wt, length(grad))
@@ -95,6 +93,5 @@ if(!all(is.na(V.res$par)))
   models <- list(I = I.res, II = II.res, III = III.res , IV = IV.res, V = V.res, VI = VI.res, VII = VII.res)
   out <- list(call = match.call(), x = x.orig, y = occ,  range = range(grad), M = M, family = famname, nobs = nobs, models = models)
   class(out) <- "HOF"
-  options(warn=0)
   out
 }
