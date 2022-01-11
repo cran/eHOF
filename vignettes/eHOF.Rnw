@@ -59,13 +59,13 @@ from the floodplain of river Elbe \citep{Leyer2007} and a dataset delivered with
 library(vegdata)
 db <- 'elbaue'
 site <- tv.site(db)
-veg <- tv.veg(db, tax=FALSE, spcnames='numbers')
+veg <- tv.veg(db, taxval = FALSE, spcnames = 'Numbers')
 obs <- tv.obs(db)
 # taxa <- tax(unique(obs$TaxonUsageID), verbose=TRUE)
 # write.csv2(taxa, file='taxonnames.csv')
-taxa <- read.csv('taxonnames.csv')
+taxa <- tax('all') # read.csv('taxonnames.csv')
 names(veg) <- sub('.0', '', names(veg), fixed=TRUE)
-for(i in 1:ncol(veg)) names(veg)[i] <- as.character(taxa$LETTERCODE[match(as.numeric(names(veg)[i]), taxa$TaxonUsageID)])
+# for(i in 1:ncol(veg)) names(veg)[i] <- as.character(taxa$LETTERCODE[match(as.numeric(names(veg)[i]), taxa$TaxonUsageID)])
 @
 
 Normally you will use the capabilities of package vegdata and the taxonomic reference list of your Turboveg installation to replace species numbers with Shortletters or real names. For the sake of CRAN policies we set tax=FALSE and replace taxnumbers manually.
@@ -76,7 +76,7 @@ If you want to use cover values as performance, it might be better to use cover
 transformed abundance values instead of the original percentage cover.
 
 <<5veg.2, results='hide'>>=
-veg.sqrt <- tv.veg(db, cover.transform='sqrt', tax=FALSE, spcnames='numbers')
+veg.sqrt <- tv.veg(db, cover.transform='sqrt', tax=FALSE, spcnames='Numbers')
 names(veg.sqrt) <- sub('.0', '', names(veg.sqrt), fixed=TRUE)
 names(veg.sqrt) <- taxa$LETTERCODE[match(names(veg.sqrt), taxa$TaxonUsageID)]
 @
@@ -84,7 +84,7 @@ names(veg.sqrt) <- taxa$LETTERCODE[match(names(veg.sqrt), taxa$TaxonUsageID)]
 or even presence-absence information only.
 
 <<5veg.3, results='hide'>>=
-veg.pa <- tv.veg(db, cover.transform='pa', tax=FALSE, spcnames='numbers')
+veg.pa <- tv.veg(db, cover.transform='pa', tax=FALSE, spcnames='Numbers')
 names(veg.pa) <- sub('.0', '', names(veg.pa), fixed=TRUE)
 names(veg.pa) <- taxa$LETTERCODE[match(names(veg.pa), taxa$TaxonUsageID)]
 @
@@ -175,7 +175,7 @@ Package eHOF contains functions to compute parameters for the different model ty
 \begin{figure}
 \begin{center}
 <<paraplot, warning=FALSE, out.width='.5\\textwidth'>>=
-plot(mods.pa[['RANCREP']], para=TRUE, onlybest=FALSE)
+plot(mods.pa[['RNNCPEP']], para=TRUE, onlybest=FALSE)
 @
 \end{center}
 \caption{
@@ -188,13 +188,13 @@ Hierarchical logistic regression models for \textit{Ranunculus repens} presence/
 \begin{figure}
 \begin{center}
 <<sqrt-ELYMREP, results='hide', warning=FALSE, out.width='.5\\textwidth'>>=
-mod.ELYM.sqrt <- HOF(veg.sqrt$ELYMREP, site$MGL, M=10, family=poisson, bootstrap = 10)
-plot(mod.ELYM.sqrt, marginal='point', para=TRUE, onlybest=FALSE, newdata=seq(min(mod.ELYM.sqrt$range), max(mod.ELYM.sqrt$range),length.out=10000) )
-Para(mod.ELYM.sqrt)
+mod.sqrt <- HOF(veg.sqrt$RNNCPEP, site$MGL, M=10, family=poisson, bootstrap = 10)
+plot(mod.sqrt, marginal='point', para=TRUE, onlybest=FALSE, newdata=seq(min(mod.sqrt$range), max(mod.sqrt$range), length.out=10000) )
+Para(mod.sqrt)
 @
 \end{center}
 \caption{
-Hierarchical logistic regression models for \textit{Elymus repens} square root cover within the Elbaue dataset with plotted parameters of the most adequate model.
+Hierarchical logistic regression models for \textit{Ranunculus repens} square root cover within the Elbaue dataset with plotted parameters of the most adequate model.
 }
  \label{fig:paraModels}
 \end{figure}

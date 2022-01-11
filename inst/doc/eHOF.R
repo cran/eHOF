@@ -16,21 +16,21 @@ library(eHOF)
 library(vegdata)
 db <- 'elbaue'
 site <- tv.site(db)
-veg <- tv.veg(db, tax=FALSE, spcnames='numbers')
+veg <- tv.veg(db, taxval = FALSE, spcnames = 'Numbers')
 obs <- tv.obs(db)
 # taxa <- tax(unique(obs$TaxonUsageID), verbose=TRUE)
 # write.csv2(taxa, file='taxonnames.csv')
-taxa <- read.csv('taxonnames.csv')
+taxa <- tax('all') # read.csv('taxonnames.csv')
 names(veg) <- sub('.0', '', names(veg), fixed=TRUE)
-for(i in 1:ncol(veg)) names(veg)[i] <- as.character(taxa$LETTERCODE[match(as.numeric(names(veg)[i]), taxa$TaxonUsageID)])
+# for(i in 1:ncol(veg)) names(veg)[i] <- as.character(taxa$LETTERCODE[match(as.numeric(names(veg)[i]), taxa$TaxonUsageID)])
 
 ## ----5veg.2, results='hide'---------------------------------------------------
-veg.sqrt <- tv.veg(db, cover.transform='sqrt', tax=FALSE, spcnames='numbers')
+veg.sqrt <- tv.veg(db, cover.transform='sqrt', tax=FALSE, spcnames='Numbers')
 names(veg.sqrt) <- sub('.0', '', names(veg.sqrt), fixed=TRUE)
 names(veg.sqrt) <- taxa$LETTERCODE[match(names(veg.sqrt), taxa$TaxonUsageID)]
 
 ## ----5veg.3, results='hide'---------------------------------------------------
-veg.pa <- tv.veg(db, cover.transform='pa', tax=FALSE, spcnames='numbers')
+veg.pa <- tv.veg(db, cover.transform='pa', tax=FALSE, spcnames='Numbers')
 names(veg.pa) <- sub('.0', '', names(veg.pa), fixed=TRUE)
 names(veg.pa) <- taxa$LETTERCODE[match(names(veg.pa), taxa$TaxonUsageID)]
 
@@ -58,10 +58,10 @@ mods.pa <- HOF(veg.pa, site$MGL, M=1, bootstrap=NULL)
 plot(mods.pa)
 
 ## ----paraplot, warning=FALSE, out.width='.5\\textwidth'-----------------------
-plot(mods.pa[['RANCREP']], para=TRUE, onlybest=FALSE)
+plot(mods.pa[['RNNCPEP']], para=TRUE, onlybest=FALSE)
 
 ## ----sqrt-ELYMREP, results='hide', warning=FALSE, out.width='.5\\textwidth'----
-mod.ELYM.sqrt <- HOF(veg.sqrt$ELYMREP, site$MGL, M=10, family=poisson, bootstrap = 10)
-plot(mod.ELYM.sqrt, marginal='point', para=TRUE, onlybest=FALSE, newdata=seq(min(mod.ELYM.sqrt$range), max(mod.ELYM.sqrt$range),length.out=10000) )
-Para(mod.ELYM.sqrt)
+mod.sqrt <- HOF(veg.sqrt$RNNCPEP, site$MGL, M=10, family=poisson, bootstrap = 10)
+plot(mod.sqrt, marginal='point', para=TRUE, onlybest=FALSE, newdata=seq(min(mod.sqrt$range), max(mod.sqrt$range), length.out=10000) )
+Para(mod.sqrt)
 

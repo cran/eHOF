@@ -1,4 +1,4 @@
-a59d2ef9eb1f2399873fc08f1c74d777 *DESCRIPTION
+051e2330fdbcfde77f54a8e7d687ea38 *DESCRIPTION
 c55b9232348cae256393b231fd67eb37 *NAMESPACE
 2c1fbdcebc5049173ddb0f15280582d4 *R/HOF.data.frame.r
 19ad11100879e61b5ddb4d3728420701 *R/HOF.default.r
@@ -15,7 +15,7 @@ f23be173af2f9d140f10671296381cc9 *R/coef.HOF.r
 a79f47485afb2416344c95bd0872eed3 *R/logLik.HOF.r
 de2904a5d6468ce9e06fb1a41573fce2 *R/pick.model.r
 718cf85d27ce976efb95ab1a8b610833 *R/plot.HOF.list.r
-08df565bfe85eb4448c9374ace7861de *R/plot.HOF.r
+29ddd11e8ba4599c7f74a3424d43af3e *R/plot.HOF.r
 c8453fed6738d605ba3a9b1cda31abbd *R/print.HOF.list.r
 2377ffde2d2c823285921b07a2399bdb *R/print.HOF.r
 f9dd841fd52baaa4d17c121c45303abf *R/scale01.r
@@ -26,9 +26,9 @@ a107ee5b2efe24247067df0c20957be6 *data/acre.rda
 9c1bce627cfea2a83df0e256ca6c0a7c *data/mtf.rda
 edf6e1c9eaa3e44a22e41c82fe7529af *inst/CITATION
 1e9a93fdbb7a002287a403dfae1b8c36 *inst/ChangeLog
-c169c61963b57ecf6f03e7a41bef5c33 *inst/doc/eHOF.R
-59d6dd5588e9f872bc5e606fda484b7a *inst/doc/eHOF.Rnw
-e363383f02034743f7416151e38c3a4c *inst/doc/eHOF.pdf
+15908a5301a68e8b060fc53e4431a5e6 *inst/doc/eHOF.R
+73df3c93e185ed6a4fccafc62f549ad4 *inst/doc/eHOF.Rnw
+d58bb4c247c00a777008eed79710a05b *inst/doc/eHOF.pdf
 5c7ff1ecd7d9f2e5b03618aea823f55d *man/HOF-internal.Rd
 8a2c695567f42617a244662663bbf54c *man/HOF-package.Rd
 8bb11b8bf82b6ef032b1321e0d012d8a *man/HOF.Rd
@@ -40,5 +40,4 @@ b0989a493a054e806d486b107fb61393 *man/autolayout.Rd
 77359146b3c4b62c80f3d04b01734d8c *man/mtf.Rd
 e13e7952e513f1a1095a70c4d4f72a38 *man/plot.HOF.Rd
 566a07d722853acc887d151d1880e689 *vignettes/bibdata.bib
-59d6dd5588e9f872bc5e606fda484b7a *vignettes/eHOF.Rnw
-7db5992c8b43c0f1e88c26542e7c5c74 *vignettes/taxonnames.csv
+73df3c93e185ed6a4fccafc62f549ad4 *vignettes/eHOF.Rnw

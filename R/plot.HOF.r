@@ -228,7 +228,7 @@ para.fun <- function(resp, cex.pl = .8, ...) {
 ## Call plot functions
   old.mar <- par()$mar
   if(leg) {
-  	par(mar=par()$mar + c(0,0,2))
+  	par(mar=par()$mar + c(0,0,2,0))
   	if(para) par(mar=par()$mar + c(0,0,0,3))
     }
   if(!add) {
