@@ -1,5 +1,5 @@
 Package: eHOF
-Version: 1.10
+Version: 1.11
 Encoding: UTF-8
 Title: Extended HOF (Huisman-Olff-Fresco) Models
 Author: Florian Jansen, Jari Oksanen
@@ -11,6 +11,6 @@ VignetteBuilder: knitr
 Description: Extended and enhanced hierarchical logistic regression models (called Huisman-Olff-Fresco in biology, see Huisman et al. 1993 Journal of Vegetation Science <doi:10.1111/jvs.12050>) models. Response curves along one-dimensional gradients including no response, monotone, plateau, unimodal and bimodal models. 
 License: GPL (>= 2)
 NeedsCompilation: no
-Packaged: 2022-01-10 22:29:27 UTC; jansen
+Packaged: 2022-01-21 07:14:29 UTC; jansen
 Repository: CRAN
-Date/Publication: 2022-01-11 09:52:42 UTC
+Date/Publication: 2022-01-21 07:32:43 UTC

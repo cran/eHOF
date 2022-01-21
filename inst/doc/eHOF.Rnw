@@ -65,7 +65,7 @@ obs <- tv.obs(db)
 # write.csv2(taxa, file='taxonnames.csv')
 taxa <- tax('all') # read.csv('taxonnames.csv')
 names(veg) <- sub('.0', '', names(veg), fixed=TRUE)
-# for(i in 1:ncol(veg)) names(veg)[i] <- as.character(taxa$LETTERCODE[match(as.numeric(names(veg)[i]), taxa$TaxonUsageID)])
+for(i in 1:ncol(veg)) names(veg)[i] <- as.character(taxa$LETTERCODE[match(as.numeric(names(veg)[i]), taxa$TaxonUsageID)])
 @
 
 Normally you will use the capabilities of package vegdata and the taxonomic reference list of your Turboveg installation to replace species numbers with Shortletters or real names. For the sake of CRAN policies we set tax=FALSE and replace taxnumbers manually.
@@ -174,8 +174,9 @@ Package eHOF contains functions to compute parameters for the different model ty
 
 \begin{figure}
 \begin{center}
-<<paraplot, warning=FALSE, out.width='.5\\textwidth'>>=
-plot(mods.pa[['RNNCPEP']], para=TRUE, onlybest=FALSE)
+<<paraplot, eval = TRUE, warning=FALSE, out.width='.5\\textwidth'>>=
+lRP <- taxa$LETTERCODE[taxa$TaxonName == 'Ranunculus repens']
+plot(mods.pa[[lRP]], para=TRUE, onlybest=FALSE)
 @
 \end{center}
 \caption{
@@ -187,8 +188,8 @@ Hierarchical logistic regression models for \textit{Ranunculus repens} presence/
 
 \begin{figure}
 \begin{center}
-<<sqrt-ELYMREP, results='hide', warning=FALSE, out.width='.5\\textwidth'>>=
-mod.sqrt <- HOF(veg.sqrt$RNNCPEP, site$MGL, M=10, family=poisson, bootstrap = 10)
+<<sqrt-2, results='hide', warning=FALSE, out.width='.5\\textwidth'>>=
+mod.sqrt <- HOF(veg.sqrt[[lRP]], site$MGL, M=10, family=poisson, bootstrap = 10)
 plot(mod.sqrt, marginal='point', para=TRUE, onlybest=FALSE, newdata=seq(min(mod.sqrt$range), max(mod.sqrt$range), length.out=10000) )
 Para(mod.sqrt)
 @

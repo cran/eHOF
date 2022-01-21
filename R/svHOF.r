@@ -3,7 +3,9 @@
 #x <- scale01(x)
 if(model == 'I') a = log((1 - mean(y/M))/mean(y/M))
 if(model == 'II') {
+  suppressWarnings(
         m1 <- glm(cbind(y, M - y) ~ x, family=famname)
+  )
         k <- coef(m1)
         names(k) <- NULL
         a <- -k[1]
@@ -16,10 +18,14 @@ if(model == 'III') {
       }
 
 if(model %in% c('IV','VI','VII')) {
-        m2 <- glm(cbind(y, M - y) ~ x + I(x^2), family=famname)
+  suppressWarnings(
+    m2 <- glm(cbind(y, M - y) ~ x + I(x^2), family=famname)
+  )
         k <- coef(m2)
         if (k[3] > 0) {
-          m2 <- glm(cbind(y, M-y) ~ x + offset(-x^2), family=famname)
+          suppressWarnings(
+                m2 <- glm(cbind(y, M-y) ~ x + offset(-x^2), family=famname)
+          )
           k <- c(coef(m2), -1)
         }
         names(k) <- NULL

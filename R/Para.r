@@ -9,7 +9,7 @@
   ...)
 {
   if (missing(model)) model <- pick.model(resp, gam=FALSE, ...)
-  if (is.null(newdata)) x <- seq(-1, 2, length.out = 10000) else x <- scale01(newdata, ...)
+  x <- if (is.null(newdata)) seq(min(resp$x), max(resp$x), length.out = 10000) else scale01(newdata, ...)
   M <- resp$M
   opt <- Para_opt(resp, model=model, newdata=x, ...)
   border <- Para_niche(resp, newdata=x, model=model, top=opt$top/M, optima=opt$opt, mini=opt$mini, pess=opt$pess, ...)
@@ -18,7 +18,7 @@
   if(!is.numeric(infl)) infl <- NULL
   
   max.sl <- max(abs(slope))
-  out <- list(species = resp$y.name, abund.sum = sum(resp$y/M), range = resp$range, model = model, para = resp$models[[model]]$par, M = M, mini = opt$mini, pess= opt$pess, top = opt$top, opt = opt$opt, max.slope=max.sl,  inflection=infl, expect = opt$expect) 
+  out <- list(species = resp$y.name, abund.sum = sum(resp$y/M), range = resp$range, model = model, para = resp$models[[model]]$par, M = M, mini = opt$mini, pess= opt$pess, top = opt$top, opt = opt$opt, max.slope=max.sl,  inflection=infl, expect = opt$expect)
   out$centralBorder <- border$centralBorder
   out$outerBorder <- border$outerBorder
   out$raw.mean <-  mean(resp$x[resp$y>0])

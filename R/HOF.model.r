@@ -36,7 +36,9 @@ HOF.model <- function (
 
   trial.1 <- function(p, x, m, ...) { # PORT routine
     p <- svHOF(x, occ, M, model = m, mod = mod)
-    temp <- nlminb(start=p, objective = mlHOF, lower = -lim, upper = lim, x = x, y = occ, M = M, model = m)
+    suppressWarnings(
+      temp <- nlminb(start=p, objective = mlHOF, lower = -lim, upper = lim, x = x, y = occ, M = M, model = m)
+    )
     temp$method <- 'nlminb'
     temp
     }
