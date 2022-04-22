@@ -21,7 +21,7 @@
   \item{boxp}{plotting of horizontal boxplots}
   \item{las.h}{orientation of axes labels (0 = vertical, 1 = horizontal)}
   \item{yl}{range of y axis, useful for rare species. Must be given as fraction of M (between 0 and 1).}
-  \item{main}{optional plot titel}
+  \item{main}{optional plot title}
   \item{model}{specific HOF model used, if not selected automatically.}
   \item{test}{test for model selection. Alternatives are \code{"AICc"} (default), \code{"F"},
     \code{"Chisq"}, \code{"AIC"}, \code{"BIC"} and \code{"Dev"iance}. }
@@ -43,7 +43,7 @@
 
 \details{
 Plottype \code{layout} will give a normal plot for a single species, or if the HOF object contains several species, 
-the graphics display will be divided by \code{\link{autolayout}}. Multiple species can also be plottet by a \code{lattice} 
+the graphics display will be divided by \code{\link{autolayout}}. Multiple species can also be plotted by a \code{lattice} 
 xyplot and plotted with plot.HOF for every species. The third option (plottype='all') plots all selected species 
 on the same graph which might be useful to evaluate e.g. the species within one vegetation plot, see examples.
 

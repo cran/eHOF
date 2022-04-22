@@ -68,7 +68,7 @@ names(veg) <- sub('.0', '', names(veg), fixed=TRUE)
 for(i in 1:ncol(veg)) names(veg)[i] <- as.character(taxa$LETTERCODE[match(as.numeric(names(veg)[i]), taxa$TaxonUsageID)])
 @
 
-Normally you will use the capabilities of package vegdata and the taxonomic reference list of your Turboveg installation to replace species numbers with Shortletters or real names. For the sake of CRAN policies we set tax=FALSE and replace taxnumbers manually.
+Normally you will use the capabilities of package vegdata and the taxonomic reference list of your Turboveg installation to replace species numbers with shortletters or real names. For the sake of CRAN policies we set tax=FALSE and replace taxnumbers manually.
 
 \subsection{Cover transformation}
 
@@ -96,8 +96,7 @@ names(veg.pa) <- taxa$LETTERCODE[match(names(veg.pa), taxa$TaxonUsageID)]
 Introduced by Ramenskij in the early 20th century and named direct gradient analysis by \citet{Whittaker1967} is modeling species responses along environmental gradients still a frequent task in vegetation ecology.
 Several algorithms are available to map the performance of a species along changing ecological conditions. Often it is difficult to decide which level of complexity is needed to get an adequate simplification of the data. In 1993 Huisman, Olff and Fresco introduced a set of hierarchical models to combine the wish for simple and easy to interpret response models with the need to catch different kinds of niche types and species response data \citep{Huisman1993}.
 
-Species responses along measured environmental gradients are cross-sections of the species hyperniche. Even if we assume, that the physiological niche of a species should be simple (e.g. unimodal or with a specific threshold) we can not expect, that realized niches should be that simple too. Nevertheless, due to the generally high number of hidden gradients in field data and the resulting unbalanced datasets, it seems to be advisable not to use an untrammelled modelling technique like Generalised Additive Models (GAM) but to restrict ourselves to a more conservative set of model types which can be interpreted afterwards.
-
+Species responses along measured environmental gradients are cross-sections of the species hyperniche. Even if we assume, that the physiological niche of a species should be simple (e.g. unimodal or with a specific threshold) we can not expect, that realized niches should be that simple too. Nevertheless, due to the generally high number of hidden gradients in field data and the resulting unbalanced datasets, it seems to be advisable not to use a modeling technique like Generalised Additive Models (GAM) but to restrict ourselves to a more conservative set of model types which can be interpreted afterwards.
 
 \subsection{Modeltypes}
 
@@ -116,17 +115,17 @@ for(i in 1:7) plot(mo[[i]], model = eHOF.modelnames[i], marginal ='n')
 @
 \end{center}
 \caption{
-The layout plot shows the seven model types of enhanced Hierarchical logistic regression modelling.
+The layout plot shows the seven model types of enhanced Hierarchical logistic regression modeling.
 }
 \label{fig:HOFModels}
 \end{figure}
 
-The seven models are of increasing complexity. Maybe the most important model type is number I: a flat response, that means there is no significant trend along the gradient for that species. It is our null hypothesis and ensures that only species with a clear response will be modelled with one of the further model types. Shape II is monotone sigmoid with a top at one end of the gradient, III is monotone sigmoid with a plateau below the maximal upper abundance value. Model type IV is the canonical form of species response, a unimodal symmetric model, V is a unimodal skewed model and model types VI and VII have two optima, VI with tops being equal.
+The seven models are of increasing complexity. Maybe the most important model type is number I: a flat response, that means there is no significant trend along the gradient for that species. It is our null hypothesis and ensures that only species with a clear response will be modelled with one of the further model types. Shape II is monotone sigmoidal with a top at one end of the gradient, III is monotone sigmoidal with a plateau below the maximal upper abundance value. Model type IV is the canonical form of species response, a unimodal symmetric model, V is a unimodal skewed model and model types VI and VII have two optima, VI with tops being equal.
 
 
 \subsection{How to use function HOF?}
 
-For all species in a vegetation data frame above a specific frequency threshold (10 by default) all six model shapes are modelled and stored in a HOF object. The most appropriate model type is evaluated only at the moment this object is printed, summarised or plotted.
+For all species in a vegetation data frame above a specific frequency threshold (10 by default) all six model shapes are modelled and stored in a HOF object. The most appropriate model type is evaluated only at the moment this object is printed, summarized or plotted.
 
 <<percentageVEG, results='hide', warning=FALSE>>=
 mods <- HOF(veg, site$MGL, M=100, family = poisson, bootstrap = NULL)
@@ -159,12 +158,12 @@ plot(mods.pa)
 @
 \end{center}
 \caption{
-Most adequate model types for all species of the elbaue dataset with at least 10 occurrences, presence-absence information.
+Most adequate model types for all species of the Elbaue dataset with at least 10 occurrences, presence-absence information.
 }
 \label{fig:paModels}
 \end{figure}
 
-Depending on the chosen performance measure HOF modelling will lead to different species response shapes.
+Depending on the chosen performance measure HOF modeling will lead to different species response shapes.
 
 
 \section{Model parameters}

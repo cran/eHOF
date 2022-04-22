@@ -19,15 +19,13 @@ to bounded responses to any gradient. The gradients (x-values) are internally st
 Binary as well as continous response values can be modelled.
 }
 
-\author{Florian Jansen <florian.jansen@uni-rostock.de> and 
-    Jari Oksanen
-  }
+\author{Florian Jansen and Jari Oksanen}
 
 \references{
 Huisman, J., Olff, H. & Fresco, L.F.M. (1993). A hierarchical set of models for species response analysis. 
   \emph{Journal of Vegetation Science} 4, 37-46.
 Jansen F, Oksanen J (2013) How to model species responses along ecological
-  gradients - Huisman-Olff-Fresco models revisited.  Journal of Vegetation Science. DOI: 10.1111/jvs.12050
+  gradients - Huisman-Olff-Fresco models revisited.  Journal of Vegetation Science. doi:10.1111/jvs.12050
 }
 
 \keyword{ package }

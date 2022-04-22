@@ -26,10 +26,9 @@
 
 \references{
 Jansen, F. & Oksanen, J. (2013) How to model species responses along ecological gradients? - 
- Huisman-Olf-Fresco models revisited, Journal of Vegetation Science DOI: 10.1111/jvs.12050
+ Huisman-Olff-Fresco models revisited, Journal of Vegetation Science doi:10.1111/jvs.12050
 
-Oksanen, J. & Minchin, P.R. (2002). Continuum theory revisited: what shape are species responses along ecological gradients? \emph{Ecological
-  Modelling} 157, 119-129.
+Oksanen, J. & Minchin, P.R. (2002). Continuum theory revisited: what shape are species responses along ecological gradients? \emph{Ecological Modelling} 157, 119-129.
  }
  
 \author{Jari Oksanen}

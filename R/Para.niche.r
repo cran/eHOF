@@ -33,7 +33,7 @@
         if(resp$models[[model]]$par[2] < 0) orient = 'increase' else orient = 'decrease'
     }
     if (model == "III") {
-        top1 <- resp$models$III$fitted[which.max(resp$x)][1]
+        top1 <- resp$models$III$fitted[which.min(resp$x)][1]
         top2 <- resp$models$III$fitted[which.max(resp$x)][1]
         if (top1 > top2) 
             outer.low <- central.low <- Range[1] else 

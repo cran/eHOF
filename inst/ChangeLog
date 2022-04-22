@@ -1,5 +1,9 @@
 eHOF RELEASE VERSIONS at http://cran.r-project.org/
-Version 1.9.2 (2022-01)
+
+Version 1.12 (2022-04)
+	* bug in Para regarding outer.niche for model III
+
+Version 1.10 (2022-01)
 	* solving a bug in Para without setting x=newdata, mostly regarding outer.niche
 
 Version 1.9 (2020-05)
