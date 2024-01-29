@@ -1,19 +1,19 @@
+#' @export
 "Para_niche" <- function (
-		resp, 
-		model, 
-		top, 
-		optima, 
-		pess, 
-		central = exp(-0.5), 
-		outer = exp(-2), 
+		resp,
+		model,
+		top,
+		optima,
+		pess,
+		central = exp(-0.5),
+		outer = exp(-2),
 		newdata = NULL,
 		...) {
   x <-  if(is.null(newdata)) seq(min(resp$x), max(resp$x), length.out = 10000) else newdata
-  Range <- range(x)
+  Range <- range(scale01(x))
   M <- resp$M
- if (missing(model)) 
+ if (missing(model))
     model <- pick.model(resp, gam=FALSE, ...)
-# ranx <- diff(Range)
  HOFfun <- function(resp, x, y, M) abs(y - predict(resp, new = x, M = M, model = model))
 
     if (model == "I") {
@@ -35,17 +35,17 @@
     if (model == "III") {
         top1 <- resp$models$III$fitted[which.min(resp$x)][1]
         top2 <- resp$models$III$fitted[which.max(resp$x)][1]
-        if (top1 > top2) 
-            outer.low <- central.low <- Range[1] else 
+        if (top1 > top2)
+            outer.low <- central.low <- Range[1] else
             outer.high <- central.high <- Range[2]
 
         tmp <- optimize(HOFfun, y = top*eval(outer), Range, resp = resp, maximum = FALSE)
-        if (top1 > top2) 
-            outer.high <- tmp$minimum else 
+        if (top1 > top2)
+            outer.high <- tmp$minimum else
             outer.low <- tmp$minimum
         tmp <- optimize(HOFfun, y = top*eval(central), Range, resp = resp, maximum = FALSE)
-        if (top1 > top2) 
-            central.high <- tmp$minimum else 
+        if (top1 > top2)
+            central.high <- tmp$minimum else
             central.low <- tmp$minimum
         if(resp$models[[model]]$par[2] < 0) orient = 'increase' else orient = 'decrease'
     }
@@ -64,15 +64,15 @@
     }
 
     if (model == "V") {
-      tmp <- optimize(HOFfun, y = top*eval(outer), x[x < optima], resp = resp, maximum = FALSE)
+      tmp <- optimize(HOFfun, interval = Range, y = top*eval(outer), resp = resp, maximum = FALSE)
   	  outer.low <- tmp$minimum
   	   x <- resp$x[resp$x > optima]
       tmp <- optimize(HOFfun, y = top*eval(outer), c(optima, Range[2]), resp = resp, maximum = FALSE)
   	  outer.high <- tmp$minimum
-  	  tmp <- optimize(HOFfun, y = top*eval(central), c(Range[1], optima), resp = resp, maximum = FALSE)
+  	  tmp <- optimize(HOFfun, y = top*eval(central), interval = c(Range[1], optima), resp = resp, maximum = FALSE)
   	  central.low <- tmp$minimum
   	  x <- resp$x[resp$x > optima]
-      tmp <- optimize(HOFfun, y = top*eval(central), c(optima, Range[2]), resp = resp, maximum = FALSE)
+      tmp <- optimize(HOFfun, interval = c(optima, Range[2]), y = top*eval(central), resp = resp, maximum = FALSE)
       central.high <- tmp$minimum
       orient <- if((optima - outer.low) < (outer.high - optima)) 'skewed.left' else 'skewed.right'
     }

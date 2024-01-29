@@ -1,9 +1,7 @@
 \documentclass[a4paper,10pt]{article}
 %\VignetteIndexEntry{Hierarchical logistic regression with package HOF}
 %\VignetteDepends{vegan}
-%\VignetteKeyword{Vegetation}
 %\VignetteEngine{knitr::knitr}
-
 \usepackage[utf8x]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage[sort&compress]{natbib}
@@ -19,10 +17,10 @@
 
 \begin{abstract}
 \noindent
-This is an example session to show how to use enhanced hierarchical logistic regression modeling in R with package \textit{eHOF}. 
+This is an example session to show how to use enhanced hierarchical logistic regression modeling in R with package \textit{eHOF}.
 Only a few possibilities and applications can be covered. Use the usual help functions for further information or contact the author if in doubt. The package is still in it's early stage.
-After the installation of package eHOF you can access this PDF 
-\footnote{$ $Id: eHOF.Rnw $ $ processed with eHOF \Sexpr{packageDescription("eHOF", field="Version")} in \Sexpr{R.version.string} on \today} 
+After the installation of package eHOF you can access this PDF
+\footnote{$ $Id: eHOF.Rnw $ $ processed with eHOF \Sexpr{packageDescription("eHOF", field="Version")} in \Sexpr{R.version.string} on \today}
 with
 
 vignette("eHOF")
@@ -52,7 +50,7 @@ library(eHOF)
 
 Hierarchical logistic regressions can be used in many fields. We will use vegetation data and we can use package \texttt{vegdata} \citep{Jansen2010} to load vegetation data from a Turboveg \citep{Hennekens2001} database.
 Taxon names can be evaluated \cite{Jansen2010} if they are referenced with an appropriate taxonomic reference list \citep{Jansen2008}.
-Within this sample session we will use the build-in vegetation dataset of package \texttt{vegdata} 
+Within this sample session we will use the build-in vegetation dataset of package \texttt{vegdata}
 from the floodplain of river Elbe \citep{Leyer2007} and a dataset delivered with \texttt{eHOF} from arable land of North-Eastern Germany with measured pH.
 
 <<4site.echo, results='hide', message=FALSE>>=
@@ -65,10 +63,11 @@ obs <- tv.obs(db)
 # write.csv2(taxa, file='taxonnames.csv')
 taxa <- tax('all') # read.csv('taxonnames.csv')
 names(veg) <- sub('.0', '', names(veg), fixed=TRUE)
-for(i in 1:ncol(veg)) names(veg)[i] <- as.character(taxa$LETTERCODE[match(as.numeric(names(veg)[i]), taxa$TaxonUsageID)])
+names(veg) <- taxa$LETTERCODE[match(names(veg), taxa$TaxonUsageID)]
 @
 
-Normally you will use the capabilities of package vegdata and the taxonomic reference list of your Turboveg installation to replace species numbers with shortletters or real names. For the sake of CRAN policies we set tax=FALSE and replace taxnumbers manually.
+Normally you will use the capabilities of the vegdata package and the taxonomic reference list of your Turboveg installation to replace species numbers with shortletters or real names. For the sake of CRAN policy (not to download foreign data) we set tax=FALSE and replace taxnumbers manually.
+
 
 \subsection{Cover transformation}
 
@@ -144,7 +143,7 @@ plot(mods.sq)
 @
 \end{center}
 \caption{
-Most adequate model types for all species of the Elbaue dataset with at least 10 occurrences, square-root cover performance.
+Most adequate model types for all species with at least 10 occurrences, square-root cover performance.
  }
 \label{fig:sqrtModels}
 \end{figure}
@@ -168,13 +167,14 @@ Depending on the chosen performance measure HOF modeling will lead to different 
 
 \section{Model parameters}
 
-Restricting models to predefined shapes offers the possibility to derive ecologically interpretable model characteristics like "the optimum", species niches etc. (see Fig. \ref{fig:ParaRep}).
+Restricting models to predefined shapes offers the possibility to derive ecological interpretable model characteristics like "the optimum", species niches etc. (see Fig. \ref{fig:ParaRep}).
 Package eHOF contains functions to compute parameters for the different model types.
 
 \begin{figure}
 \begin{center}
 <<paraplot, eval = TRUE, warning=FALSE, out.width='.5\\textwidth'>>=
 lRP <- taxa$LETTERCODE[taxa$TaxonName == 'Ranunculus repens']
+Para(mods.pa[[lRP]])
 plot(mods.pa[[lRP]], para=TRUE, onlybest=FALSE)
 @
 \end{center}
@@ -188,7 +188,7 @@ Hierarchical logistic regression models for \textit{Ranunculus repens} presence/
 \begin{figure}
 \begin{center}
 <<sqrt-2, results='hide', warning=FALSE, out.width='.5\\textwidth'>>=
-mod.sqrt <- HOF(veg.sqrt[[lRP]], site$MGL, M=10, family=poisson, bootstrap = 10)
+mod.sqrt <- eHOF:::HOF.default(veg.sqrt[[lRP]], site$MGL, M=10, family=poisson, bootstrap = 10)
 plot(mod.sqrt, marginal='point', para=TRUE, onlybest=FALSE, newdata=seq(min(mod.sqrt$range), max(mod.sqrt$range), length.out=10000) )
 Para(mod.sqrt)
 @

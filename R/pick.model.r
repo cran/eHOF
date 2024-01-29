@@ -1,10 +1,11 @@
+#'
+#' @export
+#' @rdname HOF
 pick.model <-  function(...) UseMethod("pick.model")
-
-pick.model.HOF.list <- function(object, ...) {
-   out <- sapply(object, function(x) pick.model.HOF(object=x,  ...))
-  return(out)
-}
-
+#'
+#'
+#' @export
+#' @rdname HOF
 pick.model.HOF <- function (object, level = 0.95, test = c('AICc', 'BIC', 'AIC','Dev'), modeltypes, penal = 'df', gam = FALSE, selectMethod = c('bootselect.lower', 'bootselect.always', 'IC.weight', 'pick.model'), silent = FALSE, ...) {
   selectMethod <- match.arg(selectMethod)
   if(is.null(object$bootstrapmodels) & selectMethod != 'pick.model') {
@@ -28,20 +29,20 @@ pick.model.HOF <- function (object, level = 0.95, test = c('AICc', 'BIC', 'AIC',
     pg <- gamfun(object, ...)
     object$models$GAM <- pg
     modeltypes <- c(modeltypes, 'GAM')
-    if('GAM' %in% names(penal)) penal['GAM'] <- sum(pg$edf) else 
+    if('GAM' %in% names(penal)) penal['GAM'] <- sum(pg$edf) else
       penal <- c(penal, GAM=sum(pg$edf))
   }
-  
+
 #   if(gam) {
 #     x <- object$x; y <- object$y; fam <- get(object$family)
 #   	gamfun <- function(..., y ~ s(x, bs=bs, k=k), family = fam, scale = 0, bs = 'cr', k = -1, ...) gam(...)
 #     pg <- gamfun(object = object, bs = bs, k = k, ...)
 #   	object$models$GAM <- pg
 #   	modeltypes <- c(modeltypes, 'GAM')
-#   	if('GAM' %in% names(penal)) penal['GAM'] <- sum(pg$edf) else 
+#   	if('GAM' %in% names(penal)) penal['GAM'] <- sum(pg$edf) else
 #   	penal <- c(penal, GAM=sum(pg$edf))
 #   }
-#    
+#
   if (test == "AIC") {
       k <-  2
       p <- penal[match(names(penal), names(object$models))]
@@ -70,7 +71,7 @@ pick.model.HOF <- function (object, level = 0.95, test = c('AICc', 'BIC', 'AIC',
   }
 
   if(selectMethod == 'bootselect.lower') {
-    # modboot <- names(ic[!rejectedmodels])[which.min(ic[!rejectedmodels])]    
+    # modboot <- names(ic[!rejectedmodels])[which.min(ic[!rejectedmodels])]
     modboot <- names(which.max(table(object$bootstrapmodels)))
     if(eHOF.modelnames[match(modboot, eHOF.modelnames)] < eHOF.modelnames[match(model, eHOF.modelnames)] )
       if(!silent) message(object$y.name, ': Most frequent bootstrap model (',modboot, ') lower than original choice (', model, ',',  object$bootstraptest,') by ', test, ' test.', sep='')
@@ -88,7 +89,7 @@ if(selectMethod == 'IC.weights') {
 #     if(table(object$bootstrapmodels)[modboot] <= length(object$bootstrapmodels)/2) {
 #     cat(': Chosen model (', modboot, ') does not exceed 50%, ', sep='')
       dev <- deviance(object); ll <- logLik(object)
-      AICc <- -2 * ll + 2 * penal + 2 * penal *(penal + 1)/(object$nobs - penal - 1) 
+      AICc <- -2 * ll + 2 * penal + 2 * penal *(penal + 1)/(object$nobs - penal - 1)
       d.AICc <- AICc - min(AICc, na.rm=TRUE)
       AICc.W <- round(exp(-0.5*AICc)/ sum(exp(-0.5*AICc), na.rm=TRUE),4)
       model.weight <- names(which.max(AICc.W[!rejectedmodels]))
@@ -99,3 +100,14 @@ if(selectMethod == 'IC.weights') {
   }
   return(model)
 }
+#'
+#'
+#' @rdname HOF
+#' @export
+#' @method pick.model.HOF list
+#' @keywords internal
+pick.model.HOF.list <- function(object, ...) {
+  out <- sapply(object, function(x) pick.model.HOF(object=x,  ...))
+  return(out)
+}
+#'

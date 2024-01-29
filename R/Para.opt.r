@@ -1,15 +1,16 @@
+#' @export
 Para_opt <- function (
- 		resp, 
-		model=NULL, 
+ 		resp,
+		model = NULL,
 		punctual = FALSE,
 		...) {
   if(is.null(model)) model <- pick.model(resp, gam=FALSE, ...)
   M <- resp$M
   x <- seq(resp$range[1] - diff(resp$range), resp$range[2] + diff(resp$range),length.out=10000)
-  pred <- predict.HOF(resp, newdata = x, model = model)
+  pred <- predict(resp, newdata = x, model = model)
   HOFfun <- function(resp, x, model) predict(resp, newdata = x, M = M, model = model)
   HOFfun3 <- function(x, y, resp) abs(y - predict(resp, newdata = x, M = M, model = model))
-  
+
   if (model == "I") {
       opt <- NA  # alternative: resp$range
       top <- fitted(resp, 'I')[1]
@@ -30,10 +31,10 @@ Para_opt <- function (
     top <- optimize(HOFfun, interval=resp$range, model = model, resp = resp, maximum = TRUE)$objective
     # optimum as range between 9/10 of the highest response plateau and the gradient edge
     opt <- optimize(HOFfun3, resp$range, y = top * 9/10, resp = resp, maximum = FALSE)$minimum
-  if(resp$models$III$par['a'] < 0) 
+  if(resp$models$III$par['a'] < 0)
 		opt <- if(punctual) opt - (opt - min(resp$range))/2	else c(opt.min = min(resp$range), opt.max = opt) else
-	if(resp$models$III$par['a'] >= 0) 
-		opt <- if(punctual) opt + (max(resp$range) - opt)/2	else c(opt.min = opt, opt.max = max(resp$range)) 
+	if(resp$models$III$par['a'] >= 0)
+		opt <- if(punctual) opt + (max(resp$range) - opt)/2	else c(opt.min = opt, opt.max = max(resp$range))
 #  else if(resp$models$III$par['a'] >= 0 & resp$models$III$par['c'] >= 0)  else warning('Check optimum estimation code.')
   pess <- optimize(HOFfun, model=model, resp$range, resp = resp, maximum = FALSE)
   mini <- pess$objective
@@ -54,7 +55,7 @@ Para_opt <- function (
   }
 
   if (model == "V") {
-      p <- coef(resp, model)
+      p <- coef(resp, model = model)
       if (p[2] * p[4] >= 0) {
           tmp <- optimize(HOFfun3, resp$range, y=0, resp = resp, maximum = TRUE)
           opt <- tmp$maximum
@@ -70,11 +71,11 @@ Para_opt <- function (
               if (tmp$obj <= 0) opt <- top <- NA
           }
       }
-      tmp <- optimize(HOFfun, resp$range, resp = resp, model = model, maximum = FALSE)
+      tmp <- optimize(HOFfun, resp$range, model = model, resp = resp, maximum = FALSE)
       mini <- tmp$objective
       pess <- tmp$minimum
   }
-  
+
 #   if (model == "VI") {
 #       infl <- c(FALSE, diff(diff(pred)>0)!=0)
 #       if(sum(infl) == 2) {# one optimum outside range
@@ -101,11 +102,11 @@ Para_opt <- function (
 #       expect1 <- sum(pm * new)/sum(pm)
 #       new <- seq(pess, resp$range[2], length.out = 5000)
 #       pm <- predict.HOF(resp, newdata = new, model = model)
-#       expect2 <- sum(pm * new)/sum(pm) 
+#       expect2 <- sum(pm * new)/sum(pm)
 #       expect <- c(expect1, expect2)
 #    }
-# 
-#   
+#
+#
   if (model %in% c('VI', 'VII')) {
     max1 <- optimize(HOFfun, resp$range, resp = resp, model=model, maximum = TRUE)
     min.left <- optimize(HOFfun, c(resp$range[1], max1$maximum), model=model, resp = resp, maximum = FALSE)
@@ -129,10 +130,10 @@ Para_opt <- function (
     expect1 <- sum(pm * new)/sum(pm)
     new <- seq(pess, resp$range[2], length.out = 10000)
     pm <- predict.HOF(resp, newdata = new, model = model)
-    expect2 <- sum(pm * new)/sum(pm) 
+    expect2 <- sum(pm * new)/sum(pm)
     expect <- c(expect1, expect2)
   }
-  if(model %in% c('I', 'II', 'III', 'IV', 'V')) {      
+  if(model %in% c('I', 'II', 'III', 'IV', 'V')) {
 		expect <- sum(pred * x)/sum(pred)
 	}
 

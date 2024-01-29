@@ -1,3 +1,4 @@
+#' @noRd
 "scale01" <-
     function (x, xrange, ...)
 {
@@ -11,7 +12,8 @@
     }
     (x - minx)/ranx
 }
-
+#'
+#' @noRd
 "rescale01" <-
     function (x, xrange, ...)
 {

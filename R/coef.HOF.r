@@ -1,10 +1,13 @@
-"coef.HOF" <-
+#' @rdname HOF
+#' @export
+#' @method coef HOF
+coef.HOF <-
     function (
-			object, 
-			model, 
+			object,
+			model,
 			...
 ) {
-    maxNrofParameters <- 5  
+    maxNrofParameters <- 5
     out <- sapply(object$models, function(x) c(x$par, rep(NA, maxNrofParameters - length(x$par))))
     rownames(out) <- letters[1:maxNrofParameters]
     if (!missing(model)) {
@@ -12,21 +15,30 @@
     }
     out
 }
+#'
+#' @rdname HOF
+#' @export
 "deviance.HOF" <-
-    function (object, model, ...) 
+    function (object, model, ...)
 {
     out <- sapply(object$models, function(x) x$deviance)
     if (!missing(model))
         out <- out[model]
     out
-}
+    }
+
+#' @rdname HOF
+#' @export
 "fitted.HOF" <-
-    function (object, model, ...) 
+    function (object, model, ...)
 {
-    out <- sapply(object$models, function(x) x$fitted)  
+    out <- sapply(object$models, function(x) x$fitted)
     if(!missing(model)) out <- out[,model]
     out
-}
+    }
+
+#' @rdname HOF
+#' @export
 "predict.HOF" <-
     function (object, model, newdata, ...) {
     if(missing(model)) model <- pick.model(object, ...)

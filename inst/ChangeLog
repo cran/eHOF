@@ -1,5 +1,9 @@
 eHOF RELEASE VERSIONS at http://cran.r-project.org/
 
+Version 1.15 (2024-01)
+	* bug in Para (optimize parameterisation) regarding model V fixed
+	* documentation cleaned
+
 Version 1.12 (2022-04)
 	* bug in Para regarding outer.niche for model III
 

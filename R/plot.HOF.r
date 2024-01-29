@@ -1,31 +1,106 @@
+#' Plot Hierarchical Logistic Regression Models
+#'
+#' @aliases plot.HOF plot.HOF.list
+#'
+#' @description Plot single or multiple HOF models with or without model parameters.
+#'
+#' @param x an object from \code{HOF(spec, \dots)}.
+#' @param marginal type of marginal representation for occurrences/absences.
+#' @param boxp plotting of horizontal boxplots
+#' @param las.h orientation of axes labels (0 = vertical, 1 = horizontal)
+#' @param yl range of y axis, useful for rare species. Must be given as fraction of M (between 0 and 1).
+#' @param main optional plot title
+#' @param model specific HOF model used, if not selected automatically.
+#' @param test test for model selection. Alternatives are \code{"AICc"} (default), \code{"F"},
+#'     \code{"Chisq"}, \code{"AIC"}, \code{"BIC"} and \code{"Dev"iance}.
+#' @param modeltypes vector of suggested model types
+#' @param onlybest plot only the best model according to chosen Information criterion. If set to FALSE all calculated models will be plotted, but the best model with a thicker line.
+#' @param penal penalty term for model types, default is the number of model parameter
+#' @param para should model parameters (optima, raw.mean, niche,..) be plotted.
+#' @param gam.se plotting of two times standard error of predict.gam as confidence interval
+#' @param color model line color, vector of length seven
+#' @param newdata curves are plotted for original x-values. Otherwise you have to provide a vector with new gradient values.
+#' @param leg legend for model type (and parameters)
+#' @param lwd line width of model curve(s)
+#' @param add add to existing plot
+#' @param xlabel x axis label
+#' @param \dots further arguments passed to or from other methods.
+#'
+#' @details
+#'   Plottype \code{layout} will give a normal plot for a single species, or if the HOF object contains several species,
+#'   the graphics display will be divided by \code{\link{autolayout}}. Multiple species can also be plotted by a \code{lattice}
+#'   xyplot and plotted with plot.HOF for every species. The third option (plottype='all') plots all selected species
+#'   on the same graph which might be useful to evaluate e.g. the species within one vegetation plot, see examples.
+#'
+#'   A \code{rug} adds a rug representation (1-d plot) of the data to the plot. A rug plot is a compact way of
+#'   illustrating the marginal distributions of x. Positions of the data points along x and y are denoted by tick marks,
+#'   reminiscent of the tassels on a rug. Rug marks are overlaid onto the axis.
+#'   A \code{dit='bar'} plot will display the original response values. For binary data this will be identical to rug.
+#'
+#' @seealso [HOF()]
+#'
+#' @references
+#'   de la Cruz Rot M (2005) Improving the Presentation of Results of Logistic Regression with R.
+#'   Bulletin of the Ecological Society of America 86: 41-48
+#'
+#' @examples
+#'   data(acre)
+#'   sel <- c('MATRREC', 'RUMEACT', 'SILENOC', 'APHAARV', 'MYOSARV', 'DESUSOP', 'ARTE#VU')
+#'   mo <- HOF(acre[match(sel, names(acre))], acre.env$PH_KCL, M=1, bootstrap=NULL)
+#'   par(mar=c(2,2,1,.1))
+#'   plot(mo, para=TRUE)
+#'
+#'   #' An example for plottype='all' to show species responses for the species within
+#'   #' the most acidic and the most calcareous vegetation plot.
+#'   \dontrun{
+#'     allSpeciesFromAnAcidicPlot <- acre['57',] > 0
+#'     mods.acidic <- HOF(acre[,allSpeciesFromAnAcidicPlot],acre.env$PH_KCL,M=1,bootstrap=NULL)
+#'     allSpeciesFromAnCalcareousPlot <- acre['87',] > 0
+#'     mods.calc <- HOF(acre[,allSpeciesFromAnCalcareousPlot],acre.env$PH_KCL,M=1,bootstrap=NULL)
+#'
+#'     autolayout(2)
+#'     plot(mods.acidic, plottype='all', main='Plot with low pH')
+#'     abline(v=acre.env$PH_KCL[acre.env$RELEVE_NR == '57'])
+#'     names(mods.acidic)
+#'
+#'     plot(mods.calc, plottype='all', main='Plot with high pH')
+#'     abline(v=acre.env$PH_KCL[acre.env$RELEVE_NR == '87'])
+#'     names(mods.calc)
+#'   }
+#'
+#' @author Florian Jansen
+#'
+#' @keywords model
+#'
+#' @export
 plot.HOF <- function (
-		x, 
-		marginal =  c('bar', 'rug', 'hist', 'points', 'n'), 
-		boxp = TRUE, 
-		las.h = 1, 
-		yl, 
-		main, 
-		model, 
-		test = "AICc", 
-		modeltypes, 
-		onlybest = TRUE, 
-		penal, 
-		para = FALSE, 
-		gam.se = FALSE, 
-		color, 
-		newdata = NULL, 
-		lwd=1, 
-		leg = TRUE, 
-		add=FALSE, 
-		xlabel, 
+		x,
+		marginal =  c('bar', 'rug', 'hist', 'points', 'n'),
+		boxp = TRUE,
+		las.h = 1,
+		yl,
+		main,
+		model,
+		test = "AICc",
+		modeltypes,
+		onlybest = TRUE,
+		penal,
+		para = FALSE,
+		gam.se = FALSE,
+		color,
+		newdata = NULL,
+		lwd=1,
+		leg = TRUE,
+		add=FALSE,
+		xlabel,
 		...)    {
   resp <- x
   # ow <- options("warn")
   yaxt = TRUE
-  independ <- resp$x 
-  depend <- resp$y 
+  independ <- resp$x
+  depend <- resp$y
   if(missing(marginal)) {
-    dit <- ifelse(para, 'n', if(length(independ) > 200) 'hist' else  'bar') 
+    dit <- ifelse(para, 'n', if(length(independ) > 200) 'hist' else  'bar')
     if(resp$family != 'binomial') dit <- 'points'
     } else dit <-  match.arg(marginal)
   if(missing(modeltypes)) modeltypes <- eHOF.modelnames else onlybest = FALSE
@@ -41,7 +116,7 @@ plot.HOF <- function (
   if (missing(yl)) yl <- c(0, 1)
   if(missing(yaxt)) yaxt <- 's'
   if (is.null(newdata)) newdata <- seq(min(resp$x), max(resp$x), length.out=10000)
-    
+
   logi.box <- function(independ, depend, col.box = "grey", x.lab = xlabel, yrange = yl, ylab= NULL, las = las.h, multi=FALSE, ...) {
         if(is.null(ylab)) ylab <- if(resp$M == 1) 'Predicted probability' else 'Response'
 	plot(independ, depend, ylim = c(yrange[1] - diff(yrange)/10, yrange[2] + diff(yrange)/10), yaxp = c(0, yrange[2], 5), type = "n", ylab = ylab, xlab = x.lab, yaxt = 'n', ...)
@@ -55,7 +130,7 @@ plot.HOF <- function (
       axis(1, mgp=c(2,.5,0))
       suppressWarnings(
         boxplot(indep.0, horizontal = TRUE, add = TRUE, at = 0 - diff(yrange)/20, boxwex = diff(yrange)/10, col = col.box, notch = TRUE, axes = FALSE, ...)
-      ) 
+      )
        if(para & leg) title(main, adj = 0, ...) else title(main, ...)
     }
 
@@ -76,7 +151,7 @@ plot.HOF <- function (
     p <- ifelse(depend > 0, 2, 1) #pch = pch.p[p],
     points(independ, depend / resp$M, cex = cex.rug, pch = pch.p[p], ...)
   }
-  
+
   logi.bar <- function(independ, depend, incre = 0.02, cex.p = .5, pch.rug = c(1, 19), yrange = yl, ...) {
      p <- depend > 0 ; p[p] <- 2; p[!p] <- 1
      points(independ, (depend > 0 )* yrange[2], pch = pch.rug[p], cex = cex.p, ...)
@@ -87,18 +162,18 @@ plot.HOF <- function (
      cosa.0 <- apply(as.matrix(unique(indep.0)), 1, uni.plot.0)
      cosa.1 <- apply(as.matrix(unique(indep.1)), 1, uni.plot.1)
      for (i in 1:max(cosa.0)) {
-         for (j in 1:i) points(unique(indep.0)[which(cosa.0 == i + 1)], 
+         for (j in 1:i) points(unique(indep.0)[which(cosa.0 == i + 1)],
                rep(0 + incre * j, length(which(cosa.0 == i + 1))), pch = 1, cex = cex.p)
      }
      for (i in 1:max(cosa.1)) {
-         for (j in 1:i) points(unique(indep.1)[which(cosa.1 == i + 1)], 
+         for (j in 1:i) points(unique(indep.1)[which(cosa.1 == i + 1)],
                rep(1 - incre * j, length(which(cosa.1 == i + 1))) - (1 - yrange[2]), pch = 19, cex = cex.p)
      }
-}  
+}
 
   logi.hist <- function(independ, depend, scale.hist = 5, yrange = yl, col.hist = gray(0.9), bord.hist = gray(0.8), count.hist = FALSE,  interval = 0, las.h1 = las.h, ...) {
       h.br <- hist(independ, plot = FALSE)$br
-      if (interval > 0) 
+      if (interval > 0)
           h.br <- seq(from = range(h.br)[1], to = range(h.br)[2], y = interval)
       h.x <- hist(independ[depend == min(depend)], breaks = h.br, plot = FALSE)$mid
       h.y0 <- hist(independ[depend == min(depend)], breaks = h.br, plot = FALSE)$counts
@@ -106,18 +181,18 @@ plot.HOF <- function (
       h.y0n <- h.y0/(max(c(h.y0, h.y1)) * scale.hist)
       h.y1n <- 1 - h.y1/(max(c(h.y0, h.y1)) * scale.hist)
       for (i in 1:length(h.y0n)) {
-          if (h.y0n[i] > 0) 
-              polygon(c(rep(h.br[i], 2), rep(h.br[i + 1], 2)), 
+          if (h.y0n[i] > 0)
+              polygon(c(rep(h.br[i], 2), rep(h.br[i + 1], 2)),
                 c(0, rep(h.y0n[i], 2), 0), col = col.hist, border = bord.hist)
       }
       for (i in 1:length(h.y1n)) {
-          if (h.y1n[i] < 1) 
-            polygon(c(rep(h.br[i], 2), rep(h.br[i + 1], 2)), 
+          if (h.y1n[i] < 1)
+            polygon(c(rep(h.br[i], 2), rep(h.br[i + 1], 2)),
               c(yrange[2] - (1 - h.y1n[i]), yrange[2], #resp$M
                 yrange[2], yrange[2] - (1 - h.y1n[i])), #resp$M
               col = col.hist, border = bord.hist)
       }
-      if (count.hist == TRUE) 
+      if (count.hist == TRUE)
         for (i in 1:length(h.x)) {
          text(h.x[i], yrange[2] - (1 - h.y1n[i]), h.y1[i], cex = 1, pos = 1, col='grey')
          text(h.x[i], h.y0n[i], h.y0[i], cex = 1, pos = 3, col='grey') #
@@ -133,13 +208,13 @@ plot.HOF <- function (
           mtext("Frequency", col = bord.hist, side = 4, line = 2, ...)
           } else {
           axis(side = 4, at = at.down, col.lab = bord.hist, col.axis = bord.hist, labels = label.down, las = las)
-          } 
+          }
       }
       axis.hist(h.y0, h.y1, scale.hist)
   }
 
  logi.curve <- function(resp, cex.l = .8, ...) {
-   x <- sort(newdata) 
+   x <- sort(newdata)
    if (onlybest) {
      cols <- cols[match(model, eHOF.modelnames)]
      fv <- predict(resp, model, newdata=x)
@@ -147,7 +222,7 @@ plot.HOF <- function (
      lines(x, fv, col =  cols[1], lwd = linewd, ...)
    } else {
      fv <- matrix(ncol=length(modeltypes), nrow=length(newdata))
-     for(i in 1:length(modeltypes)) 
+     for(i in 1:length(modeltypes))
          fv[,i] <- predict(resp, model=modeltypes[i], newdata=x)
      # fv <- sweep(fv, 1, resp$M, "/")
 
@@ -158,8 +233,8 @@ plot.HOF <- function (
   par(xpd = TRUE)
   if(leg) {
        legend(par("usr")[2] + 0.05, par("usr")[4], if(onlybest) model else rev(modeltypes), ncol = 1, bty = "n", col = if(onlybest) cols else rev(cols[match(modeltypes, eHOF.modelnames)]), lty = 1, lwd = rev(linewd), title="Model", cex = cex.l)
-       if (para) legend((par("usr")[2]), par("usr")[4], legend=c("optimum", "expectancy value", "raw mean", "inflection points", "outer niche", "central niche"), title='Response parameters', ncol=2, 
-                        pch=c(1,NA,NA,1,15,15), 
+       if (para) legend((par("usr")[2]), par("usr")[4], legend=c("optimum", "expectancy value", "raw mean", "inflection points", "outer niche", "central niche"), title='Response parameters', ncol=2,
+                        pch=c(1,NA,NA,1,15,15),
                         lty = c(0,2,1,0,0,0), col = c(4, 2, 1, 'orange', 'lightgrey', 'grey'), bg = "transparent", xjust = 1, yjust = 0, lwd = c(1,2,2,1,NA,NA), cex = cex.l)
       }
   invisible()
@@ -201,7 +276,7 @@ para.fun <- function(resp, cex.pl = .8, ...) {
     	lines(rep(p$opt['opt1'],2), c(tl, yl[2]), col = 4, lwd = 2)
     	lines(rep(p$opt['opt2'],2), c(tl, yl[2]), col = 4, lwd = 2)
     	points(p$opt, predict(resp, model, newdata=p$opt), col='blue')
-    } else { 
+    } else {
       if(length(p$opt)==1) lines(c(p$opt, p$opt), c(tl, yl[2]), col = 4, lwd = 2) else
     	lines(p$opt, c(yl[2], yl[2]), col='blue', lwd = 2)
       points(p$opt, predict(resp, model, newdata=p$opt), col='blue')
@@ -216,7 +291,7 @@ para.fun <- function(resp, cex.pl = .8, ...) {
        points(p$inflection, predict(resp, model, newdata=p$inflection), col='orange')
      }
 }
-  
+
  gam.conf <- function(independ, depend, bs = 'cr', k = 4, ...) {
     if (!is.null(newdata)) warning('GAM confidence intervalls only calculated for original predictor values!')
     fit <- mgcv::gam(depend ~ s(independ, bs=bs, k=k),family=get(resp$family), scale=0, ...)

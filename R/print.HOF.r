@@ -1,15 +1,17 @@
+#' @export
+#' @noRd
 "print.HOF" <- function (
 		x,
 		...,
-		test = 'AICc', 
-		penal = 'df', 
-		selectMethod = c('bootselect.lower', 'IC.weight', 'pick.model'), 
-		gam = FALSE, 
+		test = 'AICc',
+		penal = 'df',
+		selectMethod = c('bootselect.lower', 'IC.weight', 'pick.model'),
+		gam = FALSE,
 		k=4) {
 	  selectMethod <- match.arg(selectMethod)
     if(length(penal)==1) {
       if(penal == 'df') penal <- sapply(x$models, function(x) length(x$par))
-# if(penal == 'new') penal <- c('I'=1,'II'=2,'III'=2,'IIIb'=3,'IV'=3,'IVb'=3,'V'=4,'Vb'=4)    
+# if(penal == 'new') penal <- c('I'=1,'II'=2,'III'=2,'IIIb'=3,'IV'=3,'IVb'=3,'V'=4,'Vb'=4)
 # penal <- c('I'=1,'II'=2,'III'=2,'IIIb'=3,'IV'=3,'IVb'=3,'V'=4,'Vb'=4) else
 # possible manipulation of model penalization
     }
@@ -23,7 +25,7 @@
     }
     dev <- deviance(x)
     ll <- logLik(x)
-    AICc <- -2 * ll + 2 * penal + 2 * penal *(penal + 1)/(x$nobs - penal - 1) 
+    AICc <- -2 * ll + 2 * penal + 2 * penal *(penal + 1)/(x$nobs - penal - 1)
     d.AICc <- AICc - min(AICc, na.rm=TRUE)
     # nAICc <- AICc/sum(AICc, na.rm=TRUE)
     AICc.W <- round(exp(-0.5*AICc)/ sum(exp(-0.5*AICc), na.rm=TRUE),4)
@@ -44,7 +46,7 @@
 	  }
 	  if(selectMethod == 'IC.weight') best <- names(which.max(colSums(x$ICweights))) else
                             best <- pick.model(x, test=test, k=k, silent = TRUE, ...)
-    
+
      cat("\nSuggested best model (", test, ", " , selectMethod, "): ", best, '\n', sep='')
     } else {
   	  best <- pick.model(x, test=test, k=k, silent = TRUE, ...)

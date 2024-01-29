@@ -1,11 +1,9 @@
 \name{HOF-internal}
-\alias{coef.HOF}
-\alias{deviance.HOF}
 \alias{HOF.fun}
 \alias{logLik.HOF}
-\alias{Para_niche} 
+\alias{Para_niche}
 \alias{Para_opt}
-\alias{scale01} 
+\alias{scale01}
 \alias{svHOF}
 \alias{HOF.model}
 \alias{[.HOF.list}

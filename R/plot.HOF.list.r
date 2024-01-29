@@ -1,7 +1,12 @@
+#' @export
+#' @param plottype plottype, see details
+#' @param border.top height of top border for legend description
+#' @noRd
+#'
 plot.HOF.list <- function (
-	x, 
-	plottype = c('layout', "lattice", "all"), 
-	xlabel = NULL, 
+	x,
+	plottype = c('layout', "lattice", "all"),
+	xlabel = NULL,
 	test = "AICc",
 	modeltypes,
 	border.top = 0.1,
@@ -10,7 +15,7 @@ plot.HOF.list <- function (
 	leg = FALSE,
 	...) {
 ncol = 4
-plottype <- match.arg(plottype) 
+plottype <- match.arg(plottype)
 cols <- if(missing(color)) c("black", "red", "green", "blue", "sienna", "violet", "pink") else color
 
 if(missing('modeltypes')) modeltypes <- eHOF.modelnames
@@ -19,13 +24,15 @@ mods <- x
 N <- length(mods)
 nobs <- length(mods[[1]]$x)
 
-fitfun <- function(x, test, modeltypes,...) fitted(x, model = pick.model(x, test = test, modeltypes=modeltypes, gam=FALSE, ...))/x$M
+fitfun <- function(x, test, modeltypes,...) fitted(x, model =
+    pick.model(x, test = test, modeltypes = modeltypes, gam = FALSE, ...))/x$M
 
    if (plottype == "layout") {
   	M <- mods[[1]]$M
   	minresp <- if(missing(yl)) 0 else yl[1]
-    maxresp <- 
-  	if(missing(yl)) max(sapply(mods, function(x) max(x$models[[pick.model(x, test = test, modeltypes, gam=FALSE)]]$fitted )/M))  else yl[2]
+    maxresp <-
+  	if(missing(yl)) max(sapply(mods, function(x) max(x$models[[pick.model(x,
+                  test = test, modeltypes, gam=FALSE)]]$fitted )/M))  else yl[2]
     layoutfun <- function(mods, N, mar=NULL, ...) {
   	  if(is.null(mar)) mar <- if(N < 30) c(2,2,2,0) else c(1,0,0,0)
   	  autolayout(N)
@@ -49,9 +56,9 @@ fitfun <- function(x, test, modeltypes,...) fitted(x, model = pick.model(x, test
 	  sp <- unique(cbind(x[i], fv[i]))
 	  panel.xyplot(sp[, 1], sp[, 2], type = "l", lwd = 4, col = cols[match(mod[min(subscripts)], modeltypes)], ...)
       }
-      mykey <- list(text = list(text = modeltypes), lines = list(lty = 1, 
+      mykey <- list(text = list(text = modeltypes), lines = list(lty = 1,
 	  col = cols[match(modeltypes, eHOF.modelnames)]), columns = length(modeltypes))
-      out <- xyplot(Response ~ Gradient | Species, xlab = mods[[1]]$x.name, 
+      out <- xyplot(Response ~ Gradient | Species, xlab = mods[[1]]$x.name,
 	  Fit = Fit, key = mykey, panel = fit.panel)
       return(out)
   }
@@ -59,7 +66,7 @@ fitfun <- function(x, test, modeltypes,...) fitted(x, model = pick.model(x, test
       lplot <- function( ..., xlim = c(min(grad), max(grad)), ylim=c(0,m), ylab = "Predicted probability", xlab = xlabel, type = "n", para) {
         if(!missing(para)) message('Option "para" is available only for plottype "layout".')
         plot(...)
-      } 
+      }
       m <- max(sapply(mods, function(x) fitted(x, model=pick.model(x, gam=FALSE, test = test, ...)))/mods[[1]]$M)
       grad <- mods[[1]]$x
 #     plot(x=0, xlim = c(min(grad), max(grad)), ylim=c(0,m), ylab = "Predicted probability", xlab = xlabel, type = "n")

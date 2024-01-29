@@ -1,8 +1,10 @@
+#' @rdname HOF
+#' @export
 "HOF.data.frame" <- function (
-		veg, 
-		grad, 
-		M = max(veg), 
-		freq.limit = 10, 
+		veg,
+		grad,
+		M = max(veg),
+		freq.limit = 10,
 		...)
 {
     if(names(veg)[1] == 'RELEVE_NR' & names(veg)[2] == 'SPECIES_NR') print('tvabund format detected, use tv.veg first')   else {

@@ -1,11 +1,12 @@
+#' @export
 HOF.model <- function (
-		occ, 
-		grad, 
-		M = max(occ), 
-		y.name, 
-		family = binomial, 
-		lim = 100, 
-		x.name, 
+		occ,
+		grad,
+		M = max(occ),
+		y.name,
+		family = binomial,
+		lim = 100,
+		x.name,
 		...)  {
   if(max(occ) > M) stop('Maximum response value specified too low!')
   if(any(is.na(grad))) stop('No NA values in gradient allowed.')
@@ -14,7 +15,7 @@ HOF.model <- function (
   famname <- family()$family
   if (!(famname %in% c("binomial", "gaussian", "poisson"))) stop("Allowed families: binomial, gaussian, poisson")
   if(famname == "poisson" & sum(grep('.',as.character(occ), fixed=TRUE)) > 0)  stop('Occurrency data must be integer values for family poisson!')
-  if(famname == "binomial" && !all(occ %in% c(0,1))) warning('Occurrency data should be 0 or 1 for family binomial!') 
+  if(famname == "binomial" && !all(occ %in% c(0,1))) warning('Occurrency data should be 0 or 1 for family binomial!')
 
   div <- if(famname == "binomial") M else 1
   if(!exists('wt')) wt  <- if(famname == "binomial") M else 1
@@ -43,7 +44,7 @@ HOF.model <- function (
     temp
     }
   trial.2 <- function(p, x, m, ...) { # Byrd et. al. (1995)
-    p <- svHOF(x, occ, M, model = m, mod = mod)                                
+    p <- svHOF(x, occ, M, model = m, mod = mod)
     temp <- optim(par = p, mlHOF, x = x, method = "L-BFGS-B", lower = -lim, upper = lim, y = occ, M = M, model = m)
     temp$method <- 'Nelder-Mead'
     return(temp)
@@ -57,7 +58,7 @@ for(m in eHOF.modelnames) {
     III  = II.res,
     V    = IV.res,
     VI   = IV.res,
-    VII  = IV.res,            
+    VII  = IV.res,
     NA
     )
   try(assign(res, trial.1(p, x, m)), silent=TRUE)
@@ -86,7 +87,7 @@ if(any(is.na(VI.res$fitted))) {
    VI.res$message <- 'Can not minimize bimodal model'
    VI.res$deviance <- NA
    }
-if(!all(is.na(V.res$par))) 
+if(!all(is.na(V.res$par)))
   if(V.res$par[2] * V.res$par[4] < 0) {
     V.res$message <- 'response continuous, rejected'
     V.res$deviance <- NA

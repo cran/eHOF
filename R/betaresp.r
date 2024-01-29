@@ -1,11 +1,31 @@
-### Simulate beta response with Bernoulli error
-
+#' Beta response models
+#'
+#' @rdname betaresp
+#' @aliases betaresp print.betaresp plot.betaresp betaresponse
+#'
+#' @description
+#'   Generating beta response models. Implemented to compare the hierarchical logistic regression models
+#'   with beta response models.
+#'
+#' @param x Gradient values
+#' @param p1,p2 response endpoints
+#' @param alpha,gamma shape parameters of the response
+#' @param hi maximum height of response
+#'
+#' @author Jari Oksanen
+#'
+#' @examples
+#'  x <- seq(0,3, len=201)
+#'  m <- betaresp(x, 2, 0.8, 0.1, 0.5, 0.8)
+#'  plot(m)
+#'
+#' @export
 `betaresp` <- function(
 		x, ### x: gradient
 		p1, ### p1, p2: response endpoints
-		p2, 
-		alpha, ### alpha, gamma: shape parameters of the response		
-		gamma, 
+		p2,
+		alpha, ### alpha, gamma: shape parameters of the response
+		gamma,
 		hi  ### hi: maximum height of the response
 ) {
     ## take care that p1 < p2
@@ -36,7 +56,7 @@
 }
 
 ### plot response curve and simulated points
-
+#' @export
 `plot.betaresp` <-
     function(x, xlab = "Gradient", ylab = "Response", cex = 0.5,
              ylim = range(x$y), rug = TRUE, ...)
@@ -49,7 +69,7 @@
 }
 
 ### add response curve (mu) to an existing plot
-
+#' @export
 `lines.betaresp`<-
     function(x, ...)
 {

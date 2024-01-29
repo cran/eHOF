@@ -1,12 +1,34 @@
+#' Automatically Specifying Complex Plot Arrangements
+#'
+#' @rdname autolayout
+#' @aliases autolayout
+#'
+#' @description Automatic version of function \code{\link{layout}} for given number of subplots. Defined matrix schemes for \code{\link{layout}} for up to 32 subfigures.
+#'
+#' @export
+#' @param N number of subfigures
+#' @param byrow see \link{matrix}
+#' @param ... additional arguments for \link{layout} or \link{matrix}.
+#'
+#' @usage autolayout(N, byrow = TRUE, ...)
+#' @return Number of figures, N, see \link{layout}.
+#'
+#' @examples
+#' for(i in sample(1:32, 1)) {
+#'  autolayout(i, byrow=TRUE)
+#'  layout.show(i)
+#'  }
+#'
+
 autolayout <- function (
-		N, 
-		byrow = TRUE, 
+		N,
+		byrow = TRUE,
 		...) {
   if (N < 1 | N > 33) stop("I am not able to determine layout for more than 33 plots automatically.")
 lay <- switch(N,
   matrix(1, ncol = 1),
   matrix(1:2, ncol = 2, byrow = byrow),
-  matrix(c(0, 1, 1, 0, 2, 2, 3, 3), nrow = 2, byrow = byrow), 
+  matrix(c(0, 1, 1, 0, 2, 2, 3, 3), nrow = 2, byrow = byrow),
   matrix(1:4, nrow = 2, byrow = byrow),
   matrix(c(0, 1, 1, 2, 2, 0, 3, 3, 4, 4, 5, 5), nrow = 2, byrow = byrow),
   matrix(1:6, nrow = 2, byrow = byrow),

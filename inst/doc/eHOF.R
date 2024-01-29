@@ -22,7 +22,7 @@ obs <- tv.obs(db)
 # write.csv2(taxa, file='taxonnames.csv')
 taxa <- tax('all') # read.csv('taxonnames.csv')
 names(veg) <- sub('.0', '', names(veg), fixed=TRUE)
-for(i in 1:ncol(veg)) names(veg)[i] <- as.character(taxa$LETTERCODE[match(as.numeric(names(veg)[i]), taxa$TaxonUsageID)])
+names(veg) <- taxa$LETTERCODE[match(names(veg), taxa$TaxonUsageID)]
 
 ## ----5veg.2, results='hide'---------------------------------------------------
 veg.sqrt <- tv.veg(db, cover.transform='sqrt', tax=FALSE, spcnames='Numbers')
@@ -59,10 +59,11 @@ plot(mods.pa)
 
 ## ----paraplot, eval = TRUE, warning=FALSE, out.width='.5\\textwidth'----------
 lRP <- taxa$LETTERCODE[taxa$TaxonName == 'Ranunculus repens']
+Para(mods.pa[[lRP]])
 plot(mods.pa[[lRP]], para=TRUE, onlybest=FALSE)
 
 ## ----sqrt-2, results='hide', warning=FALSE, out.width='.5\\textwidth'---------
-mod.sqrt <- HOF(veg.sqrt[[lRP]], site$MGL, M=10, family=poisson, bootstrap = 10)
+mod.sqrt <- eHOF:::HOF.default(veg.sqrt[[lRP]], site$MGL, M=10, family=poisson, bootstrap = 10)
 plot(mod.sqrt, marginal='point', para=TRUE, onlybest=FALSE, newdata=seq(min(mod.sqrt$range), max(mod.sqrt$range), length.out=10000) )
 Para(mod.sqrt)
 
