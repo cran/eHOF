@@ -2,7 +2,7 @@
 eHOF.modelnames <- factor(c("I", "II", "III", "IV", "V", "VI", "VII"), ordered = TRUE)
 
 #' @export
-HOF.fun <- function (x, model, p, M = 1, ...) {
+"HOF.fun" <- function (x, model, p, M = 1, ...) {
     model <- match.arg(model, eHOF.modelnames)
     a <- p[1]; b <- p[2]; c <- p[3]; d <- p[4]; f <- p[5]
     #v <- list(M = M, a = p[1], b = p[2], c = p[3], d = p[4], e = p[5])

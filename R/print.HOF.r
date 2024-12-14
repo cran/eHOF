@@ -8,6 +8,7 @@
 		selectMethod = c('bootselect.lower', 'IC.weight', 'pick.model'),
 		gam = FALSE,
 		k=4) {
+
 	  selectMethod <- match.arg(selectMethod)
     if(length(penal)==1) {
       if(penal == 'df') penal <- sapply(x$models, function(x) length(x$par))

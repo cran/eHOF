@@ -27,7 +27,7 @@
 		alpha, ### alpha, gamma: shape parameters of the response
 		gamma,
 		hi  ### hi: maximum height of the response
-) {
+    ) {
     ## take care that p1 < p2
     if (p1 > p2) {
         tmp <- p1
@@ -59,20 +59,18 @@
 #' @export
 `plot.betaresp` <-
     function(x, xlab = "Gradient", ylab = "Response", cex = 0.5,
-             ylim = range(x$y), rug = TRUE, ...)
-{
-    k <- order(x$x)
-    plot(x$x[k], x$mu[k], type = "l", ylim = ylim, xlab = xlab, ylab = ylab,
-         ...)
-    if(rug)  points(x$x, x$y, cex = cex, ...)
-    invisible()
-}
+             ylim = range(x$y), rug = TRUE, ...)  {
+      k <- order(x$x)
+      plot(x$x[k], x$mu[k], type = "l", ylim = ylim, xlab = xlab, ylab = ylab,
+           ...)
+      if(rug)  points(x$x, x$y, cex = cex, ...)
+      invisible()
+  }
 
 ### add response curve (mu) to an existing plot
 #' @export
 `lines.betaresp`<-
-    function(x, ...)
-{
-    k <- order(x$x)
-    lines(x$x[k], x$mu[k], ...)
-}
+    function(x, ...) {
+      k <- order(x$x)
+      lines(x$x[k], x$mu[k], ...)
+  }

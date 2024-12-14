@@ -1,5 +1,6 @@
 "svHOF" <- function (
 		x, y, M, model, mod, famname = binomial, ...) {
+
 #x <- scale01(x)
 if(model == 'I') a = log((1 - mean(y/M))/mean(y/M))
 if(model == 'II') {
@@ -11,7 +12,7 @@ if(model == 'II') {
         a <- -k[1]
         b <- -k[2]
       }
-if(model == 'III') { 
+if(model == 'III') {
       a <- mod$par[[1]]
       b <- mod$par[[2]]
       c <- 0
@@ -47,7 +48,7 @@ if(model %in% c('V')) {
      c <- mod$par[[3]]
      d <- mod$par[[2]]
     }
-  
+
   out <- switch(model,
 	    I = list(a = a),
 	   II = list(a = a, b = b),

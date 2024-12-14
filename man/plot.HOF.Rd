@@ -17,6 +17,9 @@
   modeltypes,
   onlybest = TRUE,
   penal,
+  gam = FALSE,
+  selectMethod,
+  silent = FALSE,
   para = FALSE,
   gam.se = FALSE,
   color,
@@ -43,14 +46,19 @@
 
 \item{model}{specific HOF model used, if not selected automatically.}
 
-\item{test}{test for model selection. Alternatives are \code{"AICc"} (default), \code{"F"},
-\code{"Chisq"}, \code{"AIC"}, \code{"BIC"} and \code{"Dev"iance}.}
+\item{test}{See \code{pick.model}}
 
 \item{modeltypes}{vector of suggested model types}
 
 \item{onlybest}{plot only the best model according to chosen Information criterion. If set to FALSE all calculated models will be plotted, but the best model with a thicker line.}
 
 \item{penal}{penalty term for model types, default is the number of model parameter}
+
+\item{gam}{plot Generalized additive response}
+
+\item{selectMethod}{See \code{pick.model}}
+
+\item{silent}{Print messages}
 
 \item{para}{should model parameters (optima, raw.mean, niche,..) be plotted.}
 

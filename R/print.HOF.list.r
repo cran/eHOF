@@ -2,11 +2,11 @@
 "print.HOF.list" <-  function (
 		x,
 		test = 'AICc',
-		selectMethod = 'bootselect',
+		selectMethod = 'bootselect.lower',
 		...) {
 	if(selectMethod == 'bootselect' & is.null(x[[1]]$bootstrapmodels)) {
-		message('Bootstrap results missing. Using selectMethod "pick.model" instead.\n')
-		selectMethod <- 'pick.model'
+		message('Bootstrap results missing. Using selectMethod "IC.weight" instead.\n')
+		selectMethod <- 'IC.weight'
 	}
     cat("Deviances:\n")
     sapply(sapply(x, function(m) m$models), '[[', 'deviance')
@@ -16,13 +16,6 @@
     names(tmp) <- names(x)
     cat('\n')
     print(noquote(tmp))
-#    if(!is.null(x[[1]]$bootstrapmodels)) {
-#      bootpick <- sapply(x, function(x) x$bootstrapmodels)
-#      cat('\nPercentage of equal model types during bootstrapping\n')
-#      perc <- vector('integer', length=ncol(bootpick))
-#      names(perc) <- names(x)
-#      for(i in 1:ncol(bootpick)) perc[i] <- round(sum(bootpick[,i]==tmp[i])/nrow(bootpick)*100,0)
-#      print(perc)
 #      }
     invisible(x)
 }

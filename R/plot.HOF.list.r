@@ -10,19 +10,22 @@ plot.HOF.list <- function (
 	test = "AICc",
 	modeltypes,
 	border.top = 0.1,
+	onlybest = TRUE,
 	color,
 	yl,
 	leg = FALSE,
-	...) {
-ncol = 4
-plottype <- match.arg(plottype)
-cols <- if(missing(color)) c("black", "red", "green", "blue", "sienna", "violet", "pink") else color
+	...)
+  {
 
-if(missing('modeltypes')) modeltypes <- eHOF.modelnames
-xlabel <- if(is.null(xlabel)) x[[1]]$x.name else xlabel
-mods <- x
-N <- length(mods)
-nobs <- length(mods[[1]]$x)
+  ncol = 4
+  plottype <- match.arg(plottype)
+  cols <- if(missing(color)) c("black", "red", "green", "blue", "sienna", "violet", "pink") else color
+
+  if(missing('modeltypes')) modeltypes <- eHOF.modelnames
+  xlabel <- if(is.null(xlabel)) x[[1]]$x.name else xlabel
+  mods <- x
+  N <- length(mods)
+  nobs <- length(mods[[1]]$x)
 
 fitfun <- function(x, test, modeltypes,...) fitted(x, model =
     pick.model(x, test = test, modeltypes = modeltypes, gam = FALSE, ...))/x$M
@@ -37,7 +40,7 @@ fitfun <- function(x, test, modeltypes,...) fitted(x, model =
   	  if(is.null(mar)) mar <- if(N < 30) c(2,2,2,0) else c(1,0,0,0)
   	  autolayout(N)
   	  par(mar=mar)
-  	  for(i in 1:N) plot(mods[[i]], test=test, leg=leg, yl=c(minresp,maxresp), color=cols,  ...)
+  	  for(i in 1:N) plot(mods[[i]], test=test, leg=leg, yl=c(minresp,maxresp), modeltypes = modeltypes, 		onlybest = onlybest, color=cols,  ...)
   	}
     layoutfun(mods, N=N, ...)
   }

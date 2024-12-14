@@ -39,8 +39,7 @@ coef.HOF <-
 
 #' @rdname HOF
 #' @export
-"predict.HOF" <-
-    function (object, model, newdata, ...) {
+"predict.HOF" <-  function (object, model, newdata, ...) {
     if(missing(model)) model <- pick.model(object, ...)
     p <- coef(object, model, ...)
     xrange <- object$range

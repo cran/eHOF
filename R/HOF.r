@@ -63,7 +63,7 @@
 #' @examples
 #'   data(acre)
 #'   sel <- c('MATRREC', 'RUMEACT', 'SILENOC', 'APHAARV', 'MYOSARV', 'DESUSOP', 'ARTE#VU')
-#'   mo <- HOF(acre[,match(sel, names(acre))], acre.env$PH_KCL, M=1, bootstrap=NULL)
+#'   mo <- HOF(acre[,match(sel, names(acre))], acre.env$PH_KCL, M = 1, bootstrap = NULL)
 #'   mo
 #'
 #' @export
@@ -81,7 +81,7 @@ HOF.default <- function(
     lim=100,
     bootstrap=100,
     test = c('AICc', 'BIC', 'AIC','Dev'),
-    modeltypes=eHOF.modelnames,
+    modeltypes = eHOF.modelnames,
     ...)  {
   if(any(c('data.frame', 'matrix','list') %in% class(occ))) stop('Performance data for HOF.default must be a vector.')
   x.name <- deparse(substitute(grad))

@@ -1,9 +1,8 @@
 #' Plot Hierarchical Logistic Regression Models
-#'
+#' @rdname plot.HOF
 #' @aliases plot.HOF plot.HOF.list
 #'
 #' @description Plot single or multiple HOF models with or without model parameters.
-#'
 #' @param x an object from \code{HOF(spec, \dots)}.
 #' @param marginal type of marginal representation for occurrences/absences.
 #' @param boxp plotting of horizontal boxplots
@@ -11,12 +10,14 @@
 #' @param yl range of y axis, useful for rare species. Must be given as fraction of M (between 0 and 1).
 #' @param main optional plot title
 #' @param model specific HOF model used, if not selected automatically.
-#' @param test test for model selection. Alternatives are \code{"AICc"} (default), \code{"F"},
-#'     \code{"Chisq"}, \code{"AIC"}, \code{"BIC"} and \code{"Dev"iance}.
+#' @param test See \code{pick.model}
 #' @param modeltypes vector of suggested model types
 #' @param onlybest plot only the best model according to chosen Information criterion. If set to FALSE all calculated models will be plotted, but the best model with a thicker line.
 #' @param penal penalty term for model types, default is the number of model parameter
 #' @param para should model parameters (optima, raw.mean, niche,..) be plotted.
+#' @param selectMethod See \code{pick.model}
+#' @param silent Print messages
+#' @param gam plot Generalized additive response
 #' @param gam.se plotting of two times standard error of predict.gam as confidence interval
 #' @param color model line color, vector of length seven
 #' @param newdata curves are plotted for original x-values. Otherwise you have to provide a vector with new gradient values.
@@ -85,15 +86,19 @@ plot.HOF <- function (
 		modeltypes,
 		onlybest = TRUE,
 		penal,
+		gam = FALSE,
+		selectMethod,
+		silent = FALSE,
 		para = FALSE,
 		gam.se = FALSE,
 		color,
 		newdata = NULL,
 		lwd=1,
 		leg = TRUE,
-		add=FALSE,
+		add = FALSE,
 		xlabel,
 		...)    {
+
   resp <- x
   # ow <- options("warn")
   yaxt = TRUE
@@ -103,8 +108,9 @@ plot.HOF <- function (
     dit <- ifelse(para, 'n', if(length(independ) > 200) 'hist' else  'bar')
     if(resp$family != 'binomial') dit <- 'points'
     } else dit <-  match.arg(marginal)
-  if(missing(modeltypes)) modeltypes <- eHOF.modelnames else onlybest = FALSE
+  if(missing(modeltypes)) modeltypes <- eHOF.modelnames
   if(missing(penal)) penal <- 'df'
+  if(missing(selectMethod)) selectMethod <- 'bootselect.lower'
   if(missing(model)) {
 	    model <- pick.model(resp, modeltypes = modeltypes, penal = penal, test = test, gam=FALSE, ...)
   }
@@ -118,7 +124,8 @@ plot.HOF <- function (
   if (is.null(newdata)) newdata <- seq(min(resp$x), max(resp$x), length.out=10000)
 
   logi.box <- function(independ, depend, col.box = "grey", x.lab = xlabel, yrange = yl, ylab= NULL, las = las.h, multi=FALSE, ...) {
-        if(is.null(ylab)) ylab <- if(resp$M == 1) 'Predicted probability' else 'Response'
+
+    if(is.null(ylab)) ylab <- if(resp$M == 1) 'Predicted probability' else 'Response'
 	plot(independ, depend, ylim = c(yrange[1] - diff(yrange)/10, yrange[2] + diff(yrange)/10), yaxp = c(0, yrange[2], 5), type = "n", ylab = ylab, xlab = x.lab, yaxt = 'n', ...)
 	ax <- axTicks(2)
  	if(yaxt!='n') axis(2, at=ax, labels= eval(ax*resp$M), ...)
@@ -135,12 +142,13 @@ plot.HOF <- function (
     }
 
   logi.scatter <- function(independ, depend, x.lab = xlabel, yrange = yl, las = las.h, ylab=NULL, ...) {
-        if(is.null(ylab)) ylab <- if(resp$M == 1) 'Predicted probability' else 'Response'
+
+    if(is.null(ylab)) ylab <- if(resp$M == 1) 'Predicted probability' else 'Response'
         plot(independ, depend / resp$M, type = 'n', ylim = yrange, yaxp = c(0, yrange[2], 5), ylab = ylab, xlab = x.lab, las = las, yaxt='n', ...)
-	ax <- axTicks(2)
- 	if(yaxt!='n') axis(2, at=ax, labels= eval(ax*resp$M))
+	  ax <- axTicks(2)
+ 	  if(yaxt!='n') axis(2, at=ax, labels= eval(ax*resp$M))
         if(para) title(main, adj = 0, ...) else title(main, ...)
-   }
+    }
 
   logi.rug <- function(independ, depend, cex.rug = 1, yrange = yl, ...) {
     # p <- ifelse(depend > 0, 2, 1)

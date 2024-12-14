@@ -2,6 +2,7 @@
 suppressPackageStartupMessages(library(vegdata))
 tmp <- tempdir()
 options(tv_home = tmp)
+dir.create(tmp)
 dir.create(file.path(tmp, 'Species'))
 dir.create(file.path(tmp, 'Popup'))
 dir.create(file.path(tmp, 'Data'))
@@ -19,8 +20,7 @@ site <- tv.site(db)
 veg <- tv.veg(db, taxval = FALSE, spcnames = 'Numbers')
 obs <- tv.obs(db)
 # taxa <- tax(unique(obs$TaxonUsageID), verbose=TRUE)
-# write.csv2(taxa, file='taxonnames.csv')
-taxa <- tax('all') # read.csv('taxonnames.csv')
+taxa <- tax('all')
 names(veg) <- sub('.0', '', names(veg), fixed=TRUE)
 names(veg) <- taxa$LETTERCODE[match(names(veg), taxa$TaxonUsageID)]
 
@@ -57,13 +57,15 @@ plot(mods.sq)
 mods.pa <- HOF(veg.pa, site$MGL, M=1, bootstrap=NULL)
 plot(mods.pa)
 
+## ----RanRep-------------------------------------------------------------------
+Rrep <- taxa$LETTERCODE[taxa$TaxonName == 'Ranunculus repens']
+Para(mods.pa[[Rrep]])
+
 ## ----paraplot, eval = TRUE, warning=FALSE, out.width='.5\\textwidth'----------
-lRP <- taxa$LETTERCODE[taxa$TaxonName == 'Ranunculus repens']
-Para(mods.pa[[lRP]])
-plot(mods.pa[[lRP]], para=TRUE, onlybest=FALSE)
+plot(mods.pa[[Rrep]], para=TRUE, onlybest=FALSE)
 
 ## ----sqrt-2, results='hide', warning=FALSE, out.width='.5\\textwidth'---------
-mod.sqrt <- eHOF:::HOF.default(veg.sqrt[[lRP]], site$MGL, M=10, family=poisson, bootstrap = 10)
+mod.sqrt <- eHOF:::HOF.default(veg.sqrt[[Rrep]], site$MGL, M=10, family=poisson, bootstrap = 10)
 plot(mod.sqrt, marginal='point', para=TRUE, onlybest=FALSE, newdata=seq(min(mod.sqrt$range), max(mod.sqrt$range), length.out=10000) )
 Para(mod.sqrt)
 

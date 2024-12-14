@@ -24,12 +24,11 @@
 #' @export
 Para_deriv <- function (
 		resp, # response data object of HOF function
-		newdata=NULL, # specify new x value vector
-		model=NULL,
+		newdata = NULL, # specify new x value vector
+		model = NULL,
 		p,
 		type=c('slope','inflection'),
-		...)
-{
+		...) {
   type <- match.arg(type, c('slope','inflection'))
   if(is.null(newdata)) x <- scale01(seq(resp$range[1] - diff(resp$range), resp$range[2] + diff(resp$range), length.out=10000)) else x <- scale01(newdata, ...)
   if(is.null(model)) model <- pick.model(resp, gam=FALSE, ...)

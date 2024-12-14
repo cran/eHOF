@@ -4,12 +4,18 @@ Para_opt <- function (
 		model = NULL,
 		punctual = FALSE,
 		...) {
-  if(is.null(model)) model <- pick.model(resp, gam=FALSE, ...)
+
+  if(is.null(model))
+    model <- pick.model(resp, gam=FALSE, ...)
   M <- resp$M
   x <- seq(resp$range[1] - diff(resp$range), resp$range[2] + diff(resp$range),length.out=10000)
   pred <- predict(resp, newdata = x, model = model)
-  HOFfun <- function(resp, x, model) predict(resp, newdata = x, M = M, model = model)
-  HOFfun3 <- function(x, y, resp) abs(y - predict(resp, newdata = x, M = M, model = model))
+  HOFfun <- function(resp, x, model) {
+    predict(resp, newdata = x, M = M, model = model)
+  }
+  HOFfun3 <- function(x, y, resp) {
+    abs(y - predict(resp, newdata = x, M = M, model = model))
+  }
 
   if (model == "I") {
       opt <- NA  # alternative: resp$range

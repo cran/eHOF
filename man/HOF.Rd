@@ -121,7 +121,7 @@ The minimization function changed compared to package gravy (Oksanen 2002) from 
 \examples{
   data(acre)
   sel <- c('MATRREC', 'RUMEACT', 'SILENOC', 'APHAARV', 'MYOSARV', 'DESUSOP', 'ARTE#VU')
-  mo <- HOF(acre[,match(sel, names(acre))], acre.env$PH_KCL, M=1, bootstrap=NULL)
+  mo <- HOF(acre[,match(sel, names(acre))], acre.env$PH_KCL, M = 1, bootstrap = NULL)
   mo
 
 }

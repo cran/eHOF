@@ -1,5 +1,9 @@
 eHOF RELEASE VERSIONS at http://cran.r-project.org/
 
+Version 1.16 (2024-12)
+	* bug in pick.model if using IC.weight
+	* use modeltypes restrictions for HOF.list 
+
 Version 1.15 (2024-01)
 	* bug in Para (optimize parameterisation) regarding model V fixed
 	* documentation cleaned
